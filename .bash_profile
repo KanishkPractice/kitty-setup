@@ -9,4 +9,4 @@ fi
 
 
 # Added by Antigravity CLI installer
-export PATH="/home/kanishk/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"

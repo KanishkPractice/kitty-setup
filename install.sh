@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Fail-Proof Kitty, Zsh, Starship & Environment Installer
-# Portable, Multi-Distro, Idempotent, and Non-Root / Sudo Aware
+# Complete Fail-Proof Kitty, Shell & Modern CLI Environment Installer
+# Portable, Multi-Distro, Idempotent, Non-Root & Sudo-Aware with Auto-Fallbacks
 # ==============================================================================
 
 set -uo pipefail
@@ -21,17 +21,7 @@ warn()    { echo -e "${YELLOW}[WARN]${RESET} $*"; }
 error()   { echo -e "${RED}[ERROR]${RESET} $*"; }
 step()    { echo -e "\n${BOLD}${CYAN}==> $*${RESET}"; }
 
-# Error handler for unexpected failures
-trap 'on_error $? $LINENO' ERR
-on_error() {
-    local exit_code=$1
-    local line_no=$2
-    error "An error occurred at line ${line_no} (exit code: ${exit_code})."
-    warn "Continuing with remaining setup steps where possible..."
-}
-
 # ── 2. ENVIRONMENT & USER DETECTION ──────────────────────────
-# Detect real user even when run with `sudo`
 if [ -n "${SUDO_USER:-}" ] && [ "$SUDO_USER" != "root" ]; then
     TARGET_USER="$SUDO_USER"
     TARGET_HOME="$(getent passwd "$TARGET_USER" 2>/dev/null | cut -d: -f6)"
@@ -46,16 +36,29 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
 TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
 BACKUP_DIR="${TARGET_HOME}/.config/dotfiles_backup_${TIMESTAMP}"
+USER_BIN="${TARGET_HOME}/.local/bin"
+
+mkdir -p "$USER_BIN"
+export PATH="${USER_BIN}:${PATH}"
 
 has_cmd() { command -v "$1" >/dev/null 2>&1; }
+
+AUTO_YES=false
+for arg in "$@"; do
+    if [ "$arg" = "-y" ] || [ "$arg" = "--yes" ] || [ "$arg" = "--non-interactive" ]; then
+        AUTO_YES=true
+        break
+    fi
+done
 
 run_elevated() {
     if [ "$(id -u)" -eq 0 ]; then
         "$@"
-    elif has_cmd sudo; then
+    elif sudo -n true 2>/dev/null; then
+        sudo -n "$@"
+    elif [ "$AUTO_YES" = false ] && [ -t 0 ] && has_cmd sudo; then
         sudo "$@"
     else
-        warn "Sudo not available. Skipping elevated command: $*"
         return 1
     fi
 }
@@ -68,57 +71,139 @@ run_as_user() {
     fi
 }
 
-# ── 3. SYSTEM PACKAGE INSTALLATION ───────────────────────────
+# ── 3. SYSTEM PACKAGE INSTALLATION (BEST-EFFORT) ─────────────
 install_system_dependencies() {
-    step "Checking & Installing System Dependencies"
+    step "Checking System Package Manager"
     
+    local pkg_success=false
+
     if has_cmd pacman; then
-        info "Package manager: pacman (Arch/Manjaro)"
-        run_elevated pacman -S --needed --noconfirm kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null || warn "pacman install reported issues, checking fallbacks."
-    elif has_cmd apt-get; then
-        info "Package manager: apt (Debian/Ubuntu/Mint)"
-        run_elevated apt-get update -y 2>/dev/null || warn "apt-get update had non-zero exit, proceeding..."
-        run_elevated apt-get install -y kitty zsh fzf fontconfig curl git 2>/dev/null || warn "apt-get install had warnings."
-        
-        if ! has_cmd bat && ! has_cmd batcat; then
-            run_elevated apt-get install -y bat 2>/dev/null || true
+        info "Package manager detected: pacman (Arch/Manjaro)"
+        if run_elevated pacman -S --needed --noconfirm kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null; then
+            pkg_success=true
+            success "System packages installed via pacman."
         fi
     elif has_cmd dnf; then
-        info "Package manager: dnf (Fedora/RHEL)"
-        run_elevated dnf install -y kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null || warn "dnf install reported issues."
+        info "Package manager detected: dnf (Fedora/RHEL)"
+        if run_elevated dnf install -y kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null; then
+            pkg_success=true
+            success "System packages installed via dnf."
+        fi
+    elif has_cmd apt-get; then
+        info "Package manager detected: apt (Debian/Ubuntu/Mint)"
+        if run_elevated apt-get update -y 2>/dev/null && run_elevated apt-get install -y kitty zsh fzf fontconfig curl git bat 2>/dev/null; then
+            pkg_success=true
+            success "System packages installed via apt."
+        fi
     elif has_cmd zypper; then
-        info "Package manager: zypper (openSUSE)"
-        run_elevated zypper --non-interactive install kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null || warn "zypper install reported issues."
+        info "Package manager detected: zypper (openSUSE)"
+        if run_elevated zypper --non-interactive install kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null; then
+            pkg_success=true
+            success "System packages installed via zypper."
+        fi
     elif has_cmd apk; then
-        info "Package manager: apk (Alpine)"
-        run_elevated apk add kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null || warn "apk install reported issues."
+        info "Package manager detected: apk (Alpine)"
+        if run_elevated apk add kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null; then
+            pkg_success=true
+            success "System packages installed via apk."
+        fi
     elif has_cmd xbps-install; then
-        info "Package manager: xbps (Void Linux)"
-        run_elevated xbps-install -Sy kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null || warn "xbps install reported issues."
-    else
-        warn "No supported package manager detected or non-root environment. Proceeding with user-space binaries."
-    fi
-
-    # Fallback user-space installation for starship and zoxide if not installed
-    local user_bin="${TARGET_HOME}/.local/bin"
-    mkdir -p "$user_bin"
-
-    if ! has_cmd starship; then
-        if has_cmd curl; then
-            info "Installing Starship into ${user_bin}..."
-            run_as_user curl -sS https://starship.rs/install.sh | run_as_user sh -s -- --bin-dir "$user_bin" -y 2>/dev/null || warn "Starship script installer failed."
+        info "Package manager detected: xbps (Void Linux)"
+        if run_elevated xbps-install -Sy kitty zsh fzf zoxide starship bat fontconfig curl git 2>/dev/null; then
+            pkg_success=true
+            success "System packages installed via xbps."
         fi
     fi
 
-    if ! has_cmd zoxide; then
+    if [ "$pkg_success" = false ]; then
+        info "System package manager install skipped or requires sudo. Proceeding with automatic user-space fallbacks."
+    fi
+}
+
+# ── 4. AUTOMATIC KITTY INSTALLATION (STANDALONE FALLBACK) ────
+install_kitty_binary() {
+    step "Verifying Kitty Terminal Installation"
+
+    if has_cmd kitty; then
+        success "Kitty is installed at: $(command -v kitty) ($(kitty --version 2>/dev/null || echo 'available'))"
+        return 0
+    fi
+
+    info "Kitty binary not found in PATH. Installing official standalone Kitty release..."
+    if has_cmd curl; then
+        run_as_user curl -L https://sw.kovidgoyal.net/kitty/installer.sh | run_as_user sh /dev/stdin launch=n
+
+        # Create symlinks to ~/.local/bin
+        mkdir -p "$USER_BIN"
+        ln -sf "${TARGET_HOME}/.local/kitty.app/bin/kitty" "${USER_BIN}/kitty"
+        ln -sf "${TARGET_HOME}/.local/kitty.app/bin/kitten" "${USER_BIN}/kitten"
+
+        # Desktop integration & icons
+        local app_dir="${TARGET_HOME}/.local/share/applications"
+        mkdir -p "$app_dir"
+        if [ -f "${TARGET_HOME}/.local/kitty.app/share/applications/kitty.desktop" ]; then
+            cp "${TARGET_HOME}/.local/kitty.app/share/applications/kitty.desktop" "${app_dir}/"
+            cp "${TARGET_HOME}/.local/kitty.app/share/applications/kitty-open.desktop" "${app_dir}/" 2>/dev/null || true
+            sed -i "s|Icon=kitty|Icon=${TARGET_HOME}/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" "${app_dir}"/kitty*.desktop 2>/dev/null || true
+            sed -i "s|Exec=kitty|Exec=${TARGET_HOME}/.local/kitty.app/bin/kitty|g" "${app_dir}"/kitty*.desktop 2>/dev/null || true
+            
+            if has_cmd update-desktop-database; then
+                update-desktop-database "$app_dir" 2>/dev/null || true
+            fi
+        fi
+
+        if [ -x "${USER_BIN}/kitty" ]; then
+            success "Kitty standalone installer completed successfully."
+        else
+            warn "Kitty binary installation requires manual verification."
+        fi
+    else
+        error "curl is required to download Kitty standalone installer."
+    fi
+}
+
+# ── 5. AUTOMATIC CLI TOOLS (STARSHIP, ZOXIDE, FZF) ───────────
+install_cli_tools() {
+    step "Verifying & Installing Modern CLI Tools (Starship, Zoxide, FZF)"
+
+    # 1. Starship Prompt
+    if has_cmd starship; then
+        success "Starship is installed: $(starship --version 2>/dev/null | head -n 1 || echo 'available')"
+    else
         if has_cmd curl; then
-            info "Installing Zoxide into ${user_bin}..."
-            run_as_user curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | run_as_user sh 2>/dev/null || warn "Zoxide script installer failed."
+            info "Downloading & installing Starship into ${USER_BIN}..."
+            run_as_user curl -sS https://starship.rs/install.sh | run_as_user sh -s -- --bin-dir "$USER_BIN" -y 2>/dev/null || warn "Starship installer had warnings."
+        fi
+    fi
+
+    # 2. Zoxide
+    if has_cmd zoxide; then
+        success "Zoxide is installed: $(zoxide --version 2>/dev/null || echo 'available')"
+    else
+        if has_cmd curl; then
+            info "Downloading & installing Zoxide..."
+            run_as_user curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | run_as_user sh 2>/dev/null || warn "Zoxide installer had warnings."
+        fi
+    fi
+
+    # 3. FZF
+    if has_cmd fzf; then
+        success "FZF is installed: $(fzf --version 2>/dev/null || echo 'available')"
+    else
+        local fzf_dir="${TARGET_HOME}/.fzf"
+        if [ ! -d "$fzf_dir" ] && has_cmd git; then
+            info "Cloning and installing FZF into ${fzf_dir}..."
+            git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_dir" 2>/dev/null && \
+                "$fzf_dir"/install --bin --no-key-bindings --no-completion --no-update-rc 2>/dev/null || true
+        fi
+        if [ -x "${fzf_dir}/bin/fzf" ]; then
+            ln -sf "${fzf_dir}/bin/fzf" "${USER_BIN}/fzf"
+            success "FZF binary installed into ${USER_BIN}/fzf"
         fi
     fi
 }
 
-# ── 4. BACKUP HELPER ──────────────────────────────────────────
+# ── 6. BACKUP HELPER ──────────────────────────────────────────
 safe_backup_and_copy() {
     local src="$1"
     local dst="$2"
@@ -148,7 +233,7 @@ safe_backup_and_copy() {
     success "Deployed: $dst"
 }
 
-# ── 5. FONTS DEPLOYMENT ───────────────────────────────────────
+# ── 7. FONTS DEPLOYMENT ───────────────────────────────────────
 install_fonts() {
     step "Installing Fantasque Sans Mono Nerd Font"
     local font_dst="${TARGET_HOME}/.local/share/fonts/fantasque-sans-mono-nerd-fonts"
@@ -159,7 +244,7 @@ install_fonts() {
         cp -r "$src_font_dir"/* "$font_dst/" 2>/dev/null || true
         success "Font files installed to $font_dst"
     else
-        warn "Local font files not found. Attempting online fallback download..."
+        warn "Local font files not found. Attempting online download..."
         if has_cmd curl && has_cmd unzip; then
             local temp_zip="/tmp/fantasque_font_$$.zip"
             curl -fLo "$temp_zip" "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FantasqueSansMono.zip" 2>/dev/null && {
@@ -170,17 +255,15 @@ install_fonts() {
         fi
     fi
 
-    # Fix ownership
     chown -R "$TARGET_USER":"$(id -gn "$TARGET_USER" 2>/dev/null || id -g)" "${TARGET_HOME}/.local/share/fonts" 2>/dev/null || true
 
-    # Update font cache
     if has_cmd fc-cache; then
         fc-cache -f "${TARGET_HOME}/.local/share/fonts" >/dev/null 2>&1 || true
         success "Font cache refreshed."
     fi
 }
 
-# ── 6. ZSH PLUGINS SETUP ─────────────────────────────────────
+# ── 8. ZSH PLUGINS SETUP ─────────────────────────────────────
 setup_zsh_plugins() {
     step "Setting up Zsh Plugins"
     local zsh_dir="${TARGET_HOME}/.zsh"
@@ -213,51 +296,58 @@ setup_zsh_plugins() {
     chown -R "$TARGET_USER":"$(id -gn "$TARGET_USER" 2>/dev/null || id -g)" "$zsh_dir" 2>/dev/null || true
 }
 
-# ── 7. CONFIGURATION DEPLOYMENT ──────────────────────────────
+# ── 9. CONFIGURATION DEPLOYMENT ──────────────────────────────
 deploy_configurations() {
     step "Deploying Configurations"
 
-    # Kitty
+    # Kitty configuration
     safe_backup_and_copy "${SCRIPT_DIR}/kitty/kitty.conf" "${TARGET_HOME}/.config/kitty/kitty.conf"
     [ -f "${SCRIPT_DIR}/kitty/kitty.conf.bak" ] && safe_backup_and_copy "${SCRIPT_DIR}/kitty/kitty.conf.bak" "${TARGET_HOME}/.config/kitty/kitty.conf.bak"
 
-    # Starship
+    # Starship configuration
     safe_backup_and_copy "${SCRIPT_DIR}/starship.toml" "${TARGET_HOME}/.config/starship.toml"
     [ -f "${SCRIPT_DIR}/starship.toml.bak" ] && safe_backup_and_copy "${SCRIPT_DIR}/starship.toml.bak" "${TARGET_HOME}/.config/starship.toml.bak"
 
     # Terminal environment
     safe_backup_and_copy "${SCRIPT_DIR}/terminal.conf" "${TARGET_HOME}/.config/environment.d/terminal.conf"
 
-    # Shell RC files
+    # Shell RC files (.zshrc, .bashrc, .bash_profile)
     for rc in .zshrc .bashrc .bash_profile; do
         if [ -f "${SCRIPT_DIR}/${rc}" ]; then
             safe_backup_and_copy "${SCRIPT_DIR}/${rc}" "${TARGET_HOME}/${rc}"
         fi
     done
 
-    # Ensure ~/.local/bin exists in directory structure
-    mkdir -p "${TARGET_HOME}/.local/bin"
     chown -R "$TARGET_USER":"$(id -gn "$TARGET_USER" 2>/dev/null || id -g)" "${TARGET_HOME}/.config" "${TARGET_HOME}/.local" 2>/dev/null || true
 }
 
-# ── 8. DEFAULT SHELL CONFIGURATION ───────────────────────────
+# ── 10. DEFAULT SHELL CONFIGURATION & GUIDANCE ───────────────
 configure_default_shell() {
-    step "Configuring Default Shell"
+    step "Configuring Shell Environment"
     local zsh_bin
-    zsh_bin="$(command -v zsh 2>/dev/null || which zsh 2>/dev/null || true)"
+    zsh_bin="$(command -v zsh 2>/dev/null || true)"
 
     if [ -z "$zsh_bin" ]; then
-        warn "Zsh binary not found. Skipping default shell change."
+        warn "Zsh is not installed on this system."
+        info "Kitty is configured with 'shell .' to launch your system default shell ($SHELL) seamlessly."
+        info "To install Zsh anytime:"
+        if has_cmd dnf; then
+            echo -e "    ${BOLD}sudo dnf install zsh${RESET}"
+        elif has_cmd apt-get; then
+            echo -e "    ${BOLD}sudo apt install zsh${RESET}"
+        elif has_cmd pacman; then
+            echo -e "    ${BOLD}sudo pacman -S zsh${RESET}"
+        fi
+        echo -e "  Then run ${BOLD}chsh -s \$(which zsh)${RESET} to make it default."
         return 0
     fi
 
-    # Ensure zsh is in /etc/shells if we have permissions
+    # Ensure zsh is listed in /etc/shells
     if [ -f /etc/shells ] && ! grep -Fxq "$zsh_bin" /etc/shells 2>/dev/null; then
-        info "Adding $zsh_bin to /etc/shells..."
         if [ "$(id -u)" -eq 0 ]; then
             echo "$zsh_bin" >> /etc/shells 2>/dev/null || true
-        elif has_cmd sudo; then
-            echo "$zsh_bin" | sudo tee -a /etc/shells >/dev/null 2>&1 || true
+        elif sudo -n true 2>/dev/null; then
+            echo "$zsh_bin" | sudo -n tee -a /etc/shells >/dev/null 2>&1 || true
         fi
     fi
 
@@ -277,7 +367,6 @@ configure_default_shell() {
         fi
     done
 
-    # Check if we can interactively prompt
     if [ "$auto_yes" = false ] && [ -t 0 ]; then
         read -r -p "Set Zsh ($zsh_bin) as default shell for $TARGET_USER? [Y/n] " choice
         choice=${choice:-Y}
@@ -295,17 +384,19 @@ configure_default_shell() {
     fi
 }
 
-# ── 9. MAIN ROUTINE ──────────────────────────────────────────
+# ── 11. MAIN ROUTINE ──────────────────────────────────────────
 main() {
     echo -e "${BOLD}${BLUE}"
     echo "========================================================"
-    echo "  Kitty & Environment Automated Installer"
+    echo "  Kitty & Modern CLI Environment Automated Installer"
     echo "  Target User : ${TARGET_USER}"
     echo "  Target Home : ${TARGET_HOME}"
     echo "========================================================"
     echo -e "${RESET}"
 
     install_system_dependencies
+    install_kitty_binary
+    install_cli_tools
     install_fonts
     setup_zsh_plugins
     deploy_configurations
@@ -318,9 +409,8 @@ main() {
         echo -e "${YELLOW}Existing configuration backups saved in:${RESET}"
         echo -e "  ${BACKUP_DIR}\n"
     fi
-    echo -e "To start your new environment now:"
-    echo -e "  1. Start a new Kitty terminal: ${BOLD}kitty &${RESET}"
-    echo -e "  2. Or start Zsh immediately:  ${BOLD}zsh${RESET}\n"
+    echo -e "You can now launch Kitty immediately:"
+    echo -e "  ${BOLD}kitty &${RESET}\n"
 }
 
 main "$@"
