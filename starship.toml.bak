@@ -1,0 +1,108 @@
+# ~/.config/starship.toml
+# Catppuccin Mocha prompt with slanted powerline transitions matching Kitty tab bar style.
+
+format = """
+[ $os$username ](bg:#1e1e2e fg:#cdd6f4)\
+[](fg:#1e1e2e bg:#313244)\
+$directory\
+[](fg:#313244 bg:#45475a)\
+$git_branch\
+$git_status\
+[](fg:#45475a bg:#585b70)\
+$kubernetes\
+$docker_context\
+$aws\
+[](fg:#585b70)\
+$fill\
+$cmd_duration\
+$line_break\
+$character"""
+
+palette = "catppuccin_mocha"
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo  = "#f2cdcd"
+pink      = "#f5c2e7"
+mauve     = "#cba6f7"
+red       = "#f38ba8"
+maroon    = "#eba0ac"
+peach     = "#fab387"
+yellow    = "#f9e2af"
+green     = "#a6e3a1"
+teal      = "#94e2d5"
+sky       = "#89dceb"
+sapphire  = "#74c7ec"
+blue      = "#89b4fa"
+lavender  = "#b4befe"
+text      = "#cdd6f4"
+base      = "#1e1e2e"
+surface0  = "#313244"
+surface1  = "#45475a"
+surface2  = "#585b70"
+overlay0  = "#6c7086"
+
+[os]
+disabled = false
+style = "bg:#1e1e2e fg:text"
+format = '[$symbol ]($style)'
+
+[os.symbols]
+Fedora = "󰣛"
+Ubuntu = ""
+Debian = ""
+Arch = "󰣇"
+Linux = "🐧"
+Macos = "🍎"
+
+[username]
+style_user = "bg:#1e1e2e fg:text"
+style_root = "bg:#1e1e2e fg:red"
+format = '[$user]($style)'
+disabled = false
+show_always = false
+
+[directory]
+style = "bg:#313244 fg:yellow"
+format = "[ $path ]($style)"
+truncation_length = 4
+truncate_to_repo = true
+
+[git_branch]
+style = "bg:#45475a fg:mauve"
+format = '[ $symbol$branch ]($style)'
+symbol = " "
+
+[git_status]
+style = "bg:#45475a fg:peach"
+format = '[$all_status$ahead_behind ]($style)'
+
+[kubernetes]
+disabled = false
+style = "bg:#585b70 fg:sky"
+format = '[ ⎈ $context($namespace) ]($style)'
+
+[docker_context]
+style = "bg:#585b70 fg:blue"
+format = '[ 🐳 $context ]($style)'
+only_with_files = true
+
+[aws]
+style = "bg:#585b70 fg:peach"
+format = '[ ☁️ $profile($region) ]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "fg:overlay0"
+format = "took [$duration]($style) "
+
+[character]
+success_symbol = "[❯](bold mauve)"
+error_symbol   = "[❯](bold red)"
+vimcmd_symbol  = "[❮](bold green)"
+
+[fill]
+symbol = " "
+
+[line_break]
+disabled = false
