@@ -74,31 +74,9 @@ bindkey "^[[F"     end-of-line
 bindkey "^?"       backward-delete-char
 
 # ── 6. FZF & ZOXIDE INTEGRATION ──────────────────────────────
-# fzf keybindings & popup styling (multi-distro fallback search)
-for _fzf_kb in \
-    /usr/share/fzf/shell/key-bindings.zsh \
-    /usr/share/fzf/key-bindings.zsh \
-    /usr/share/doc/fzf/examples/key-bindings.zsh \
-    /etc/profile.d/fzf-key-bindings.zsh \
-    "$HOME/.fzf.zsh"; do
-    if [ -f "$_fzf_kb" ]; then
-        source "$_fzf_kb"
-        break
-    fi
-done
-unset _fzf_kb
-
-for _fzf_comp in \
-    /usr/share/fzf/shell/completion.zsh \
-    /usr/share/fzf/completion.zsh \
-    /usr/share/doc/fzf/examples/completion.zsh \
-    /etc/profile.d/fzf-completion.zsh; do
-    if [ -f "$_fzf_comp" ]; then
-        source "$_fzf_comp"
-        break
-    fi
-done
-unset _fzf_comp
+# fzf keybindings & popup styling
+[ -f /usr/share/fzf/shell/key-bindings.zsh ] && source /usr/share/fzf/shell/key-bindings.zsh
+[ -f /usr/share/fzf/shell/completion.zsh ]   && source /usr/share/fzf/shell/completion.zsh
 
 export FZF_DEFAULT_OPTS="\
   --height 40% --layout=reverse --border=rounded \
@@ -175,11 +153,71 @@ alias scs='systemctl status'
 alias scu='systemctl --user'
 alias jc='journalctl -xe'
 
+# ── 10. INTERACTIVE SHORTCUTS PICKER (Ctrl+H) ─────────────
+shortcuts() {
+    local entries=(
+        "󰊢 Git          | gs       | git status"
+        "󰊢 Git          | ga       | git add"
+        "󰊢 Git          | gc       | git commit"
+        "󰊢 Git          | gp       | git push"
+        "󰊢 Git          | gl       | git log --oneline --graph --decorate --all"
+        "󰊢 Git          | gd       | git diff"
+        "󰊢 Git          | gb       | git branch"
+        "󰊢 Git          | gco      | git checkout"
+        "󰡨 Docker       | dps      | docker ps"
+        "󰡨 Docker       | dpsa     | docker ps -a"
+        "󰡨 Docker       | di       | docker images"
+        "󰡨 Docker       | dex      | docker exec -it"
+        "󰡨 Docker       | dlog     | docker logs -f"
+        "󰡨 Docker       | dc       | docker compose"
+        "󱃾 Kubernetes   | k        | kubectl"
+        "󱃾 Kubernetes   | kgp      | kubectl get pods"
+        "󱃾 Kubernetes   | kgs      | kubectl get svc"
+        "󱃾 Kubernetes   | kdp      | kubectl describe pod"
+        "󱃾 Kubernetes   | kl       | kubectl logs -f"
+        "󰘬 System/Nav   | ll       | ls -lah"
+        "󰘬 System/Nav   | ..       | cd .."
+        "󰘬 System/Nav   | ...      | cd ../.."
+        "󰘬 System/Nav   | cls      | clear"
+        "󰘬 System/Nav   | path     | echo \$PATH | tr ':' '\n'"
+        "󰘬 System/Nav   | reload   | source ~/.zshrc"
+        "󰘬 System/Nav   | sc       | sudo systemctl"
+        "󰘬 System/Nav   | scs      | systemctl status"
+        "󰘬 System/Nav   | scu      | systemctl --user"
+        "󰘬 System/Nav   | jc       | journalctl -xe"
+    )
+
+    local selected=$(printf "%s\n" "${entries[@]}" | fzf \
+        --header="⚡ Shortcuts & Aliases (Enter to paste/run, Esc to exit)" \
+        --prompt="🔍 Search: " \
+        --delimiter="|" \
+        --with-nth=1,2,3 \
+        --preview='echo -e "\n  Category: {1}\n  Alias:    \033[1;33m{2}\033[0m\n  Command:  \033[1;36m{3}\033[0m"' \
+        --preview-window=down:3:wrap)
+
+    if [[ -n "$selected" ]]; then
+        local cmd=$(echo "$selected" | awk -F'\\|' '{print $2}' | xargs)
+        LBUFFER+="$cmd"
+    fi
+}
+
+# ZLE Widget so it can be triggered directly with hotkey anywhere in terminal
+_shortcuts_widget() {
+    shortcuts
+    zle reset-prompt
+}
+zle -N _shortcuts_widget
+bindkey '^H' _shortcuts_widget       # Ctrl+H
+bindkey '^[s' _shortcuts_widget      # Alt+S
+
+alias cheatsheet='shortcuts'
+alias help-aliases='shortcuts'
 
 # Added by Antigravity CLI installer
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="/home/kanishk/.local/bin:$PATH"
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
 
 

@@ -52,14 +52,50 @@ For automated / non-interactive installation (no prompts):
 
 ---
 
-## 🐚 Shell Support (Zsh & Bash)
+## 🐚 Shell Support & Productivity Shortcuts
 
 Both `.zshrc` and `.bashrc` are fully configured with:
 - **Starship Prompt** (minimal Catppuccin Mocha style with git status and execution timing).
-- **Zoxide** (`z <directory>` smart jump).
+- **Zoxide** (`z <directory>` smart fuzzy jump).
 - **FZF** (fuzzy finder with Catppuccin styling, `Ctrl+R` history search, `Ctrl+T` file finder).
 - **Catppuccin LS_COLORS** and **Bat syntax highlighting**.
-- Helpful aliases for Git (`gs`, `ga`, `gc`, `gp`, `gl`, `gd`), Docker (`dps`, `di`, `dex`, `dc`), Kubectl (`k`, `kgp`), and Systemd (`sc`, `scs`, `jc`).
+- **Interactive Shortcuts Cheatsheet (`Ctrl+H` / `Alt+S`)**: Interactive fuzzy popup menu with live previews to search and execute all your aliases and shortcuts.
+
+### ⚡ Interactive Shortcuts Menu
+Press <kbd>Ctrl</kbd> + <kbd>H</kbd> (or <kbd>Alt</kbd> + <kbd>S</kbd>, or type `shortcuts`) to open the interactive fuzzy-finder menu:
+
+| Category | Shortcut | Target Command |
+|---|---|---|
+| **Git** | `gs` | `git status` |
+| | `ga` | `git add` |
+| | `gc` | `git commit` |
+| | `gp` | `git push` |
+| | `gl` | `git log --oneline --graph --decorate --all` |
+| | `gd` | `git diff` |
+| | `gb` | `git branch` |
+| | `gco` | `git checkout` |
+| **Docker** | `dps` | `docker ps` |
+| | `dpsa` | `docker ps -a` |
+| | `di` | `docker images` |
+| | `dex` | `docker exec -it` |
+| | `dlog` | `docker logs -f` |
+| | `dc` | `docker compose` |
+| **Kubernetes** | `k` | `kubectl` |
+| | `kgp` | `kubectl get pods` |
+| | `kgs` | `kubectl get svc` |
+| | `kdp` | `kubectl describe pod` |
+| | `kl` | `kubectl logs -f` |
+| **System & Nav** | `ll` | `ls -lah` |
+| | `..` / `...` | `cd ..` / `cd ../..` |
+| | `cls` | `clear` |
+| | `path` | `echo $PATH \| tr ':' '\n'` |
+| | `reload` | `source ~/.zshrc` |
+| | `sc` | `sudo systemctl` |
+| | `scs` | `systemctl status` |
+| | `scu` | `systemctl --user` |
+| | `jc` | `journalctl -xe` |
+
+---
 
 ### Enabling Zsh as your default shell (Optional):
 If you want to use Zsh:
