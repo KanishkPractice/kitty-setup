@@ -53,19 +53,20 @@ can_animate() { "$ANIMATE" && ! "$DRY_RUN" && [[ -t 1 && -t 2 && -z ${CI:-} ]]; 
 eat_animation() {
     can_animate || return
     local -a frames=(
-        $'  . . .   C\n         /\\\n        /  \\   configuration'
-        $'  . . .  < C\n         /\\\n        /  \\   configuration'
-        $'  . . .   C\n          /\\\n         /  \\  configuration'
-        $'  . . .  < C\n           /\\\n          /  \\ configuration'
-        $'  . . .   C\n              /\\\n             /  \\  gone safely'
+        $'     .  .  .  .  .\n  <)             kitty.conf'
+        $'        .  .  .  .\n     <)          kitty.conf'
+        $'           .  .  .\n        <)       kitty.conf'
+        $'              .  .\n           <)    kitty.conf'
+        $'                 .\n              <) kitty.conf'
+        $'\n                 <)  eaten safely'
     )
     local frame
     printf "${yellow}\n"
     for frame in "${frames[@]}"; do
-        printf '\r%s\033[3A' "$frame"
-        sleep 0.13
+        printf '\r%s\n\033[2A' "$frame"
+        sleep 0.12
     done
-    printf '\r%s\n\n%s' "${frames[-1]}" "$reset"
+    printf '\r%s\n\n%s' "${frames[5]}" "$reset"
 }
 
 remove_if_managed() {

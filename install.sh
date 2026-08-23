@@ -63,16 +63,17 @@ can_animate() { "$ANIMATE" && ! "$DRY_RUN" && [[ -t 1 && -t 2 && -z ${CI:-} ]]; 
 show_intro_animation() {
     can_animate || return
     local -a frames=(
-        $'          +--------+\n         /        /|\n        +--------+ |\n        |  K I   | +\n        | T T Y  |/\n        +--------+'
-        $'             +--------+\n            /        /|\n           +--------+ |\n           |  K I   | +\n           | T T Y  |/\n           +--------+'
-        $'          +--------+\n         /        /|\n        +--------+ |\n        |  K I   | +\n        | T T Y  |/\n        +--------+'
-        $'     +--------+\n    /        /|\n   +--------+ |\n   |  K I   | +\n   | T T Y  |/\n   +--------+'
+        $'        .------------.\n       / .--------. /|\n      /_/__KITTY_/ / |\n      | |        | | |\n      | | terminal| |/\n      | '----------' /\n      '------------''
+        $'       .------------.\n      / .--------. /|\n     /_/__KITTY_/ / |\n     | |        | | |\n     | | terminal| |/\n     | '----------' /\n     '------------''
+        $'      .------------.\n     / .--------. /|\n    /_/__KITTY_/ / |\n    | |        | | |\n    | | terminal| |/\n    | '----------' /\n    '------------''
+        $'       .------------.\n      / .--------. /|\n     /_/__KITTY_/ / |\n     | |        | | |\n     | | terminal| |/\n     | '----------' /\n     '------------''
+        $'        .------------.\n       / .--------. /|\n      /_/__KITTY_/ / |\n      | |        | | |\n      | | terminal| |/\n      | '----------' /\n      '------------''
     )
     local frame
     printf "${cyan}\n"
     for frame in "${frames[@]}"; do
-        printf '\r%s\033[6A' "$frame"
-        sleep 0.11
+        printf '\r%s\n\033[7A' "$frame"
+        sleep 0.10
     done
     printf '\r%s\n\n%s' "${frames[0]}" "$reset"
 }
@@ -82,7 +83,7 @@ animated_as_user() {
     if ! can_animate; then run_as_user "$@"; return; fi
     log=$(mktemp "${TMPDIR:-/tmp}/kitty-setup.XXXXXX") || { run_as_user "$@"; return; }
     ( run_as_user "$@" ) >"$log" 2>&1 & pid=$!
-    local -a frames=('-' '\\' '|' '/')
+    local -a frames=('[ . ]' '[ o ]' '[ O ]' '[ o ]')
     while kill -0 "$pid" 2>/dev/null; do
         printf '\r  [%s] %-56s' "${frames[frame % ${#frames[@]}]}" "$label"
         frame=$((frame + 1))
