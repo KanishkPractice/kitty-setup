@@ -51,7 +51,7 @@ The installer downloads Zsh plugins itself. If you also want the optional reposi
 ## 🎨 Features & Keybindings
 
 ### Kitty Features
-- **Theme**: Catppuccin Mocha with 75% opacity and smooth cursor trail animations.
+- **Theme**: Catppuccin Mocha with 75% opacity.
 - **Font**: Fantasque Sans Mono Nerd Font (size 18.0) with ligature support.
 - **Layouts**: Splits, Tall, and Stack modes.
 
@@ -72,14 +72,19 @@ The installer downloads Zsh plugins itself. If you also want the optional reposi
 
 ---
 
-## 🐚 Shell Support (Zsh & Bash)
+## 🐚 Shell & Modern CLI Suite (Zsh & Bash)
 
 Both `.zshrc` and `.bashrc` are fully configured with:
-- **Starship Prompt** (minimal Catppuccin Mocha style with git status and execution timing).
-- **Zoxide** (`z <directory>` smart jump).
-- **FZF** (fuzzy finder with Catppuccin styling, `Ctrl+R` history search, `Ctrl+T` file finder).
-- **Catppuccin LS_COLORS** and **Bat syntax highlighting**.
-- Helpful aliases for Git (`gs`, `ga`, `gc`, `gp`, `gl`, `gd`), Docker (`dps`, `di`, `dex`, `dc`), Kubectl (`k`, `kgp`), and Systemd (`sc`, `scs`, `jc`).
+- **`search-cmds` (or `scmd`)**: Interactive fuzzy search for all aliases, shell functions, and built-in tool guides with live preview.
+- **`install-tools` (or `check-tools`)**: Instant visual dashboard of all installed vs missing cutting-edge tools and their installation command.
+- **`fzf-tab`**: Replaces the standard Zsh tab menu with an interactive FZF popup with real-time file and directory preview.
+- **`eza`**: Modern `ls` with icons, git status, permissions, and directory tree view (`ls`, `ll`, `la`, `lt`).
+- **`bat`**: Syntax-highlighted `cat` replacement (`catp`).
+- **`fd` / `ripgrep`**: Ultra-fast search replacements for `find` and `grep`.
+- **`Starship Prompt`**: Minimal Catppuccin Mocha prompt with Git status and command execution timing.
+- **`Zoxide`**: Smart directory jumping (`z <directory>`).
+- **`FZF`**: Fuzzy finder with Catppuccin Mocha styling (`Ctrl+R` history, `Ctrl+T` file finder).
+- **Aliases**: Git (`gs`, `ga`, `gc`, `gp`, `gl`, `gd`), Docker (`dps`, `di`, `dex`, `dc`), Kubectl (`k`, `kgp`, `kgs`, `kl`), and Systemd (`sc`, `scs`, `jc`).
 
 ### Enabling Zsh as your default shell (Optional):
 If you want to use Zsh:

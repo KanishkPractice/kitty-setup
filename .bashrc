@@ -11,6 +11,15 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin" ]]; then
 fi
 export PATH
 
+# ── 0. CASE-INSENSITIVE COMPLETION & NAVIGATION ──────────────
+bind 'set completion-ignore-case on' 2>/dev/null || true
+bind 'set show-all-if-ambiguous on' 2>/dev/null || true
+bind 'set menu-complete-display-prefix on' 2>/dev/null || true
+shopt -s nocaseglob 2>/dev/null || true   # Case-insensitive filename expansion
+shopt -s cdspell 2>/dev/null || true      # Correct minor spelling errors in cd
+shopt -s dirspell 2>/dev/null || true     # Correct spelling errors during completion
+shopt -s autocd 2>/dev/null || true       # Type directory name to cd into it
+
 # ── 1. COLORS & EXPORTS (Catppuccin Mocha) ───────────────────
 c_dir="1;38;2;249;226;175"      # bold yellow  — directories
 c_exec="1;38;2;250;179;135"     # bold peach   — executables
@@ -80,9 +89,20 @@ if command -v starship >/dev/null 2>&1; then
     eval "$(starship init bash)"
 fi
 
-# ── 5. ALIASES ───────────────────────────────────────────────
+# ── 5. ALIASES & CUTTING-EDGE CLI TOOLS ──────────────────────
+# Modern file listing with eza (fallback to ls)
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --icons --group-directories-first'
+    alias ll='eza -lh --icons --group-directories-first --git'
+    alias la='eza -lah --icons --group-directories-first --git'
+    alias lt='eza --tree --level=2 --icons'
+    alias lta='eza --tree --level=3 --icons -a'
+else
+    alias ll='ls -lah --color=auto'
+    alias la='ls -A --color=auto'
+fi
+
 # Navigation & File Management
-alias ll='ls -lah'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias reload='source ~/.bashrc'
@@ -92,6 +112,11 @@ alias path='echo $PATH | tr ":" "\n"'
 # bat (Modern cat replacement)
 if command -v bat >/dev/null 2>&1; then
     alias catp='bat'
+fi
+
+# fd-find alias for standard fd name
+if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
+    alias fd='fdfind'
 fi
 
 # Git
@@ -126,6 +151,85 @@ alias sc='sudo systemctl'
 alias scs='systemctl status'
 alias scu='systemctl --user'
 alias jc='journalctl -xe'
+
+# ── 6. INTERACTIVE COMMAND SEARCH & INSTALL HELPERS ─────────
+search-cmds() {
+    local query="${1:-}"
+    local selected
+    selected=$(
+        {
+            alias | sed 's/^/[alias] /'
+            declare -F | awk '{print "[func]  " $3}'
+            echo "[tool]  eza: Modern replacement for ls with icons and git status"
+            echo "[tool]  bat: Cat clone with syntax highlighting and Git integration"
+            echo "[tool]  rg (ripgrep): Blazing fast recursive codebase search"
+            echo "[tool]  fd (fd-find): Simple, fast, and user-friendly alternative to find"
+            echo "[tool]  fzf: General-purpose command-line fuzzy finder"
+            echo "[tool]  zoxide: Smarter cd command that learns your habits (use 'z <folder>')"
+            echo "[tool]  starship: Fast, customizable prompt for any shell"
+            echo "[tool]  btop: Resource monitor (CPU, memory, disks, network, processes)"
+            echo "[tool]  tldr (tealdeer): Simplified and community-driven man pages"
+            echo "[tool]  delta (git-delta): Syntax-highlighting pager for git diffs"
+            echo "[tool]  search-cmds: Interactively search and run commands and aliases"
+            echo "[tool]  install-tools: Check and install all cutting-edge CLI tools via DNF"
+        } | fzf --query="$query" --prompt="🔎 Search Commands > " --header="Select a command to paste or inspect"
+    )
+
+    if [[ -n "$selected" ]]; then
+        READLINE_LINE=$(echo "$selected" | sed -E 's/^\[[^]]+\][[:space:]]*//; s/=.*//; s/:.*//')
+        READLINE_POINT=${#READLINE_LINE}
+    fi
+}
+alias scmd='search-cmds'
+alias help-cmds='search-cmds'
+
+install-tools() {
+    local -A tool_packages=(
+        ["kitty"]="kitty (GPU terminal emulator)"
+        ["zsh"]="zsh (Z shell)"
+        ["eza"]="eza (Modern ls with icons)"
+        ["bat"]="bat (Cat with syntax highlighting)"
+        ["rg"]="ripgrep (Ultra-fast code search)"
+        ["fd"]="fd-find (Fast user-friendly find)"
+        ["fzf"]="fzf (Fuzzy finder)"
+        ["zoxide"]="zoxide (Smart cd jump directory)"
+        ["btop"]="btop (System resource monitor)"
+        ["tldr"]="tealdeer (Fast tldr cheat sheets)"
+        ["delta"]="git-delta (Syntax highlighted git diff)"
+        ["fontconfig"]="fontconfig (Font management)"
+        ["git"]="git (Version control)"
+        ["curl"]="curl (HTTP transfer tool)"
+    )
+
+    echo -e "\033[1;36m━━ Modern CLI Tools Status ━━\033[0m"
+    local -a missing=()
+    for cmd in "${!tool_packages[@]}"; do
+        if command -v "$cmd" >/dev/null 2>&1; then
+            printf " \033[32m✓\033[0m %-10s : %s\n" "$cmd" "${tool_packages[$cmd]}"
+        else
+            printf " \033[31m✗\033[0m %-10s : %s \033[33m(missing)\033[0m\n" "$cmd" "${tool_packages[$cmd]}"
+            missing+=("$cmd")
+        fi
+    done
+
+    if command -v starship >/dev/null 2>&1; then
+        printf " \033[32m✓\033[0m %-10s : %s\n" "starship" "Starship prompt"
+    else
+        printf " \033[31m✗\033[0m %-10s : %s \033[33m(missing)\033[0m\n" "starship" "Starship prompt"
+    fi
+
+    echo ""
+    if [ ${#missing[@]} -eq 0 ]; then
+        echo -e "\033[1;32mAll cutting-edge tools are installed and ready!\033[0m"
+    else
+        echo -e "\033[1;33mTo install all missing tools on Fedora, run:\033[0m"
+        echo -e "  \033[1msudo dnf install -y kitty zsh fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta\033[0m"
+        if ! command -v starship >/dev/null 2>&1; then
+            echo -e "  \033[1mcurl -sS https://starship.rs/install.sh | sh\033[0m"
+        fi
+    fi
+}
+alias check-tools='install-tools'
 
 # User specific aliases and functions in .bashrc.d
 if [ -d ~/.bashrc.d ]; then

@@ -60,8 +60,11 @@ install_packages() {
         fail "This installer is configured for Fedora/RHEL systems using DNF. 'dnf' command was not found."
         return 1
     fi
-    local -a packages=(kitty zsh fzf zoxide fontconfig curl git bat util-linux-user)
-    info "Installing dependencies via DNF (sudo may be requested)…"
+    local -a packages=(
+        kitty zsh fzf zoxide fontconfig curl git bat util-linux-user
+        eza ripgrep fd-find btop tealdeer git-delta
+    )
+    info "Installing modern CLI packages via DNF (sudo may be requested)…"
     run_elevated dnf install -y "${packages[@]}" || warn "Some DNF packages could not be installed."
 }
 
@@ -133,9 +136,15 @@ install_fonts() {
 install_plugin() {
     local name=$1 url=$2 entry=$3 dst
     dst="$TARGET_HOME/.zsh/$name"
-    [[ -f $dst/$entry ]] && { ok "$name already installed"; return; }; has git || { warn "$name was not installed (git is missing)."; return; }
+    [[ -f $dst/$entry ]] && { ok "$name already installed"; return; }
+    has git || { warn "$name was not installed (git is missing)."; return; }
     ensure_dir "$TARGET_HOME/.zsh" || return
     [[ -e $dst ]] && { warn "$name was not installed because $dst already exists but is incomplete; it was left untouched."; return; }
+    if "$DRY_RUN"; then
+        info "[dry-run] git clone --depth 1 $url $dst"
+        ok "Would install $name"
+        return
+    fi
     run_as_user git clone --depth 1 "$url" "$dst" && [[ -f $dst/$entry ]] && ok "Installed $name" || warn "Could not install $name."
 }
 deploy_config() {
@@ -165,7 +174,10 @@ main() {
     printf "${bold}${blue}\n  ╭──────────────────────────────────────╮\n  │       Kitty setup for Linux           │\n  ╰──────────────────────────────────────╯${reset}\n"; info "Target: $TARGET_USER ($TARGET_HOME)"
     "$DRY_RUN" && info "Dry run: no files or packages will be changed."; ensure_dir "$USER_BIN" || exit 1; export PATH="$USER_BIN:$PATH"
     install_packages; install_kitty; section "Command-line tools"; install_starship; install_zoxide; install_fzf; install_fonts
-    section "Zsh plugins"; install_plugin zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions zsh-autosuggestions.zsh; install_plugin zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting zsh-syntax-highlighting.zsh
+    section "Zsh plugins"
+    install_plugin zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions zsh-autosuggestions.zsh
+    install_plugin zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting zsh-syntax-highlighting.zsh
+    install_plugin fzf-tab https://github.com/Aloxaf/fzf-tab fzf-tab.plugin.zsh
     deploy_config; change_login_shell
     if "$DRY_RUN"; then info "[dry-run] Verification skipped because no files were deployed."; else verify; fi
     printf "\n${bold}Summary${reset}\n"
