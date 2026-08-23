@@ -6,7 +6,7 @@ A complete, battle-tested terminal configuration featuring **Kitty**, **Starship
 
 ## ⚡ Quick Automated Setup
 
-Run the automated installer to set up all tools, fonts, plugins, and configurations:
+Run the safe, repeatable installer to set up the configurations, fonts, plugins, and available tools:
 
 ```sh
 chmod +x install.sh
@@ -18,13 +18,34 @@ For automated / non-interactive installation (no prompts):
 ./install.sh -y
 ```
 
+Preview every action without changing the system:
+
+```sh
+./install.sh --dry-run
+```
+
+Interactive terminals show a short 3D ASCII Kitty cube at startup and a download animation for long operations. Both are automatically disabled in CI and redirected output; use `--no-animation` to disable them manually.
+
+### Safe uninstall
+
+`uninstall.sh` removes only files that still match this repository. It leaves modified files, plugins, fonts, and downloaded tools untouched. To restore the newest configuration backup instead, use `--restore-latest`.
+
+```sh
+./uninstall.sh --yes
+./uninstall.sh --restore-latest
+```
+
 ### What the installer does automatically:
-1. **Kitty Installation**: Detects existing Kitty or automatically installs the official standalone Kitty binary and desktop launcher (no root/sudo required).
-2. **Modern CLI Tools**: Automatically downloads and installs **Starship**, **Zoxide**, and **FZF** into `~/.local/bin`.
-3. **Fonts**: Installs **Fantasque Sans Mono Nerd Font** into `~/.local/share/fonts` and updates the system font cache.
-4. **Zsh Plugins**: Deploys `zsh-autosuggestions` and `zsh-syntax-highlighting` into `~/.zsh/`.
-5. **Config Files**: Safely deploys `kitty.conf`, `starship.toml`, `terminal.conf`, `.zshrc`, `.bashrc`, and `.bash_profile` (automatically creating timestamped backups of existing configs).
-6. **Smart Shell Support**: Configures Kitty with `shell .` so Kitty works seamlessly with your system default shell (Bash or Zsh) without crashing if Zsh is not yet installed.
+1. **Multi-distro packages**: Supports APT, DNF, Pacman, Zypper, APK, and XBPS when available; it continues safely if sudo is unavailable.
+2. **Kitty Installation**: Detects existing Kitty or installs the official standalone Kitty binary in user space.
+3. **Modern CLI Tools**: Installs **Starship**, **Zoxide**, and **FZF** in user space when packages are unavailable.
+4. **Fonts**: Installs **Fantasque Sans Mono Nerd Font** into `~/.local/share/fonts` and updates the system font cache.
+5. **Zsh Plugins**: Downloads `zsh-autosuggestions` and `zsh-syntax-highlighting` into `~/.zsh/` when Git is available.
+6. **Config Files**: Safely deploys `kitty.conf`, `starship.toml`, `terminal.conf`, `.zshrc`, `.bashrc`, and `.bash_profile` (automatically creating timestamped backups of existing regular files).
+7. **Smart Shell Support**: Configures Kitty with `shell .` so it uses the system login shell and never requires Zsh. Use `--change-shell` only if you want the installer to offer Zsh as your login shell.
+8. **Safe outcomes**: Existing files are backed up only when they differ; the final summary identifies every unavailable component instead of reporting a false success.
+
+The installer downloads Zsh plugins itself. If you also want the optional repository submodules for offline inspection, clone with `git clone --recurse-submodules <repository-url>`.
 
 ---
 
