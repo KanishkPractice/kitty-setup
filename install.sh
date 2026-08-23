@@ -26,11 +26,10 @@ fail() { ERRORS+=("$*"); printf "${red}✗${reset} %s\n" "$*" >&2; }
 section() { printf "\n${bold}${cyan}━━ %s ━━${reset}\n" "$*"; }
 has() { command -v "$1" >/dev/null 2>&1; }
 usage() { cat <<'EOF'
-Usage: ./install.sh [--yes] [--change-shell] [--dry-run] [--no-animation]
+Usage: ./install.sh [--yes] [--change-shell] [--dry-run]
   -y, --yes           Non-interactive mode
   --change-shell      Offer to make zsh the login shell
   --dry-run           Preview actions without changing the system
-  --no-animation       Disable the download animation
   -h, --help          Show this help
 EOF
 }
@@ -55,70 +54,15 @@ run_as_user() {
 run_elevated() { [[ $(id -u) -eq 0 ]] && { run "$@"; return; }; has sudo && run sudo "$@"; }
 ensure_dir() { run_as_user mkdir -p "$1" || { fail "Cannot create $1"; return 1; }; }
 
-# Keep long downloads friendly without hiding errors. Animation is only used on
-# a real terminal; logs are printed in full if a command fails.
-ANIMATE=true
-for arg in "$@"; do [[ $arg == --no-animation ]] && ANIMATE=false; done
-can_animate() { "$ANIMATE" && ! "$DRY_RUN" && [[ -t 1 && -t 2 && -z ${CI:-} ]]; }
-show_intro_animation() {
-    can_animate || return
-    local -a frames=(
-        $'        .------------.\n       / .--------. /|\n      /_/__KITTY_/ / |\n      | |        | | |\n      | | terminal| |/\n      | '----------' /\n      '------------''
-        $'       .------------.\n      / .--------. /|\n     /_/__KITTY_/ / |\n     | |        | | |\n     | | terminal| |/\n     | '----------' /\n     '------------''
-        $'      .------------.\n     / .--------. /|\n    /_/__KITTY_/ / |\n    | |        | | |\n    | | terminal| |/\n    | '----------' /\n    '------------''
-        $'       .------------.\n      / .--------. /|\n     /_/__KITTY_/ / |\n     | |        | | |\n     | | terminal| |/\n     | '----------' /\n     '------------''
-        $'        .------------.\n       / .--------. /|\n      /_/__KITTY_/ / |\n      | |        | | |\n      | | terminal| |/\n      | '----------' /\n      '------------''
-    )
-    local frame
-    printf "${cyan}\n"
-    for frame in "${frames[@]}"; do
-        printf '\r%s\n\033[7A' "$frame"
-        sleep 0.10
-    done
-    printf '\r%s\n\n%s' "${frames[0]}" "$reset"
-}
-animated_as_user() {
-    local label=$1 log pid status frame=0
-    shift
-    if ! can_animate; then run_as_user "$@"; return; fi
-    log=$(mktemp "${TMPDIR:-/tmp}/kitty-setup.XXXXXX") || { run_as_user "$@"; return; }
-    ( run_as_user "$@" ) >"$log" 2>&1 & pid=$!
-    local -a frames=('[ . ]' '[ o ]' '[ O ]' '[ o ]')
-    while kill -0 "$pid" 2>/dev/null; do
-        printf '\r  [%s] %-56s' "${frames[frame % ${#frames[@]}]}" "$label"
-        frame=$((frame + 1))
-        sleep 0.12
-    done
-    wait "$pid"; status=$?
-    if [[ $status -eq 0 ]]; then
-        printf '\r  [✓] %-56s\n' "$label"
-    else
-        printf '\r  [✗] %-56s\n' "$label" >&2
-        sed 's/^/      /' "$log" >&2
-    fi
-    rm -f "$log"
-    return "$status"
-}
-
 install_packages() {
-    section "System packages (optional)"
-    local manager='' ; local -a packages=()
-    if has apt-get; then manager=apt; packages=(kitty zsh fzf fontconfig curl git bat); fi
-    if has dnf; then manager=dnf; packages=(kitty zsh fzf zoxide starship fontconfig curl git bat); fi
-    if has pacman; then manager=pacman; packages=(kitty zsh fzf zoxide starship fontconfig curl git bat); fi
-    if has zypper; then manager=zypper; packages=(kitty zsh fzf zoxide starship fontconfig curl git bat); fi
-    if has apk; then manager=apk; packages=(kitty zsh fzf zoxide starship fontconfig curl git bat); fi
-    if has xbps-install; then manager=xbps; packages=(kitty zsh fzf zoxide starship fontconfig curl git bat); fi
-    [[ -n $manager ]] || { warn "No supported package manager found; using user-space fallbacks."; return; }
-    info "Detected $manager. Installing available dependencies (sudo may be requested)."
-    case $manager in
-        apt) run_elevated apt-get update && run_elevated apt-get install -y "${packages[@]}" ;;
-        dnf) run_elevated dnf install -y "${packages[@]}" ;;
-        pacman) run_elevated pacman -S --needed --noconfirm "${packages[@]}" ;;
-        zypper) run_elevated zypper --non-interactive install "${packages[@]}" ;;
-        apk) run_elevated apk add "${packages[@]}" ;;
-        xbps) run_elevated xbps-install -Sy "${packages[@]}" ;;
-    esac || warn "$manager installation was skipped or incomplete."
+    section "DNF Packages"
+    if ! has dnf; then
+        fail "This installer is configured for Fedora/RHEL systems using DNF. 'dnf' command was not found."
+        return 1
+    fi
+    local -a packages=(kitty zsh fzf zoxide fontconfig curl git bat util-linux-user)
+    info "Installing dependencies via DNF (sudo may be requested)…"
+    run_elevated dnf install -y "${packages[@]}" || warn "Some DNF packages could not be installed."
 }
 
 install_kitty() {
@@ -127,7 +71,7 @@ install_kitty() {
         ok "Kitty: $(kitty --version 2>/dev/null || command -v kitty)"
     elif has curl; then
         info "Installing the official Kitty release in user space…"
-        if animated_as_user "Downloading Kitty" bash -c 'curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n'; then
+        if run_as_user bash -c 'curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n'; then
             ensure_dir "$USER_BIN"
             run_as_user ln -sfn "$TARGET_HOME/.local/kitty.app/bin/kitty" "$USER_BIN/kitty"
             run_as_user ln -sfn "$TARGET_HOME/.local/kitty.app/bin/kitten" "$USER_BIN/kitten"
@@ -156,17 +100,17 @@ install_kitty() {
 install_starship() {
     has starship && { ok "Starship already installed"; return; }; has curl || { warn "Starship unavailable (curl is missing)."; return; }
     ensure_dir "$USER_BIN" || return; info "Installing Starship in $USER_BIN…"
-    animated_as_user "Downloading Starship" bash -c 'curl -fsSL https://starship.rs/install.sh | sh -s -- --bin-dir "$1" --yes' _ "$USER_BIN" && ok "Starship installed" || warn "Could not install Starship."
+    run_as_user bash -c 'curl -fsSL https://starship.rs/install.sh | sh -s -- --bin-dir "$1" --yes' _ "$USER_BIN" && ok "Starship installed" || warn "Could not install Starship."
 }
 install_zoxide() {
     has zoxide && { ok "Zoxide already installed"; return; }; has curl || { warn "Zoxide unavailable (curl is missing)."; return; }
     info "Installing Zoxide in user space…"
-    animated_as_user "Downloading Zoxide" bash -c 'curl -fsSL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh' && ok "Zoxide installed" || warn "Could not install Zoxide."
+    run_as_user bash -c 'curl -fsSL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh' && ok "Zoxide installed" || warn "Could not install Zoxide."
 }
 install_fzf() {
     has fzf && { ok "Fzf already installed"; return; }; has git || { warn "Fzf unavailable (git is missing)."; return; }
     local fzf_dir="$TARGET_HOME/.fzf"; ensure_dir "$USER_BIN" || return; info "Installing Fzf in $fzf_dir…"
-    if [[ ! -d $fzf_dir/.git ]] && ! animated_as_user "Downloading Fzf" git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_dir"; then warn "Could not download Fzf."; return; fi
+    if [[ ! -d $fzf_dir/.git ]] && ! run_as_user git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_dir"; then warn "Could not download Fzf."; return; fi
     run_as_user "$fzf_dir/install" --bin --no-key-bindings --no-completion --no-update-rc && run_as_user ln -sfn "$fzf_dir/bin/fzf" "$USER_BIN/fzf" && ok "Fzf installed" || warn "Could not finish Fzf installation."
 }
 
@@ -192,7 +136,7 @@ install_plugin() {
     [[ -f $dst/$entry ]] && { ok "$name already installed"; return; }; has git || { warn "$name was not installed (git is missing)."; return; }
     ensure_dir "$TARGET_HOME/.zsh" || return
     [[ -e $dst ]] && { warn "$name was not installed because $dst already exists but is incomplete; it was left untouched."; return; }
-    animated_as_user "Downloading $name" git clone --depth 1 "$url" "$dst" && [[ -f $dst/$entry ]] && ok "Installed $name" || warn "Could not install $name."
+    run_as_user git clone --depth 1 "$url" "$dst" && [[ -f $dst/$entry ]] && ok "Installed $name" || warn "Could not install $name."
 }
 deploy_config() {
     section "Configuration"
@@ -219,7 +163,6 @@ verify() {
 }
 main() {
     printf "${bold}${blue}\n  ╭──────────────────────────────────────╮\n  │       Kitty setup for Linux           │\n  ╰──────────────────────────────────────╯${reset}\n"; info "Target: $TARGET_USER ($TARGET_HOME)"
-    show_intro_animation
     "$DRY_RUN" && info "Dry run: no files or packages will be changed."; ensure_dir "$USER_BIN" || exit 1; export PATH="$USER_BIN:$PATH"
     install_packages; install_kitty; section "Command-line tools"; install_starship; install_zoxide; install_fzf; install_fonts
     section "Zsh plugins"; install_plugin zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions zsh-autosuggestions.zsh; install_plugin zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting zsh-syntax-highlighting.zsh

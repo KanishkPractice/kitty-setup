@@ -35,15 +35,14 @@ Interactive terminals show a short 3D ASCII Kitty cube at startup and a download
 ./uninstall.sh --restore-latest
 ```
 
-### What the installer does automatically:
-1. **Multi-distro packages**: Supports APT, DNF, Pacman, Zypper, APK, and XBPS when available; it continues safely if sudo is unavailable.
-2. **Kitty Installation**: Detects existing Kitty or installs the official standalone Kitty binary in user space.
-3. **Modern CLI Tools**: Installs **Starship**, **Zoxide**, and **FZF** in user space when packages are unavailable.
-4. **Fonts**: Installs **Fantasque Sans Mono Nerd Font** into `~/.local/share/fonts` and updates the system font cache.
-5. **Zsh Plugins**: Downloads `zsh-autosuggestions` and `zsh-syntax-highlighting` into `~/.zsh/` when Git is available.
-6. **Config Files**: Safely deploys `kitty.conf`, `starship.toml`, `terminal.conf`, `.zshrc`, `.bashrc`, and `.bash_profile` (automatically creating timestamped backups of existing regular files).
-7. **Smart Shell Support**: Configures Kitty with `shell .` so it uses the system login shell and never requires Zsh. Use `--change-shell` only if you want the installer to offer Zsh as your login shell.
-8. **Safe outcomes**: Existing files are backed up only when they differ; the final summary identifies every unavailable component instead of reporting a false success.
+### What the installer does automatically (Fedora / DNF):
+1. **DNF Packages**: Installs `kitty`, `zsh`, `fzf`, `zoxide`, `fontconfig`, `curl`, `git`, `bat`, and `util-linux-user` directly via `dnf`.
+2. **Kitty Application Setup**: Ensures Kitty and its desktop shortcuts (`kitty.desktop`) and icons are registered.
+3. **Starship Prompt**: Installs the latest Starship prompt release directly into `~/.local/bin`.
+4. **Fonts**: Installs **Fantasque Sans Mono Nerd Font** into `~/.local/share/fonts` and updates font cache.
+5. **Zsh Plugins**: Clones `zsh-autosuggestions` and `zsh-syntax-highlighting` into `~/.zsh/`.
+6. **Config Files**: Deploys `kitty.conf`, `starship.toml`, `terminal.conf`, `.zshrc`, `.bashrc`, and `.bash_profile` (creating backups of previous files).
+7. **Login Shell**: Optionally configures Zsh as your login shell with `--change-shell`.
 
 The installer downloads Zsh plugins itself. If you also want the optional repository submodules for offline inspection, clone with `git clone --recurse-submodules <repository-url>`.
 

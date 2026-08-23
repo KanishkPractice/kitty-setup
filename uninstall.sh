@@ -49,26 +49,6 @@ run_as_user() {
     if "$DRY_RUN"; then info "[dry-run] $*"; return 0; fi
     if [[ $(id -u) -eq 0 && $TARGET_USER != root ]]; then sudo -u "$TARGET_USER" -H env "HOME=$TARGET_HOME" "$@"; else "$@"; fi
 }
-can_animate() { "$ANIMATE" && ! "$DRY_RUN" && [[ -t 1 && -t 2 && -z ${CI:-} ]]; }
-eat_animation() {
-    can_animate || return
-    local -a frames=(
-        $'     .  .  .  .  .\n  <)             kitty.conf'
-        $'        .  .  .  .\n     <)          kitty.conf'
-        $'           .  .  .\n        <)       kitty.conf'
-        $'              .  .\n           <)    kitty.conf'
-        $'                 .\n              <) kitty.conf'
-        $'\n                 <)  eaten safely'
-    )
-    local frame
-    printf "${yellow}\n"
-    for frame in "${frames[@]}"; do
-        printf '\r%s\n\033[2A' "$frame"
-        sleep 0.12
-    done
-    printf '\r%s\n\n%s' "${frames[5]}" "$reset"
-}
-
 remove_if_managed() {
     local source=$1 destination=$2 label=$3
     [[ -e $destination || -L $destination ]] || { info "$label is not installed"; return; }
@@ -80,7 +60,6 @@ remove_if_managed() {
         info "[dry-run] Would remove $label ($destination)"
         return
     fi
-    eat_animation
     run_as_user rm -- "$destination" && { REMOVED+=("$label"); ok "Removed $label"; } || fail "Could not remove $label"
 }
 
