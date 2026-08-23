@@ -123,13 +123,34 @@ install_packages() {
 
 install_kitty() {
     section "Kitty"
-    has kitty && { ok "Kitty: $(kitty --version 2>/dev/null || command -v kitty)"; return; }
-    has curl || { fail "Kitty is missing and curl is unavailable for the official installer."; return; }
-    info "Installing the official Kitty release in user space…"
-    if animated_as_user "Downloading Kitty" bash -c 'curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n'; then
-        ensure_dir "$USER_BIN"; run_as_user ln -sfn "$TARGET_HOME/.local/kitty.app/bin/kitty" "$USER_BIN/kitty"
-        run_as_user ln -sfn "$TARGET_HOME/.local/kitty.app/bin/kitten" "$USER_BIN/kitten"; ok "Kitty installed in $USER_BIN"
-    else fail "Could not install Kitty. Check network access and retry."; fi
+    if has kitty; then
+        ok "Kitty: $(kitty --version 2>/dev/null || command -v kitty)"
+    elif has curl; then
+        info "Installing the official Kitty release in user space…"
+        if animated_as_user "Downloading Kitty" bash -c 'curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n'; then
+            ensure_dir "$USER_BIN"
+            run_as_user ln -sfn "$TARGET_HOME/.local/kitty.app/bin/kitty" "$USER_BIN/kitty"
+            run_as_user ln -sfn "$TARGET_HOME/.local/kitty.app/bin/kitten" "$USER_BIN/kitten"
+            ok "Kitty installed in $USER_BIN"
+        else
+            fail "Could not install Kitty. Check network access and retry."
+            return
+        fi
+    else
+        fail "Kitty is missing and curl is unavailable for the official installer."
+        return
+    fi
+
+    # Create desktop shortcut and icons in user space if not provided by system package
+    if [[ -d "$TARGET_HOME/.local/kitty.app" ]]; then
+        ensure_dir "$TARGET_HOME/.local/share/applications"
+        ensure_dir "$TARGET_HOME/.local/share/icons/hicolor/256x256/apps"
+        run_as_user cp -f "$TARGET_HOME/.local/kitty.app/share/applications/kitty.desktop" "$TARGET_HOME/.local/share/applications/" 2>/dev/null || true
+        run_as_user cp -f "$TARGET_HOME/.local/kitty.app/share/applications/kitty-open.desktop" "$TARGET_HOME/.local/share/applications/" 2>/dev/null || true
+        run_as_user cp -f "$TARGET_HOME/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png" "$TARGET_HOME/.local/share/icons/hicolor/256x256/apps/" 2>/dev/null || true
+        # Update desktop file Exec/Icon paths to full paths in case ~/.local/bin is not in GUI launcher PATH
+        run_as_user sed -i "s|^Icon=kitty|Icon=$TARGET_HOME/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g; s|^Exec=kitty|Exec=$TARGET_HOME/.local/kitty.app/bin/kitty|g" "$TARGET_HOME/.local/share/applications/kitty*.desktop" 2>/dev/null || true
+    fi
 }
 
 install_starship() {
