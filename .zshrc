@@ -208,39 +208,108 @@ alias jc='journalctl -xe'
 
 # ── 10. INTERACTIVE COMMAND SEARCH & INSTALL HELPERS ─────────
 
-# Search all aliases, builtins, functions, and commands with interactive FZF preview
+# Search all aliases, functions, cheatsheets, and CLI tools with rich visual preview panel
 search-cmds() {
     local query="${1:-}"
     local selected
     selected=$(
         {
-            # List aliases
-            alias | sed 's/^/[alias] /'
-            # List builtins and functions
-            print -l ${(ok)functions} | sed 's/^/[func]  /'
-            print -l ${(ok)builtins} | sed 's/^/[built] /'
-            # List custom tool helpers
-            echo "[tool]  eza: Modern replacement for ls with icons and git status"
-            echo "[tool]  bat: Cat clone with syntax highlighting and Git integration"
-            echo "[tool]  rg (ripgrep): Blazing fast recursive codebase search"
-            echo "[tool]  fd (fd-find): Simple, fast, and user-friendly alternative to find"
-            echo "[tool]  fzf: General-purpose command-line fuzzy finder"
-            echo "[tool]  zoxide: Smarter cd command that learns your habits (use 'z <folder>')"
-            echo "[tool]  starship: Fast, customizable prompt for any shell"
-            echo "[tool]  btop: Resource monitor (CPU, memory, disks, network, processes)"
-            echo "[tool]  tldr (tealdeer): Simplified and community-driven man pages"
-            echo "[tool]  delta (git-delta): Syntax-highlighting pager for git diffs"
-            echo "[tool]  yazi: Blazing fast terminal file manager with image previews"
-            echo "[tool]  zellij: Terminal multiplexer workspace manager"
-            echo "[tool]  search-cmds: Interactively search and run commands and aliases"
-            echo "[tool]  install-tools: Check and install all cutting-edge CLI tools via DNF"
-        } | fzf --query="$query" --prompt="🔎 Search Commands > " --header="Select a command to paste or inspect"
+            # Git category
+            printf "%-12s | %-16s | %s\n" "Git" "gs" "git status — Check modified and untracked files"
+            printf "%-12s | %-16s | %s\n" "Git" "ga" "git add — Stage changes for commit"
+            printf "%-12s | %-16s | %s\n" "Git" "gc" "git commit — Record changes to repository"
+            printf "%-12s | %-16s | %s\n" "Git" "gp" "git push — Push commits to remote repo"
+            printf "%-12s | %-16s | %s\n" "Git" "gl" "git log --graph --oneline — Visual commit history tree"
+            printf "%-12s | %-16s | %s\n" "Git" "gd" "git diff — Inspect unstaged code differences"
+            printf "%-12s | %-16s | %s\n" "Git" "gco" "git checkout / switch branch"
+            printf "%-12s | %-16s | %s\n" "Git" "gb" "git branch — List or manage branches"
+
+            # File & Navigation category
+            printf "%-12s | %-16s | %s\n" "Files" "ls / ll / la" "eza / ls — Modern file listing with icons & permissions"
+            printf "%-12s | %-16s | %s\n" "Files" "lt / lta" "eza --tree — Show directory hierarchy tree view"
+            printf "%-12s | %-16s | %s\n" "Files" "catp <file>" "bat — View file contents with syntax highlighting"
+            printf "%-12s | %-16s | %s\n" "Files" "z <folder>" "zoxide — Jump instantly to any directory by frecency"
+            printf "%-12s | %-16s | %s\n" "Files" ".." "cd .. — Move up one directory level"
+            printf "%-12s | %-16s | %s\n" "Files" "..." "cd ../.. — Move up two directory levels"
+            printf "%-12s | %-16s | %s\n" "Files" "cls" "clear — Clear terminal screen"
+            printf "%-12s | %-16s | %s\n" "Files" "reload" "source ~/.zshrc — Reload shell configuration"
+            printf "%-12s | %-16s | %s\n" "Files" "path" "Print system PATH formatted on separate lines"
+
+            # Search & Discovery category
+            printf "%-12s | %-16s | %s\n" "Search" "rg <query>" "ripgrep — Ultra-fast regex search across files"
+            printf "%-12s | %-16s | %s\n" "Search" "fd <name>" "fd-find — Fast, case-insensitive file/folder finder"
+            printf "%-12s | %-16s | %s\n" "Search" "fzf" "fzf — Fuzzy finder (Ctrl+T for files, Ctrl+R for history)"
+            printf "%-12s | %-16s | %s\n" "Search" "tldr <cmd>" "tealdeer — Practical command cheat sheet with examples"
+            printf "%-12s | %-16s | %s\n" "Search" "apropos <word>" "Search manual page descriptions for keywords"
+
+            # Docker category
+            printf "%-12s | %-16s | %s\n" "Docker" "dps" "docker ps — List running containers"
+            printf "%-12s | %-16s | %s\n" "Docker" "dpsa" "docker ps -a — List all containers"
+            printf "%-12s | %-16s | %s\n" "Docker" "di" "docker images — List local container images"
+            printf "%-12s | %-16s | %s\n" "Docker" "dex <c> sh" "docker exec -it — Open interactive shell in container"
+            printf "%-12s | %-16s | %s\n" "Docker" "dlog <c>" "docker logs -f — Stream container log output"
+            printf "%-12s | %-16s | %s\n" "Docker" "dc" "docker compose — Multi-container Docker management"
+
+            # Kubernetes category
+            printf "%-12s | %-16s | %s\n" "Kubernetes" "k" "kubectl — Kubernetes CLI client"
+            printf "%-12s | %-16s | %s\n" "Kubernetes" "kgp" "kubectl get pods — List running pods"
+            printf "%-12s | %-16s | %s\n" "Kubernetes" "kgs" "kubectl get svc — List cluster services"
+            printf "%-12s | %-16s | %s\n" "Kubernetes" "kdp <pod>" "kubectl describe pod — Show detailed pod health"
+            printf "%-12s | %-16s | %s\n" "Kubernetes" "kl <pod>" "kubectl logs -f — Stream pod logs"
+
+            # System category
+            printf "%-12s | %-16s | %s\n" "System" "btop" "btop — Interactive CPU, GPU, memory, disk & process monitor"
+            printf "%-12s | %-16s | %s\n" "System" "sc <svc>" "sudo systemctl — Manage systemd system services"
+            printf "%-12s | %-16s | %s\n" "System" "scs <svc>" "systemctl status — Check service status"
+            printf "%-12s | %-16s | %s\n" "System" "scu <svc>" "systemctl --user — Manage user-level services"
+            printf "%-12s | %-16s | %s\n" "System" "jc" "journalctl -xe — View system logs with explanations"
+            printf "%-12s | %-16s | %s\n" "System" "install-tools" "install-tools — Audit and install modern CLI suite via DNF"
+
+            # Kitty shortcuts
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+Enter" "Kitty: Split window horizontally"
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+-" "Kitty: Split window vertically"
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+H/J/K/L" "Kitty: Navigate window panes (vim-style)"
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+Z" "Kitty: Zoom/Maximize current pane (toggle stack)"
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+T" "Kitty: Open new tab in current working directory"
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+W" "Kitty: Close active tab"
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+P > F" "Kitty: Hint picker to select and copy file paths"
+            printf "%-12s | %-16s | %s\n" "Kitty UI" "Alt+S" "Shell: Open interactive Command Search & Cheat Sheet"
+
+            # Other custom user aliases
+            alias | while read -r line; do
+                local aname="${line%%=*}"
+                local aval="${line#*=}"
+                printf "%-12s | %-16s | alias %s\n" "Custom Alias" "$aname" "$aval"
+            done
+        } | sort -u | fzf \
+            --query="$query" \
+            --delimiter=' \| ' \
+            --with-nth=1,2,3 \
+            --header="📂 [CATEGORY]       COMMAND / SHORTCUT | DESCRIPTION (Enter to Paste, Esc to Exit)" \
+            --prompt="🔎 Search > " \
+            --preview='echo -e "\033[1;36mCategory:\033[0m {1}\n\033[1;32mCommand:\033[0m  {2}\n\033[1;33mDetail:\033[0m   {3}\n\n\033[1;35mQuick Example / Help:\033[0m\n$(tldr {2} 2>/dev/null || which {2} 2>/dev/null || echo "Shell builtin / alias: {2}")"' \
+            --preview-window=right:48%:wrap
     )
 
     if [[ -n "$selected" ]]; then
-        print -z "$(echo "$selected" | sed -E 's/^\[[^]]+\][[:space:]]*//; s/=.*//; s/:.*//')"
+        local cmd
+        cmd=$(echo "$selected" | awk -F ' \\| ' '{print $2}' | awk '{print $1}')
+        # If it is a shortcut like Ctrl+Shift, do not execute
+        if [[ "$cmd" =~ "Ctrl\+" || "$cmd" =~ "Alt\+" ]]; then
+            echo -e "\n\033[1;36mKitty Shortcut:\033[0m $selected"
+        else
+            print -z "$cmd"
+        fi
     fi
 }
+search-cmds-widget() {
+    search-cmds
+    zle redisplay
+}
+zle -N search-cmds-widget
+bindkey "^[s" search-cmds-widget   # Alt+S shortcut
+bindkey "^[S" search-cmds-widget
+
 alias scmd='search-cmds'
 alias help-cmds='search-cmds'
 
