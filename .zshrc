@@ -317,6 +317,7 @@ alias help-cmds='search-cmds'
 install-tools() {
     local -A tool_packages=(
         ["kitty"]="kitty (GPU terminal emulator)"
+        ["nvim"]="neovim (Modern IDE / editor)"
         ["zsh"]="zsh (Z shell)"
         ["eza"]="eza (Modern ls with icons)"
         ["bat"]="bat (Cat with syntax highlighting)"
@@ -327,6 +328,8 @@ install-tools() {
         ["btop"]="btop (System resource monitor)"
         ["tldr"]="tealdeer (Fast tldr cheat sheets)"
         ["delta"]="git-delta (Syntax highlighted git diff)"
+        ["cmatrix"]="cmatrix (Matrix falling code animation)"
+        ["cbonsai"]="cbonsai (Animated bonsai growth)"
         ["fontconfig"]="fontconfig (Font management)"
         ["git"]="git (Version control)"
         ["curl"]="curl (HTTP transfer tool)"
@@ -355,7 +358,7 @@ install-tools() {
         echo -e "\033[1;32mAll cutting-edge tools are installed and ready!\033[0m"
     else
         echo -e "\033[1;33mTo install all missing tools on Fedora, run:\033[0m"
-        echo -e "  \033[1msudo dnf install -y kitty zsh fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta\033[0m"
+        echo -e "  \033[1msudo dnf install -y kitty neovim zsh fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai\033[0m"
         if ! command -v starship >/dev/null 2>&1; then
             echo -e "  \033[1mcurl -sS https://starship.rs/install.sh | sh\033[0m"
         fi

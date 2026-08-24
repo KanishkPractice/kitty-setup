@@ -62,7 +62,7 @@ install_packages() {
     fi
     local -a packages=(
         kitty zsh fzf zoxide fontconfig curl git bat util-linux-user
-        eza ripgrep fd-find btop tealdeer git-delta neovim
+        eza ripgrep fd-find btop tealdeer git-delta neovim cmatrix cbonsai
     )
     info "Installing modern CLI packages via DNF (sudo may be requested)…"
     run_elevated dnf install -y "${packages[@]}" || warn "Some DNF packages could not be installed."
