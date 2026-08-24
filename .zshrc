@@ -120,15 +120,7 @@ if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh)"
 fi
 
-# ── 7. AUTOSUGGESTIONS, FZF-TAB & SYNTAX HIGHLIGHTING ───────
-# fzf-tab replaces default completion menu with interactive popup
-[ -f ~/.zsh/fzf-tab/fzf-tab.plugin.zsh ] && \
-    source ~/.zsh/fzf-tab/fzf-tab.plugin.zsh
-
-# Preview directory content with eza/ls on tab completion
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath 2>/dev/null || ls -1 --color=auto $realpath'
-zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --line-range :50 $realpath 2>/dev/null'
-
+# ── 7. AUTOSUGGESTIONS & SYNTAX HIGHLIGHTING ─────────────────
 [ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
     source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086"
@@ -168,10 +160,18 @@ if command -v bat >/dev/null 2>&1; then
     alias catp='bat'
 fi
 
-# fd-find alias for standard fd name
-if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
-    alias fd='fdfind'
+# Editor
+if command -v nvim >/dev/null 2>&1; then
+    alias v='nvim'
+    alias vim='nvim'
+    export EDITOR='nvim'
+    export VISUAL='nvim'
 fi
+
+# Animation & fun screensavers
+alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
+alias pipes='command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Install pipes.sh or run pipes-rs"'
+alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
 
 # Git with delta pager integration
 alias gs='git status'

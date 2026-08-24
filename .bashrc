@@ -114,10 +114,18 @@ if command -v bat >/dev/null 2>&1; then
     alias catp='bat'
 fi
 
-# fd-find alias for standard fd name
-if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
-    alias fd='fdfind'
+# Editor
+if command -v nvim >/dev/null 2>&1; then
+    alias v='nvim'
+    alias vim='nvim'
+    export EDITOR='nvim'
+    export VISUAL='nvim'
 fi
+
+# Animation & fun screensavers
+alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
+alias pipes='command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Install pipes.sh or run pipes-rs"'
+alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
 
 # Git
 alias gs='git status'

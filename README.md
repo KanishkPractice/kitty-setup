@@ -77,7 +77,6 @@ The installer downloads Zsh plugins itself. If you also want the optional reposi
 Both `.zshrc` and `.bashrc` are fully configured with:
 - **`search-cmds` (or `scmd`)**: Interactive fuzzy search for all aliases, shell functions, and built-in tool guides with live preview.
 - **`install-tools` (or `check-tools`)**: Instant visual dashboard of all installed vs missing cutting-edge tools and their installation command.
-- **`fzf-tab`**: Replaces the standard Zsh tab menu with an interactive FZF popup with real-time file and directory preview.
 - **`eza`**: Modern `ls` with icons, git status, permissions, and directory tree view (`ls`, `ll`, `la`, `lt`).
 - **`bat`**: Syntax-highlighted `cat` replacement (`catp`).
 - **`fd` / `ripgrep`**: Ultra-fast search replacements for `find` and `grep`.
@@ -106,6 +105,21 @@ Kitty will automatically launch Zsh on next startup!
 
 ---
 
+## 🚀 Neovim (Lazy.nvim / LazyVim Modular Setup)
+
+Fully configured Neovim environment bundled inside:
+- **Package Manager**: Lazy.nvim with fast asynchronous bootstrapping.
+- **Theme**: Catppuccin Mocha with transparent background.
+- **Animations**:
+  - `neoscroll.nvim`: Smooth scrolling animations for `<C-u>`, `<C-d>`, `<C-b>`, `<C-f>`, `zt`, `zz`, `zb`.
+  - `smear-cursor.nvim`: Fluid cursor smear / trailing animations inside the editor.
+- **LSP & Autocompletion**: `nvim-lspconfig`, `mason.nvim`, `mason-lspconfig`, `nvim-cmp`, `LuaSnip` (pre-configured for Lua, Python, Bash, and more).
+- **Syntax Highlighting**: Treesitter with auto-indent and rich language parsers.
+- **Navigation & Explorer**: `telescope.nvim` (fuzzy file finder) + `nvim-tree.lua` (`<leader>e` file explorer).
+- **UI & Git**: `lualine.nvim` (Catppuccin Mocha), `which-key.nvim` (interactive keymap popup), `gitsigns.nvim`.
+
+---
+
 ## 📁 Repository Structure
 
 ```
@@ -119,8 +133,13 @@ kitty-setup/
 ├── .bashrc                                   # Bash configuration (synced tools & aliases)
 ├── .bash_profile                             # Profile environment loader
 ├── kitty/
-│   ├── kitty.conf                            # Main Kitty configuration
+│   ├── kitty.conf                            # Main Kitty configuration (with animations)
 │   └── kitty.conf.bak                        # Backup Kitty configuration
+├── nvim/                                     # Complete Neovim configuration (Lazy setup)
+│   ├── init.lua                              # Neovim entry point
+│   └── lua/
+│       ├── config/                           # options, keymaps, lazy bootstrap
+│       └── plugins/                          # UI, LSP, Treesitter, animations
 ├── fonts/
 │   └── fantasque-sans-mono-nerd-fonts/       # Fantasque Sans Mono TTF files
 └── zsh/

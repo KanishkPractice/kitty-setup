@@ -62,7 +62,7 @@ install_packages() {
     fi
     local -a packages=(
         kitty zsh fzf zoxide fontconfig curl git bat util-linux-user
-        eza ripgrep fd-find btop tealdeer git-delta
+        eza ripgrep fd-find btop tealdeer git-delta neovim
     )
     info "Installing modern CLI packages via DNF (sudo may be requested)…"
     run_elevated dnf install -y "${packages[@]}" || warn "Some DNF packages could not be installed."
@@ -153,6 +153,15 @@ deploy_config() {
     copy_file "$SCRIPT_DIR/starship.toml" "$TARGET_HOME/.config/starship.toml"
     copy_file "$SCRIPT_DIR/terminal.conf" "$TARGET_HOME/.config/environment.d/terminal.conf"
     copy_file "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc"; copy_file "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc"; copy_file "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile"
+
+    # Deploy Neovim configuration
+    if [[ -d "$SCRIPT_DIR/nvim" ]]; then
+        info "Deploying Neovim configuration…"
+        while IFS= read -r -d '' file; do
+            rel_path="${file#"$SCRIPT_DIR/nvim/"}"
+            copy_file "$file" "$TARGET_HOME/.config/nvim/$rel_path"
+        done < <(find "$SCRIPT_DIR/nvim" -type f -print0)
+    fi
 }
 change_login_shell() {
     "$CHANGE_SHELL" || return; has zsh || { warn "Zsh is not installed; login shell unchanged."; return; }; local zsh_bin; zsh_bin=$(command -v zsh)
@@ -177,7 +186,6 @@ main() {
     section "Zsh plugins"
     install_plugin zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions zsh-autosuggestions.zsh
     install_plugin zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting zsh-syntax-highlighting.zsh
-    install_plugin fzf-tab https://github.com/Aloxaf/fzf-tab fzf-tab.plugin.zsh
     deploy_config; change_login_shell
     if "$DRY_RUN"; then info "[dry-run] Verification skipped because no files were deployed."; else verify; fi
     printf "\n${bold}Summary${reset}\n"
