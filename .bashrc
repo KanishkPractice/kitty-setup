@@ -20,31 +20,48 @@ shopt -s cdspell 2>/dev/null || true      # Correct minor spelling errors in cd
 shopt -s dirspell 2>/dev/null || true     # Correct spelling errors during completion
 shopt -s autocd 2>/dev/null || true       # Type directory name to cd into it
 
-# ── 1. COLORS & EXPORTS (Catppuccin Mocha) ───────────────────
+# ── 1. COLORS & EXPORTS (Catppuccin Mocha / OLED) ─────────────
 c_dir="1;38;2;249;226;175"      # bold yellow  — directories
-c_exec="1;38;2;250;179;135"     # bold peach   — executables
-c_link="38;2;243;139;168"       # red          — symlinks
+c_exec="1;38;2;166;227;161"     # bold green   — executables
+c_link="38;2;137;220;235"       # sky/cyan     — symlinks
 c_image="38;2;245;224;220"      # rosewater    — images
 c_video="38;2;250;179;135"      # peach        — video
 c_audio="38;2;249;226;175"      # yellow       — audio
-c_doc="38;2;243;139;168"        # red          — documents
+c_doc="38;2;243;139;168"        # red/pink     — documents
 c_archive="2;38;2;235;160;172"  # dim maroon   — archives
 c_code="38;2;137;180;250"       # blue         — source code
 c_config="38;2;148;226;213"     # teal         — config/data
+c_lock="2;38;2;108;112;134"     # dim gray     — lockfiles
+c_build="38;2;203;166;247"      # mauve        — build artifacts
 
 _ls_colors="di=${c_dir}:ex=${c_exec}:ln=${c_link}"
-_ls_colors+=":*.jpg=${c_image}:*.jpeg=${c_image}:*.png=${c_image}:*.gif=${c_image}:*.bmp=${c_image}:*.svg=${c_image}:*.webp=${c_image}:*.ico=${c_image}"
+_ls_colors+=":*.jpg=${c_image}:*.jpeg=${c_image}:*.png=${c_image}:*.gif=${c_image}:*.bmp=${c_image}:*.svg=${c_image}:*.webp=${c_image}:*.ico=${c_image}:*.tiff=${c_image}"
 _ls_colors+=":*.mp4=${c_video}:*.mkv=${c_video}:*.avi=${c_video}:*.mov=${c_video}:*.webm=${c_video}:*.flv=${c_video}:*.wmv=${c_video}"
 _ls_colors+=":*.mp3=${c_audio}:*.flac=${c_audio}:*.wav=${c_audio}:*.ogg=${c_audio}:*.m4a=${c_audio}:*.aac=${c_audio}:*.opus=${c_audio}"
-_ls_colors+=":*.pdf=${c_doc}:*.doc=${c_doc}:*.docx=${c_doc}:*.odt=${c_doc}:*.ppt=${c_doc}:*.pptx=${c_doc}:*.xls=${c_doc}:*.xlsx=${c_doc}:*.epub=${c_doc}"
+_ls_colors+=":*.pdf=${c_doc}:*.doc=${c_doc}:*.docx=${c_doc}:*.odt=${c_doc}:*.ppt=${c_doc}:*.pptx=${c_doc}:*.xls=${c_doc}:*.xlsx=${c_doc}:*.epub=${c_doc}:*.txt=${c_doc}:*.md=${c_doc}"
 _ls_colors+=":*.tar=${c_archive}:*.gz=${c_archive}:*.zip=${c_archive}:*.7z=${c_archive}:*.rar=${c_archive}:*.bz2=${c_archive}:*.xz=${c_archive}:*.zst=${c_archive}:*.tgz=${c_archive}"
-_ls_colors+=":*.py=${c_code}:*.js=${c_code}:*.ts=${c_code}:*.jsx=${c_code}:*.tsx=${c_code}:*.c=${c_code}:*.h=${c_code}:*.cpp=${c_code}:*.hpp=${c_code}:*.rs=${c_code}:*.go=${c_code}:*.java=${c_code}:*.rb=${c_code}:*.php=${c_code}:*.lua=${c_code}:*.sh=${c_code}:*.zsh=${c_code}"
-_ls_colors+=":*.json=${c_config}:*.yaml=${c_config}:*.yml=${c_config}:*.toml=${c_config}:*.ini=${c_config}:*.conf=${c_config}:*.xml=${c_config}:*.csv=${c_config}:*.env=${c_config}"
+_ls_colors+=":*.py=${c_code}:*.js=${c_code}:*.ts=${c_code}:*.jsx=${c_code}:*.tsx=${c_code}:*.c=${c_code}:*.h=${c_code}:*.cpp=${c_code}:*.hpp=${c_code}:*.rs=${c_code}:*.go=${c_code}:*.java=${c_code}:*.rb=${c_code}:*.php=${c_code}:*.lua=${c_code}:*.sh=${c_code}:*.zsh=${c_code}:*.sql=${c_code}:*.html=${c_code}:*.css=${c_code}:*.scss=${c_code}"
+_ls_colors+=":*.json=${c_config}:*.yaml=${c_config}:*.yml=${c_config}:*.toml=${c_config}:*.ini=${c_config}:*.conf=${c_config}:*.xml=${c_config}:*.csv=${c_config}:*.env=${c_config}:Dockerfile=${c_config}:Containerfile=${c_config}"
+_ls_colors+=":*.lock=${c_lock}:package-lock.json=${c_lock}:yarn.lock=${c_lock}:Cargo.lock=${c_lock}"
+_ls_colors+=":*.o=${c_build}:*.so=${c_build}:*.dylib=${c_build}:*.dll=${c_build}:*.exe=${c_build}:*.out=${c_build}:*.class=${c_build}"
 export LS_COLORS="$_ls_colors"
 unset _ls_colors
 
-# Bat syntax highlighter theme
+# Eza (modern ls) colors configuration
+export EZA_COLORS="da=38;2;108;112;134:ur=38;2;243;139;168:uw=38;2;250;179;135:ux=38;2;166;227;161:ue=38;2;166;227;161:gr=38;2;180;190;254:gw=38;2;250;179;135:gx=38;2;166;227;161:tr=38;2;180;190;254:tw=38;2;250;179;135:tx=38;2;166;227;161:sn=38;2;148;226;213:sb=38;2;137;180;250:df=38;2;203;166;247:ds=38;2;249;226;175"
+
+# Bat syntax highlighter theme & Pager
 export BAT_THEME="Catppuccin Mocha"
+export BAT_PAGER="less -RF"
+
+# Colored man pages via less termcap
+export LESS_TERMCAP_mb=$'\e[1;38;2;243;139;168m'      # begin blinking (red)
+export LESS_TERMCAP_md=$'\e[1;38;2;137;220;235m'      # begin bold / headings (sky blue)
+export LESS_TERMCAP_me=$'\e[0m'                         # end mode
+export LESS_TERMCAP_se=$'\e[0m'                         # end standout-mode
+export LESS_TERMCAP_so=$'\e[38;2;0;0;0;48;2;203;166;247m' # standout (mauve bar)
+export LESS_TERMCAP_ue=$'\e[0m'                         # end underline
+export LESS_TERMCAP_us=$'\e[4;38;2;166;227;161m'      # underline / flags (green)
 
 # ── 2. FZF INTEGRATION ───────────────────────────────────────
 for _fzf_kb in \
@@ -74,10 +91,10 @@ unset _fzf_comp
 
 export FZF_DEFAULT_OPTS="\
   --height 40% --layout=reverse --border=rounded \
-  --color=fg:#cdd6f4,bg:#1e1e2e,hl:#f38ba8 \
-  --color=fg+:#cdd6f4,bg+:#313244,hl+:#cba6f7 \
-  --color=info:#f9e2af,prompt:#f38ba8,pointer:#f5c2e7 \
-  --color=marker:#f9e2af,spinner:#cba6f7,header:#6c7086"
+  --color=fg:#cdd6f4,bg:#000000,hl:#f38ba8 \
+  --color=fg+:#ffffff,bg+:#313244,hl+:#a6e3a1 \
+  --color=info:#f9e2af,prompt:#89dceb,pointer:#f5c2e7 \
+  --color=marker:#a6e3a1,spinner:#cba6f7,header:#6c7086,border:#b4befe"
 
 # ── 3. ZOXIDE INTEGRATION ────────────────────────────────────
 if command -v zoxide >/dev/null 2>&1; then
