@@ -136,7 +136,7 @@ install_fonts() {
 install_plugin() {
     local name=$1 url=$2 entry=$3 dst
     dst="$TARGET_HOME/.zsh/$name"
-    [[ -f $dst/$entry ]] && { ok "$name already installed"; return; }
+    [[ -f $dst/$entry || -d $dst/$entry ]] && { ok "$name already installed"; return; }
     has git || { warn "$name was not installed (git is missing)."; return; }
     ensure_dir "$TARGET_HOME/.zsh" || return
     [[ -e $dst ]] && { warn "$name was not installed because $dst already exists but is incomplete; it was left untouched."; return; }
@@ -145,14 +145,45 @@ install_plugin() {
         ok "Would install $name"
         return
     fi
-    run_as_user git clone --depth 1 "$url" "$dst" && [[ -f $dst/$entry ]] && ok "Installed $name" || warn "Could not install $name."
+    run_as_user git clone --depth 1 "$url" "$dst" && [[ -f $dst/$entry || -d $dst/$entry ]] && ok "Installed $name" || warn "Could not install $name."
 }
 deploy_config() {
     section "Configuration"
     copy_file "$SCRIPT_DIR/kitty/kitty.conf" "$TARGET_HOME/.config/kitty/kitty.conf"
+    copy_file "$SCRIPT_DIR/kitty/keybindings.conf" "$TARGET_HOME/.config/kitty/keybindings.conf"
+    copy_file "$SCRIPT_DIR/kitty/open-actions.conf" "$TARGET_HOME/.config/kitty/open-actions.conf"
+
+    # Kitty theme files
+    if [[ -d "$SCRIPT_DIR/kitty/themes" ]]; then
+        for theme_file in "$SCRIPT_DIR/kitty/themes"/*.conf; do
+            [[ -f "$theme_file" ]] || continue
+            copy_file "$theme_file" "$TARGET_HOME/.config/kitty/themes/$(basename "$theme_file")"
+        done
+    fi
+
+    # Kitty session files
+    if [[ -d "$SCRIPT_DIR/kitty/sessions" ]]; then
+        for session_file in "$SCRIPT_DIR/kitty/sessions"/*; do
+            [[ -f "$session_file" ]] || continue
+            copy_file "$session_file" "$TARGET_HOME/.config/kitty/sessions/$(basename "$session_file")"
+        done
+    fi
+
     copy_file "$SCRIPT_DIR/starship.toml" "$TARGET_HOME/.config/starship.toml"
     copy_file "$SCRIPT_DIR/terminal.conf" "$TARGET_HOME/.config/environment.d/terminal.conf"
     copy_file "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc"; copy_file "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc"; copy_file "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile"
+
+    # Git delta configuration (only if user doesn't already have a .gitconfig)
+    if [[ -f "$SCRIPT_DIR/.gitconfig" ]]; then
+        if [[ ! -e "$TARGET_HOME/.gitconfig" ]]; then
+            copy_file "$SCRIPT_DIR/.gitconfig" "$TARGET_HOME/.gitconfig"
+        else
+            info "Skipped .gitconfig (already exists — merge manually if desired)"
+        fi
+    fi
+
+    # Tmux fallback configuration
+    [[ -f "$SCRIPT_DIR/.tmux.conf" ]] && copy_file "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf"
 
     # Deploy Neovim configuration
     if [[ -d "$SCRIPT_DIR/nvim" ]]; then
@@ -186,6 +217,9 @@ main() {
     section "Zsh plugins"
     install_plugin zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions zsh-autosuggestions.zsh
     install_plugin zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting zsh-syntax-highlighting.zsh
+    install_plugin zsh-completions https://github.com/zsh-users/zsh-completions src
+    install_plugin zsh-history-substring-search https://github.com/zsh-users/zsh-history-substring-search zsh-history-substring-search.zsh
+    install_plugin zsh-you-should-use https://github.com/MichaelAquilina/zsh-you-should-use you-should-use.plugin.zsh
     deploy_config; change_login_shell
     if "$DRY_RUN"; then info "[dry-run] Verification skipped because no files were deployed."; else verify; fi
     printf "\n${bold}Summary${reset}\n"

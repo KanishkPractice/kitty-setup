@@ -141,8 +141,19 @@ fi
 
 # Animation & fun screensavers
 alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
-alias pipes='command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Install pipes.sh or run pipes-rs"'
+alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Run: cargo install pipes-rs or install pipes.sh")'
 alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
+alias aquarium='command -v asciiquarium >/dev/null 2>&1 && asciiquarium || echo "Install asciiquarium with: sudo dnf install asciiquarium"'
+
+# Kitty terminal features (image protocol, SSH, sessions)
+if [[ "$TERM" == "xterm-kitty" || -n "$KITTY_PID" ]]; then
+    alias icat='kitten icat'
+    alias img='kitten icat --align=left'
+    alias imgfit='kitten icat --place=80x24@0x0'
+    alias kssh='kitten ssh'
+    alias kdiff='kitten diff'
+    alias dev='kitty --session ~/.config/kitty/sessions/dev.session &>/dev/null &'
+fi
 
 # Git
 alias gs='git status'

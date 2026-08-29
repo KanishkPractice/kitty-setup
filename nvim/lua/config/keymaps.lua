@@ -30,3 +30,10 @@ map("v", ">", ">gv")
 -- Quick save & quit
 map("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
 map("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
+
+-- Lazygit (requires lazygit installed)
+map("n", "<leader>gg", function()
+  require("toggleterm.terminal").Terminal
+    :new({ cmd = "lazygit", direction = "float", hidden = true })
+    :toggle()
+end, { desc = "Lazygit" })

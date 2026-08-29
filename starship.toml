@@ -56,3 +56,41 @@ vimcmd_symbol  = "[❮](bold green)"
 
 [line_break]
 disabled = false
+
+# ── Context-Aware Modules (only show when relevant) ──────────
+
+[python]
+format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
+symbol = " "
+style = "yellow"
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "green"
+
+[docker_context]
+format = "[$symbol$context]($style) "
+symbol = " "
+style = "blue"
+
+[rust]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "peach"
+
+[golang]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "teal"
+
+[package]
+format = "[$symbol$version]($style) "
+symbol = "📦 "
+style = "peach"
+
+[time]
+disabled = false
+format = '[$time]($style) '
+style = "overlay0"
+time_format = "%H:%M"

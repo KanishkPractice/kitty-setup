@@ -1,0 +1,24 @@
+# ~/.gitconfig — Git configuration with delta integration
+# Deployed by kitty-setup installer
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
+    syntax-theme = Catppuccin Mocha
+    minus-style = "syntax #3b1d22"
+    plus-style = "syntax #1d321e"
+    minus-emph-style = "syntax #5b2d32"
+    plus-emph-style = "syntax #2d5b2e"
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default

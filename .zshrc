@@ -159,8 +159,24 @@ ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#b4befe'
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8,bold'
 ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#cba6f7,bold'
 
+# Extra completions for common tools (docker, cargo, nix, etc.)
+[ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)
+
+# Remind you when an alias exists for a command you just typed
+[ -f ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh ] && \
+    source ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh
+
+# Syntax highlighting (MUST be sourced last among plugins)
 [ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
     source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# History substring search (source AFTER syntax highlighting)
+[ -f ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh ] && \
+    source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+if type history-substring-search-up &>/dev/null; then
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+fi
 
 # ── 8. STARSHIP PROMPT ───────────────────────────────────────
 if command -v starship >/dev/null 2>&1; then
@@ -203,8 +219,19 @@ fi
 
 # Animation & fun screensavers
 alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
-alias pipes='command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Install pipes.sh or run pipes-rs"'
+alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Run: cargo install pipes-rs or install pipes.sh")'
 alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
+alias aquarium='command -v asciiquarium >/dev/null 2>&1 && asciiquarium || echo "Install asciiquarium with: sudo dnf install asciiquarium"'
+
+# Kitty terminal features (image protocol, SSH, sessions)
+if [[ "$TERM" == "xterm-kitty" || -n "$KITTY_PID" ]]; then
+    alias icat='kitten icat'
+    alias img='kitten icat --align=left'
+    alias imgfit='kitten icat --place=80x24@0x0'
+    alias kssh='kitten ssh'
+    alias kdiff='kitten diff'
+    alias dev='kitty --session ~/.config/kitty/sessions/dev.session &>/dev/null &'
+fi
 
 # Git with delta pager integration
 alias gs='git status'

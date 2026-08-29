@@ -87,11 +87,32 @@ main() {
             [[ $answer =~ ^[Yy]$ ]] || { info "Nothing changed."; exit 0; }
         fi
         remove_if_managed "$SCRIPT_DIR/kitty/kitty.conf" "$TARGET_HOME/.config/kitty/kitty.conf" "Kitty configuration"
+        remove_if_managed "$SCRIPT_DIR/kitty/keybindings.conf" "$TARGET_HOME/.config/kitty/keybindings.conf" "Kitty keybindings"
+        remove_if_managed "$SCRIPT_DIR/kitty/open-actions.conf" "$TARGET_HOME/.config/kitty/open-actions.conf" "Kitty open-actions"
+        if [[ -d "$SCRIPT_DIR/kitty/themes" ]]; then
+            for theme_file in "$SCRIPT_DIR/kitty/themes"/*.conf; do
+                [[ -f "$theme_file" ]] || continue
+                remove_if_managed "$theme_file" "$TARGET_HOME/.config/kitty/themes/$(basename "$theme_file")" "Kitty theme $(basename "$theme_file")"
+            done
+        fi
+        if [[ -d "$SCRIPT_DIR/kitty/sessions" ]]; then
+            for session_file in "$SCRIPT_DIR/kitty/sessions"/*; do
+                [[ -f "$session_file" ]] || continue
+                remove_if_managed "$session_file" "$TARGET_HOME/.config/kitty/sessions/$(basename "$session_file")" "Kitty session $(basename "$session_file")"
+            done
+        fi
         remove_if_managed "$SCRIPT_DIR/starship.toml" "$TARGET_HOME/.config/starship.toml" "Starship configuration"
         remove_if_managed "$SCRIPT_DIR/terminal.conf" "$TARGET_HOME/.config/environment.d/terminal.conf" "Terminal environment configuration"
         remove_if_managed "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc" "Zsh configuration"
         remove_if_managed "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc" "Bash configuration"
         remove_if_managed "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile" "Bash profile"
+        [[ -f "$SCRIPT_DIR/.tmux.conf" ]] && remove_if_managed "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf" "Tmux configuration"
+        if [[ -d "$SCRIPT_DIR/nvim" ]]; then
+            while IFS= read -r -d '' file; do
+                rel_path="${file#"$SCRIPT_DIR/nvim/"}"
+                remove_if_managed "$file" "$TARGET_HOME/.config/nvim/$rel_path" "Neovim $rel_path"
+            done < <(find "$SCRIPT_DIR/nvim" -type f -print0)
+        fi
     fi
     printf "\n${bold}Summary${reset}\n"
     printf '%s managed file(s) removed.\n' "${#REMOVED[@]}"

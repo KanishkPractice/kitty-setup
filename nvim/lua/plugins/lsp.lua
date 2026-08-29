@@ -4,10 +4,20 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       require("mason").setup()
+      require("mason-tool-installer").setup({
+        ensure_installed = {
+          "stylua",
+          "ruff",
+          "shfmt",
+          "shellcheck",
+          "prettierd",
+        },
+      })
       local mason_lspconfig = require("mason-lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 

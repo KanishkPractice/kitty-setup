@@ -125,24 +125,31 @@ Fully configured Neovim environment bundled inside:
 ```
 kitty-setup/
 ├── install.sh                                # Automated fail-proof installer
-├── README.md                                 # Documentation
+├── uninstall.sh                              # Safe uninstaller and backup restore utility
+├── README.md                                 # Main overview & quick start
+├── USER_GUIDE.md                             # Complete in-depth usage & shortcut guide
 ├── terminal.conf                             # Environment variable (TERMINAL=kitty)
 ├── starship.toml                             # Starship prompt Catppuccin configuration
-├── starship.toml.bak                         # Alternate Starship config
-├── .zshrc                                    # Zsh configuration
+├── .zshrc                                    # Zsh configuration (plugins, FZF, eza, helpers)
 ├── .bashrc                                   # Bash configuration (synced tools & aliases)
 ├── .bash_profile                             # Profile environment loader
+├── .gitconfig                                # Git delta & diff3 syntax-highlighted pager
+├── .tmux.conf                                # Tmux fallback config (Catppuccin Mocha)
 ├── kitty/
-│   ├── kitty.conf                            # Main Kitty configuration (with animations)
-│   └── kitty.conf.bak                        # Backup Kitty configuration
-├── nvim/                                     # Complete Neovim configuration (Lazy setup)
+│   ├── kitty.conf                            # Main Kitty configuration
+│   ├── keybindings.conf                      # Modular Kitty keybindings & hints
+│   ├── open-actions.conf                     # File type handlers & preview triggers
+│   ├── sessions/                             # Predefined multi-window sessions (e.g. dev.session)
+│   └── themes/                               # Catppuccin Mocha color palette
+├── nvim/                                     # Complete Neovim configuration (Lazy.nvim setup)
 │   ├── init.lua                              # Neovim entry point
+│   ├── lazy-lock.json                        # Locked plugin specifications
 │   └── lua/
 │       ├── config/                           # options, keymaps, lazy bootstrap
-│       └── plugins/                          # UI, LSP, Treesitter, animations
+│       └── plugins/                          # UI, LSP, Treesitter, animations, telescope
 ├── fonts/
 │   └── fantasque-sans-mono-nerd-fonts/       # Fantasque Sans Mono TTF files
 └── zsh/
-    ├── zsh-autosuggestions/                  # Zsh autosuggestions plugin
-    └── zsh-syntax-highlighting/              # Zsh syntax highlighting plugin
+    ├── zsh-autosuggestions/                  # Zsh autosuggestions plugin submodule
+    └── zsh-syntax-highlighting/              # Zsh syntax highlighting plugin submodule
 ```

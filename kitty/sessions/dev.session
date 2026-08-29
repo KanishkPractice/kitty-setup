@@ -1,0 +1,12 @@
+# Dev workspace session
+# Launch with: kitty --session ~/.config/kitty/sessions/dev.session
+#          or: dev  (shell alias)
+
+new_tab editor
+layout splits
+cd ~
+launch --title editor zsh -c 'nvim .'
+launch --location=hsplit --title terminal
+
+new_tab git
+launch --title lazygit zsh -c 'lazygit 2>/dev/null || git log --oneline -20'
