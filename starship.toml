@@ -1,7 +1,7 @@
 # ~/.config/starship.toml
 # Minimal Catppuccin Mocha prompt — clean and distraction-free
 
-format = """$directory$git_branch$git_status$cmd_duration
+format = """$directory$git_branch$git_state$git_status$python$nodejs$rust$golang$docker_context$cmd_duration
 $character"""
 
 palette = "catppuccin_mocha"
@@ -31,23 +31,38 @@ overlay0  = "#6c7086"
 [directory]
 style = "bold yellow"
 format = "[$path]($style) "
-truncation_length = 3
-truncate_to_repo = true
-truncation_symbol = "…/"
+truncation_length = 0
+truncate_to_repo = false
 
 [git_branch]
-style = "mauve"
-format = "[$symbol$branch]($style) "
+style = "bold mauve"
+format = "[$symbol$branch(:$remote_branch)]($style) "
 symbol = " "
+
+[git_state]
+style = "bold red"
+format = '[\($state( $progress_current/$progress_total)\)]($style) '
 
 [git_status]
 style = "peach"
-format = '[$all_status$ahead_behind]($style) '
+format = '([\[$all_status$ahead_behind\]]($style) )'
+conflicted = "⚔️ "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕⇡${ahead_count}⇣${behind_count} "
+up_to_date = "✓ "
+untracked = "?${count} "
+stashed = "📦 "
+modified = "!${count} "
+staged = "+${count} "
+renamed = "»${count} "
+deleted = "✘${count} "
 
 [cmd_duration]
-min_time = 2000
-style = "overlay0"
-format = "[$duration]($style) "
+min_time = 500
+show_milliseconds = false
+style = "bold yellow"
+format = "[⏱ took $duration]($style) "
 
 [character]
 success_symbol = "[❯](bold mauve)"

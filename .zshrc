@@ -15,19 +15,19 @@ unsetopt BEEP
 # ── 3. COLORS & EXPORTS (Catppuccin Mocha) ───────────────────
 autoload -U colors && colors
 
-# LS_COLORS categorized styling
-c_dir="1;38;2;249;226;175"      # bold yellow  — directories
+# LS_COLORS categorized styling (Catppuccin Mocha Vibrant)
+c_dir="1;38;2;137;180;250"      # bold blue    — directories
 c_exec="1;38;2;166;227;161"     # bold green   — executables
-c_link="38;2;137;220;235"       # sky/cyan     — symlinks
-c_image="38;2;245;224;220"      # rosewater    — images
+c_link="1;38;2;137;220;235"     # bold sky/cyan— symlinks
+c_image="38;2;245;194;231"      # vibrant pink — images
 c_video="38;2;250;179;135"      # peach        — video
 c_audio="38;2;249;226;175"      # yellow       — audio
-c_doc="38;2;243;139;168"        # red/pink     — documents
-c_archive="2;38;2;235;160;172"  # dim maroon   — archives
-c_code="38;2;137;180;250"       # blue         — source code
-c_config="38;2;148;226;213"     # teal         — config/data
-c_lock="2;38;2;108;112;134"     # dim gray     — lockfiles
-c_build="38;2;203;166;247"      # mauve        — build artifacts
+c_doc="38;2;243;139;168"        # red/rose     — documents
+c_archive="1;38;2;235;160;172"  # maroon       — archives / zips
+c_code="38;2;148;226;213"       # teal/mint    — source code
+c_config="38;2;203;166;247"     # mauve        — config/data
+c_lock="38;2;108;112;134"       # dim gray     — lockfiles
+c_build="38;2;180;190;254"      # lavender     — build artifacts
 
 _ls_colors="di=${c_dir}:ex=${c_exec}:ln=${c_link}"
 _ls_colors+=":*.jpg=${c_image}:*.jpeg=${c_image}:*.png=${c_image}:*.gif=${c_image}:*.bmp=${c_image}:*.svg=${c_image}:*.webp=${c_image}:*.ico=${c_image}:*.tiff=${c_image}"
@@ -42,8 +42,8 @@ _ls_colors+=":*.o=${c_build}:*.so=${c_build}:*.dylib=${c_build}:*.dll=${c_build}
 export LS_COLORS="$_ls_colors"
 unset _ls_colors
 
-# Eza (modern ls) colors configuration
-export EZA_COLORS="da=38;2;108;112;134:ur=38;2;243;139;168:uw=38;2;250;179;135:ux=38;2;166;227;161:ue=38;2;166;227;161:gr=38;2;180;190;254:gw=38;2;250;179;135:gx=38;2;166;227;161:tr=38;2;180;190;254:tw=38;2;250;179;135:tx=38;2;166;227;161:sn=38;2;148;226;213:sb=38;2;137;180;250:df=38;2;203;166;247:ds=38;2;249;226;175"
+# Eza (modern ls) colors configuration (Vibrant Catppuccin)
+export EZA_COLORS="da=38;2;127;132;156:ur=38;2;243;139;168:uw=38;2;250;179;135:ux=1;38;2;166;227;161:ue=1;38;2;166;227;161:gr=38;2;180;190;254:gw=38;2;250;179;135:gx=38;2;166;227;161:tr=38;2;180;190;254:tw=38;2;250;179;135:tx=38;2;166;227;161:sn=38;2;148;226;213:sb=38;2;137;180;250:df=38;2;203;166;247:ds=1;38;2;137;180;250"
 
 # Bat (modern cat) & Pager theme
 export BAT_THEME="Catppuccin Mocha"
@@ -77,7 +77,6 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # Automatic directory correction for cd typos (e.g. cd dokctop -> Desktop)
 setopt CORRECT
-setopt CDABLE_VARS
 
 # ── 5. KEYBINDINGS & HISTORY SEARCH ──────────────────────────
 autoload -U up-line-or-beginning-search down-line-or-beginning-search
@@ -146,24 +145,25 @@ fi
 # ── 7. AUTOSUGGESTIONS & SYNTAX HIGHLIGHTING ─────────────────
 [ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
     source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086"
+# Bright, readable pastel suggestion preview (overlay1)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#7f849c,italic"
 
 # Syntax highlighting custom styling & activation (MUST be sourced last)
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[command]='fg=#89dceb,bold'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#89b4fa,bold'
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6e3a1,bold'
-ZSH_HIGHLIGHT_STYLES[function]='fg=#a6e3a1'
-ZSH_HIGHLIGHT_STYLES[path]='fg=#94e2d5,underline'
-ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#94e2d5'
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#f9e2af'
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#f9e2af'
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#f9e2af'
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#f5c2e7'
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#b4befe'
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#b4befe'
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8,bold'
-ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#cba6f7,bold'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#89dceb,bold'          # Sky Cyan for commands
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#89b4fa,bold'          # Blue for builtins
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6e3a1,bold'            # Vibrant Green for aliases
+ZSH_HIGHLIGHT_STYLES[function]='fg=#94e2d5,bold'         # Teal for shell functions
+ZSH_HIGHLIGHT_STYLES[path]='fg=#f9e2af,underline'        # Warm Yellow with underline for valid paths
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#f9e2af'           # Warm Yellow for partial paths
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#fab387' # Peach for single quotes
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#fab387' # Peach for double quotes
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#fab387' # Peach for $'' strings
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#f5c2e7'   # Pink for command substitutions
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#cba6f7'   # Mauve for short flags (-a)
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#cba6f7'   # Mauve for long flags (--all)
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8,bold'     # Red for typos/unknown commands
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b4befe,bold'     # Lavender for if/then/for keywords
 
 # Extra completions for common tools (docker, cargo, nix, etc.)
 [ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)
