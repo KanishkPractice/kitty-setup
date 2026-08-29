@@ -1,7 +1,7 @@
 # ~/.config/starship.toml
 # Minimal Catppuccin Mocha prompt — clean and distraction-free
 
-format = """$directory$git_branch$git_state$git_status$python$nodejs$rust$golang$docker_context$cmd_duration
+format = """$directory$git_branch$git_state$git_status$kubernetes$helm$terraform$aws$gcloud$docker_context$python$nodejs$rust$golang$sudo$cmd_duration$time
 $character"""
 
 palette = "catppuccin_mocha"
@@ -30,9 +30,11 @@ overlay0  = "#6c7086"
 
 [directory]
 style = "bold yellow"
-format = "[$path]($style) "
+format = "[$path]($style)[$read_only]($read_only_style) "
 truncation_length = 0
 truncate_to_repo = false
+read_only = " 🔒"
+read_only_style = "bold red"
 
 [git_branch]
 style = "bold mauve"
@@ -58,11 +60,59 @@ staged = "+${count} "
 renamed = "»${count} "
 deleted = "✘${count} "
 
+[kubernetes]
+disabled = false
+format = '[$symbol$context(\($namespace\))]($style) '
+symbol = "☸ "
+style = "bold cyan"
+
+[helm]
+disabled = false
+format = '[$symbol($version )]($style) '
+symbol = "⎈ "
+style = "bold white"
+
+[terraform]
+disabled = false
+format = '[$symbol$workspace]($style) '
+symbol = "󱁢 "
+style = "bold purple"
+
+[aws]
+disabled = false
+format = '[$symbol($profile )(\($region\) )]($style)'
+symbol = "☁️ "
+style = "bold yellow"
+
+[gcloud]
+disabled = false
+format = '[$symbol($account )(\($project\) )]($style)'
+symbol = "🇬 "
+style = "bold blue"
+
+[docker_context]
+disabled = false
+format = "[$symbol$context]($style) "
+symbol = "🐳 "
+style = "bold blue"
+
+[sudo]
+disabled = false
+format = "[$symbol]($style)"
+symbol = "🛡️ "
+style = "bold red"
+
 [cmd_duration]
 min_time = 500
 show_milliseconds = false
 style = "bold yellow"
 format = "[⏱ took $duration]($style) "
+
+[time]
+disabled = false
+format = '([\[$time\]]($style) )'
+style = "lavender"
+time_format = "%d %b %H:%M"
 
 [character]
 success_symbol = "[❯](bold mauve)"
@@ -84,11 +134,6 @@ format = "[$symbol($version )]($style)"
 symbol = " "
 style = "green"
 
-[docker_context]
-format = "[$symbol$context]($style) "
-symbol = " "
-style = "blue"
-
 [rust]
 format = "[$symbol($version )]($style)"
 symbol = " "
@@ -103,9 +148,3 @@ style = "teal"
 format = "[$symbol$version]($style) "
 symbol = "📦 "
 style = "peach"
-
-[time]
-disabled = false
-format = '[$time]($style) '
-style = "overlay0"
-time_format = "%H:%M"

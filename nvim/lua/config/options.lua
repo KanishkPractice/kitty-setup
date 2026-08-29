@@ -41,3 +41,12 @@ opt.splitbelow = true
 -- Performance & responsiveness
 opt.updatetime = 200
 opt.timeoutlen = 300
+
+-- Fix Neovim 0.12 upstream markdown treesitter range nil bug
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "markdown.mdx" },
+  callback = function(args)
+    pcall(vim.treesitter.stop, args.buf)
+    vim.bo[args.buf].syntax = "markdown"
+  end,
+})
