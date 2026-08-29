@@ -64,30 +64,36 @@ export LESS_TERMCAP_ue=$'\e[0m'                         # end underline
 export LESS_TERMCAP_us=$'\e[4;38;2;166;227;161m'      # underline / flags (green)
 
 # ── 2. FZF INTEGRATION ───────────────────────────────────────
-for _fzf_kb in \
-    "$HOME/.fzf/shell/key-bindings.bash" \
-    /usr/share/fzf/shell/key-bindings.bash \
-    /usr/share/fzf/key-bindings.bash \
-    /usr/share/doc/fzf/examples/key-bindings.bash \
-    /etc/profile.d/fzf.bash; do
-    if [ -f "$_fzf_kb" ]; then
-        source "$_fzf_kb"
-        break
-    fi
-done
-unset _fzf_kb
+if command -v fzf >/dev/null 2>&1; then
+    if fzf --bash >/dev/null 2>&1; then
+        eval "$(fzf --bash)"
+    else
+        for _fzf_kb in \
+            "$HOME/.fzf/shell/key-bindings.bash" \
+            /usr/share/fzf/shell/key-bindings.bash \
+            /usr/share/fzf/key-bindings.bash \
+            /usr/share/doc/fzf/examples/key-bindings.bash \
+            /etc/profile.d/fzf.bash; do
+            if [ -f "$_fzf_kb" ]; then
+                source "$_fzf_kb"
+                break
+            fi
+        done
+        unset _fzf_kb
 
-for _fzf_comp in \
-    "$HOME/.fzf/shell/completion.bash" \
-    /usr/share/fzf/shell/completion.bash \
-    /usr/share/fzf/completion.bash \
-    /usr/share/doc/fzf/examples/completion.bash; do
-    if [ -f "$_fzf_comp" ]; then
-        source "$_fzf_comp"
-        break
+        for _fzf_comp in \
+            "$HOME/.fzf/shell/completion.bash" \
+            /usr/share/fzf/shell/completion.bash \
+            /usr/share/fzf/completion.bash \
+            /usr/share/doc/fzf/examples/completion.bash; do
+            if [ -f "$_fzf_comp" ]; then
+                source "$_fzf_comp"
+                break
+            fi
+        done
+        unset _fzf_comp
     fi
-done
-unset _fzf_comp
+fi
 
 export FZF_DEFAULT_OPTS="\
   --height 40% --layout=reverse --border=rounded \

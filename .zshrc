@@ -99,31 +99,37 @@ bindkey "^[[F"     end-of-line
 bindkey "^?"       backward-delete-char
 
 # ── 6. FZF & ZOXIDE INTEGRATION ──────────────────────────────
-# fzf keybindings & popup styling (multi-distro fallback search)
-for _fzf_kb in \
-    /usr/share/fzf/shell/key-bindings.zsh \
-    /usr/share/fzf/key-bindings.zsh \
-    /usr/share/doc/fzf/examples/key-bindings.zsh \
-    /etc/profile.d/fzf-key-bindings.zsh \
-    "$HOME/.fzf.zsh"; do
-    if [ -f "$_fzf_kb" ]; then
-        source "$_fzf_kb"
-        break
-    fi
-done
-unset _fzf_kb
+# fzf keybindings & popup styling (built-in generator or fallback)
+if command -v fzf >/dev/null 2>&1; then
+    if fzf --zsh >/dev/null 2>&1; then
+        source <(fzf --zsh)
+    else
+        for _fzf_kb in \
+            /usr/share/fzf/shell/key-bindings.zsh \
+            /usr/share/fzf/key-bindings.zsh \
+            /usr/share/doc/fzf/examples/key-bindings.zsh \
+            /etc/profile.d/fzf-key-bindings.zsh \
+            "$HOME/.fzf.zsh"; do
+            if [ -f "$_fzf_kb" ]; then
+                source "$_fzf_kb"
+                break
+            fi
+        done
+        unset _fzf_kb
 
-for _fzf_comp in \
-    /usr/share/fzf/shell/completion.zsh \
-    /usr/share/fzf/completion.zsh \
-    /usr/share/doc/fzf/examples/completion.zsh \
-    /etc/profile.d/fzf-completion.zsh; do
-    if [ -f "$_fzf_comp" ]; then
-        source "$_fzf_comp"
-        break
+        for _fzf_comp in \
+            /usr/share/fzf/shell/completion.zsh \
+            /usr/share/fzf/completion.zsh \
+            /usr/share/doc/fzf/examples/completion.zsh \
+            /etc/profile.d/fzf-completion.zsh; do
+            if [ -f "$_fzf_comp" ]; then
+                source "$_fzf_comp"
+                break
+            fi
+        done
+        unset _fzf_comp
     fi
-done
-unset _fzf_comp
+fi
 
 export FZF_DEFAULT_OPTS="\
   --height 40% --layout=reverse --border=rounded \
