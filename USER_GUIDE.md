@@ -63,7 +63,7 @@ Kitty is configured with **Catppuccin Mocha**, **75% opacity**, **Fantasque Sans
 | | `Ctrl+Shift+Shift+H / L` | Switch previous / next tab |
 | | `Ctrl+Shift+1..4` | Jump to tab 1 to 4 |
 | | `Alt+1..9` | Fast tab switch (1 to 9) |
-| | `Ctrl+Shift+Shift+Enter` | Detach tab into separate window |
+| | `Ctrl+Shift+Shift+D` | Detach tab into separate window |
 | **Font Zoom** | `Ctrl+Shift+=` or `Ctrl+=` | Increase font size |
 | | `Ctrl+Shift+-` or `Ctrl+-` | Decrease font size |
 | | `Ctrl+Shift+0` or `Ctrl+0` | Reset font size to default (18pt) |
@@ -118,13 +118,24 @@ Both `.zshrc` and `.bashrc` provide feature parity with Catppuccin Mocha colors 
 | **`tealdeer` (`tldr`)** | `man` | `tldr git commit` instant practical command examples |
 | **`btop`** | `top` / `htop` | `btop` interactive CPU, GPU, memory, disks & network visualizer |
 | **`git-delta`** | `git diff` | Side-by-side syntax-highlighted git diffs |
-| **`cmatrix` / `cbonsai`** | - | `matrix` / `bonsai` terminal animations & screensavers |
+| **`cava`** | - | `cava` vibrant audio visualizer with Cyberpunk / Catppuccin gradients |
+| **`fastfetch`** | `neofetch` | `fastfetch` fast, modern system specs & hardware summary with ASCII art |
+| **`asciiquarium`** | - | `asciiquarium` animated underwater ASCII ocean screensaver |
+| **`tty-clock`** | - | `tty-clock -C 6 -c -s -b` minimalist terminal digital clock |
+| **`cmatrix` / `cbonsai` / `pipes-rs`** | - | `matrix` / `bonsai` / `pipes` terminal animations & screensavers |
+| **`sl`** | - | `sl` animated steam locomotive train |
+| **`oneko`** | - | `oneko &` retro pixel cat that chases your cursor around the screen |
+| **`figlet` / `toilet`** | - | `figlet "TEXT" \| lolcat` or `toilet -f slant --filter metal "TEXT"` ASCII art banners |
+| **`cowsay` / `fortune`** | - | `fortune \| cowsay \| lolcat` quote of the day in speech bubble |
+| **`chafa`** | - | `chafa <image/gif>` renders high-res images & animated GIFs in terminal |
 
 ---
 
 ## ⌨️ Shell Aliases & Shortcuts
 
 ### Interactive Search & Guides
+- `cool`: Visual status & quick launch cheatsheet for all aesthetic/rice tools.
+- `cool -i` (or `cool menu`): Interactive fuzzy launcher to pick and launch any screensaver or visualizer.
 - `scmd` or `search-cmds` (or press `Alt+S`): Interactive fuzzy search across all aliases, shortcuts, and commands with live documentation preview.
 - `check-tools` or `install-tools`: Tool readiness audit dashboard.
 
