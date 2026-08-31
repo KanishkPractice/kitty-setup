@@ -131,11 +131,11 @@ if command -v fzf >/dev/null 2>&1; then
 fi
 
 export FZF_DEFAULT_OPTS="\
-  --height 40% --layout=reverse --border=rounded \
-  --color=fg:#cdd6f4,bg:#000000,hl:#f38ba8 \
-  --color=fg+:#ffffff,bg+:#313244,hl+:#a6e3a1 \
-  --color=info:#f9e2af,prompt:#89dceb,pointer:#f5c2e7 \
-  --color=marker:#a6e3a1,spinner:#cba6f7,header:#6c7086,border:#b4befe"
+  --height 45% --layout=reverse --border=rounded \
+  --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7 \
+  --color=fg+:#ffffff,bg+:#283457,hl+:#7dcfff \
+  --color=info:#e0af68,prompt:#7aa2f7,pointer:#7dcfff \
+  --color=marker:#9ece6a,spinner:#bb9af7,header:#565f89,border:#7aa2f7"
 
 # zoxide initialization
 if command -v zoxide >/dev/null 2>&1; then
@@ -145,25 +145,25 @@ fi
 # ── 7. AUTOSUGGESTIONS & SYNTAX HIGHLIGHTING ─────────────────
 [ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
     source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-# Bright, readable pastel suggestion preview (overlay1)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#7f849c,italic"
+# Crisp, readable suggestion preview (Tokyo Slate)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#565f89,italic"
 
 # Syntax highlighting custom styling & activation (MUST be sourced last)
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[command]='fg=#89dceb,bold'          # Sky Cyan for commands
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#89b4fa,bold'          # Blue for builtins
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6e3a1,bold'            # Vibrant Green for aliases
-ZSH_HIGHLIGHT_STYLES[function]='fg=#94e2d5,bold'         # Teal for shell functions
-ZSH_HIGHLIGHT_STYLES[path]='fg=#f9e2af,underline'        # Warm Yellow with underline for valid paths
-ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#f9e2af'           # Warm Yellow for partial paths
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#fab387' # Peach for single quotes
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#fab387' # Peach for double quotes
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#fab387' # Peach for $'' strings
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#f5c2e7'   # Pink for command substitutions
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#cba6f7'   # Mauve for short flags (-a)
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#cba6f7'   # Mauve for long flags (--all)
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8,bold'     # Red for typos/unknown commands
-ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b4befe,bold'     # Lavender for if/then/for keywords
+ZSH_HIGHLIGHT_STYLES[command]='fg=#7dcfff,bold'          # Electric Cyan for commands
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#7aa2f7,bold'          # Bright Azure for builtins
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#9ece6a,bold'            # Vibrant Emerald Green for aliases
+ZSH_HIGHLIGHT_STYLES[function]='fg=#73daca,bold'         # Radiant Mint for shell functions
+ZSH_HIGHLIGHT_STYLES[path]='fg=#e0af68,underline'        # Warm Golden Amber with underline for valid paths
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#e0af68'           # Golden Amber for partial paths
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#ff9e64' # Orange for single quotes
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#ff9e64' # Orange for double quotes
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#ff9e64' # Orange for $'' strings
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#bb9af7'   # Luminous Violet for command substitutions
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#bb9af7'   # Violet for short flags (-a)
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#bb9af7'   # Violet for long flags (--all)
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f7768e,bold'     # Vivid Coral Red for typos/unknown commands
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b4befe,bold'     # Soft Lavender for keywords (if/then/for)
 
 # Extra completions for common tools (docker, cargo, nix, etc.)
 [ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)
@@ -223,7 +223,26 @@ if command -v nvim >/dev/null 2>&1; then
     export VISUAL='nvim'
 fi
 
-# Animation & fun screensavers
+# Yazi (terminal file manager) with dynamic directory switching on exit
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+alias y='yy'
+
+# Animation & fun screensavers / aesthetic tools
+alias theme='theme-switch'
+alias themes='theme-switch'
+alias scmd='scmd'
+alias cheatsheet='scmd'
+alias torii='torii-banner'
+alias torii-banner='torii-banner'
+alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
+alias matrix-red='matrix-red'
 alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
 alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Run: cargo install pipes-rs or install pipes.sh")'
 alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
@@ -437,5 +456,10 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+# ── Auto-run Fastfetch on Shell Launch ──
+if [[ -o interactive ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+fi
 
 

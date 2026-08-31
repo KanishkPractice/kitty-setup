@@ -2,12 +2,12 @@
 # cool - Aesthetic & Visual Terminal Tools Hub
 # Interactive fuzzy runner and visual launcher for rice, screensavers, and terminal art
 
-# Color definitions
 CYAN='\033[1;36m'
 MAGENTA='\033[1;35m'
 GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[1;34m'
+RED='\033[1;31m'
 BOLD='\033[1m'
 NC='\033[0m'
 
@@ -22,20 +22,22 @@ list_tools() {
     show_banner
     printf "  ${BOLD}%-15s${NC} │ ${CYAN}%-32s${NC} │ ${YELLOW}%s${NC}\n" "COMMAND" "CATEGORY / DESCRIPTION" "QUICK LAUNCH USAGE"
     echo -e "  ────────────────┼──────────────────────────────────┼──────────────────────────────────────"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "cava" "Audio Visualizer (Cyberpunk Glow)" "cava"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "tty-clock" "Minimalist Floating Digital Clock" "tty-clock -C 6 -c -s -b"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "pipes-rs" "Animated 3D Pipes Screensaver" "pipes-rs (or pipes)"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "fastfetch" "Modern Hardware Specs & ASCII Logo" "fastfetch"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "rice" "Aesthetic Lounge (Cava+Btop+Clock)" "rice"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "torii-banner" "24-bit TrueColor Torii Shrine Art" "torii-banner"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "theme" "Kitty Theme Switcher & Hot-Reload" "theme"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "scmd" "Fuzzy Command & Shortcut Cheatsheet" "scmd"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "matrix-red" "Crimson Torii Matrix Digital Rain" "matrix-red"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "live-wallpaper" "Manage 4K Torii Desktop Wallpaper" "live-wallpaper"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "cava" "Audio Visualizer (Torii Gradient)" "cava"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "tty-clock" "Minimalist Floating Digital Clock" "tty-clock -C 1 -c -s -b"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "pipes-rs" "Animated 3D Pipes Screensaver" "pipes-rs"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "fastfetch" "Modern Hardware Specs & ASCII Art" "fastfetch"
     printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "asciiquarium" "ASCII Ocean Aquarium Screensaver" "asciiquarium"
     printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "btop" "Cyberpunk System & GPU Monitor" "btop"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "cmatrix" "Matrix Digital Rain Screensaver" "cmatrix (or matrix)"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "cbonsai" "Living Procedural Bonsai Tree" "cbonsai -l (or bonsai)"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "cbonsai" "Living Procedural Bonsai Tree" "cbonsai -l"
     printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "sl" "Steam Locomotive Animation" "sl"
     printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "oneko" "Pixel Cat Desktop Cursor Chaser" "oneko &"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "figlet" "ASCII Text Art Generator" "figlet 'KITTY' | lolcat"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "toilet" "High-Def Colored ASCII Font" "toilet -f slant --filter metal 'NEOVIM'"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "cowsay" "Quote of the Day in ASCII Bubble" "fortune | cowsay | lolcat"
-    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "chafa" "Terminal Image & GIF Player" "chafa <image/gif>"
+    printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "figlet" "ASCII Text Art Generator" "figlet 'TORII' | lolcat"
     printf "  ${GREEN}%-15s${NC} │ %-32s │ ${BLUE}%s${NC}\n" "lazygit" "Full Floating Git UI" "lazygit"
     echo ""
     echo -e "  ${YELLOW}Tip:${NC} Run ${BOLD}cool -i${NC} (or ${BOLD}cool --menu${NC}) for interactive selection with live preview!"
@@ -51,20 +53,22 @@ interactive_menu() {
     local selected
     selected=$(
         {
-            printf "%-14s │ %-34s │ %s\n" "cava" "Audio Visualizer (Cyberpunk Glow)" "cava"
-            printf "%-14s │ %-34s │ %s\n" "tty-clock" "Minimalist Floating Digital Clock" "tty-clock -C 6 -c -s -b"
+            printf "%-14s │ %-34s │ %s\n" "rice" "Aesthetic Lounge (Cava+Btop+Clock)" "kitty --session ~/.config/kitty/sessions/rice.session &"
+            printf "%-14s │ %-34s │ %s\n" "torii-banner" "24-bit TrueColor Torii Shrine Art" "torii-banner"
+            printf "%-14s │ %-34s │ %s\n" "theme" "Kitty Theme Switcher & Hot-Reload" "theme"
+            printf "%-14s │ %-34s │ %s\n" "scmd" "Fuzzy Command & Shortcut Cheatsheet" "scmd"
+            printf "%-14s │ %-34s │ %s\n" "matrix-red" "Crimson Torii Matrix Digital Rain" "matrix-red"
+            printf "%-14s │ %-34s │ %s\n" "live-wallpaper" "Manage 4K Torii Desktop Wallpaper" "live-wallpaper"
+            printf "%-14s │ %-34s │ %s\n" "cava" "Audio Visualizer (Torii Gradient)" "cava"
+            printf "%-14s │ %-34s │ %s\n" "tty-clock" "Minimalist Floating Digital Clock" "tty-clock -C 1 -c -s -b"
             printf "%-14s │ %-34s │ %s\n" "pipes-rs" "Animated 3D Pipes Screensaver" "pipes-rs"
             printf "%-14s │ %-34s │ %s\n" "fastfetch" "Modern Hardware Specs & ASCII Art" "fastfetch"
             printf "%-14s │ %-34s │ %s\n" "asciiquarium" "ASCII Ocean Aquarium Screensaver" "asciiquarium"
             printf "%-14s │ %-34s │ %s\n" "btop" "Cyberpunk System & GPU Monitor" "btop"
-            printf "%-14s │ %-34s │ %s\n" "cmatrix" "Matrix Digital Rain Screensaver" "cmatrix"
             printf "%-14s │ %-34s │ %s\n" "cbonsai" "Living Procedural Bonsai Tree" "cbonsai -l"
             printf "%-14s │ %-34s │ %s\n" "sl" "Steam Locomotive Animation" "sl"
             printf "%-14s │ %-34s │ %s\n" "oneko" "Pixel Cat Desktop Cursor Chaser" "oneko &"
-            printf "%-14s │ %-34s │ %s\n" "figlet" "ASCII Text Banner Generator" "figlet 'KITTY' | lolcat"
-            printf "%-14s │ %-34s │ %s\n" "toilet" "High-Def Metal/Rainbow ASCII Font" "toilet -f slant --filter metal 'NEOVIM'"
-            printf "%-14s │ %-34s │ %s\n" "cowsay" "Quote of the Day in ASCII Speech Bubble" "fortune | cowsay | lolcat"
-            printf "%-14s │ %-34s │ %s\n" "chafa" "Terminal Image & GIF Player" "chafa --help"
+            printf "%-14s │ %-34s │ %s\n" "figlet" "ASCII Text Banner Generator" "figlet 'TORII' | lolcat"
             printf "%-14s │ %-34s │ %s\n" "lazygit" "Full Floating Git UI" "lazygit"
         } | fzf \
             --delimiter=' │ ' \

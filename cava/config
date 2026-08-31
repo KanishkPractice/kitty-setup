@@ -1,15 +1,18 @@
-## CAVA — "Cyberpunk Neon Matrix" Palette
-## Electric Blue -> Cyan -> Mint -> Neon Green -> Cyber Yellow -> Coral -> Hot Pink
+## CAVA — Clean Monochrome White Theme
+## Ultra-smooth 90fps, balanced frequency response & crisp white bars
 
 [general]
-framerate = 60
+# High-definition 90 FPS rendering for smooth liquid motion
+framerate = 90
 autosens = 1
-sensitivity = 70
+overshoot = 20
+sensitivity = 65
 bars = 0
-bar_width = 2
+bar_width = 3
 bar_spacing = 1
-lower_cutoff_freq = 50
-higher_cutoff_freq = 12000
+bar_height = 32
+lower_cutoff_freq = 40
+higher_cutoff_freq = 14000
 sleep_timer = 0
 
 [input]
@@ -25,27 +28,22 @@ reverse = 0
 show_idle_bar_heads = 1
 
 [color]
-# 8-Stop Cyberpunk Neon Matrix Gradient (High contrast, vibrant glow)
-gradient = 1
-gradient_count = 8
-
-gradient_color_1 = '#0066ff'  # Electric Blue (Base ground)
-gradient_color_2 = '#00d2ff'  # Laser Cyan
-gradient_color_3 = '#00f5d4'  # Bright Mint
-gradient_color_4 = '#00ff87'  # Neon Matrix Green
-gradient_color_5 = '#a6ff00'  # Lime Highlighter
-gradient_color_6 = '#ffee00'  # Cyber Electric Yellow
-gradient_color_7 = '#ff6b35'  # Neon Coral Flame
-gradient_color_8 = '#ff007f'  # Hyper Hot Pink (Peak)
+# Clean White / Monochrome Theme
+foreground = '#ffffff'
+# Alternatively with gradient = 0 (solid white bars)
+gradient = 0
 
 [smoothing]
+# Monstercat dynamic audio smoothing
 monstercat = 1
-waves = 0
-noise_reduction = 68
+integral = 75
+gravity = 110
+noise_reduction = 60
 
 [eq]
-1 = 1.0
-2 = 1.0
-3 = 1.0
-4 = 1.0
-5 = 1.0
+# Dynamic Equalizer curve (boosts mid and high frequencies so all bars dance together)
+1 = 0.85   # Sub-bass
+2 = 1.05   # Mid-bass
+3 = 1.30   # Mid-range
+4 = 1.65   # Upper mids
+5 = 1.95   # High treble

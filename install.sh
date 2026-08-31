@@ -62,7 +62,7 @@ install_packages() {
     fi
     local -a packages=(
         kitty zsh fzf zoxide fontconfig curl git bat util-linux-user
-        eza ripgrep fd-find btop tealdeer git-delta neovim cmatrix cbonsai
+        eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai
     )
     info "Installing modern CLI packages via DNF (sudo may be requested)…"
     run_elevated dnf install -y "${packages[@]}" || warn "Some DNF packages could not be installed."
@@ -169,8 +169,19 @@ deploy_config() {
         done
     fi
 
+    # Deploy CLI helper tools (theme-switch, cool, etc.)
+    if [[ -d "$SCRIPT_DIR/bin" ]]; then
+        ensure_dir "$USER_BIN"
+        for bin_file in "$SCRIPT_DIR/bin"/*; do
+            [[ -f "$bin_file" ]] || continue
+            run_as_user install -m 0755 "$bin_file" "$USER_BIN/$(basename "$bin_file")" && ok "Installed CLI helper $(basename "$bin_file")" || warn "Could not install $(basename "$bin_file")"
+        done
+        run_as_user ln -sfn "$USER_BIN/theme-switch" "$USER_BIN/theme" 2>/dev/null || true
+    fi
+
     copy_file "$SCRIPT_DIR/starship.toml" "$TARGET_HOME/.config/starship.toml"
     copy_file "$SCRIPT_DIR/terminal.conf" "$TARGET_HOME/.config/environment.d/terminal.conf"
+    [[ -f "$SCRIPT_DIR/cava/config" ]] && copy_file "$SCRIPT_DIR/cava/config" "$TARGET_HOME/.config/cava/config"
     copy_file "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc"; copy_file "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc"; copy_file "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile"
 
     # Git delta configuration (only if user doesn't already have a .gitconfig)
@@ -182,17 +193,18 @@ deploy_config() {
         fi
     fi
 
+    # Fastfetch configuration
+    if [[ -f "$SCRIPT_DIR/fastfetch/config.jsonc" ]]; then
+        copy_file "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc"
+    fi
+
+    # Yazi configuration
+    if [[ -f "$SCRIPT_DIR/yazi/yazi.toml" ]]; then
+        copy_file "$SCRIPT_DIR/yazi/yazi.toml" "$TARGET_HOME/.config/yazi/yazi.toml"
+    fi
+
     # Tmux fallback configuration
     [[ -f "$SCRIPT_DIR/.tmux.conf" ]] && copy_file "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf"
-
-    # Deploy Neovim configuration
-    if [[ -d "$SCRIPT_DIR/nvim" ]]; then
-        info "Deploying Neovim configuration…"
-        while IFS= read -r -d '' file; do
-            rel_path="${file#"$SCRIPT_DIR/nvim/"}"
-            copy_file "$file" "$TARGET_HOME/.config/nvim/$rel_path"
-        done < <(find "$SCRIPT_DIR/nvim" -type f -print0)
-    fi
 }
 change_login_shell() {
     "$CHANGE_SHELL" || return; has zsh || { warn "Zsh is not installed; login shell unchanged."; return; }; local zsh_bin; zsh_bin=$(command -v zsh)

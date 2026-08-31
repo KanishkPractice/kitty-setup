@@ -97,7 +97,7 @@ symbol = "🐳 "
 style = "bold blue"
 
 [sudo]
-disabled = false
+disabled = true
 format = "[$symbol]($style)"
 symbol = "🛡️ "
 style = "bold red"
@@ -115,9 +115,9 @@ style = "lavender"
 time_format = "%d %b %H:%M"
 
 [character]
-success_symbol = "[❯](bold mauve)"
-error_symbol   = "[❯](bold red)"
-vimcmd_symbol  = "[❮](bold green)"
+success_symbol = "[──❯](bold mauve)"
+error_symbol   = "[──❯](bold red)"
+vimcmd_symbol  = "[──❮](bold green)"
 
 [line_break]
 disabled = false

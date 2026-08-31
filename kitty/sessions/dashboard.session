@@ -1,0 +1,9 @@
+# Development & System Dashboard Session
+# Launch with: kitty --session ~/.config/kitty/sessions/dashboard.session
+
+new_tab dashboard
+layout splits
+cd ~
+launch --title workspace zsh
+launch --location=vsplit --title git zsh -c 'lazygit 2>/dev/null || git log --oneline -15; zsh'
+launch --location=hsplit --title stats zsh -c 'torii-banner 2>/dev/null || fastfetch 2>/dev/null; zsh'

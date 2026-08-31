@@ -48,12 +48,30 @@ The installer downloads Zsh plugins itself. If you also want the optional reposi
 
 ---
 
-## 🎨 Features & Keybindings
+## 🎨 Themes, Visibility & Aesthetics
 
-### Kitty Features
-- **Theme**: Catppuccin Mocha with 75% opacity.
-- **Font**: Fantasque Sans Mono Nerd Font (size 18.0) with ligature support.
-- **Layouts**: Splits, Tall, and Stack modes.
+### Curated Reddit & Unixporn Color Themes
+Switch between top-rated community themes at any time without restarting your terminal:
+- **`Red Forest Torii`** *(New Active Theme)*: Mystic Japanese Torii shrine in crimson mist — obsidian plum background, glowing vermilion & red accents, Shinto lantern gold, pine jade, and luminous sakura moonlight text.
+- **`Tokyo Night`**: Reddit's #1 favorite — deep slate midnight background, crisp ice-blue/white text, radiant neon cyan cursor, glowing sapphire selection highlight.
+- **`Catppuccin Mocha`**: High-visibility pastel palette with boosted contrast and soft mauve accents.
+- **`Rosé Pine Moon`**: Moody natural palette with pine, foam, and warm gold highlights.
+- **`Dracula Pro`**: High-contrast retrowave dark theme with vivid neon pink, cyan, and emerald.
+- **`Gruvbox Dark Material`**: Retro compute aesthetic, easy on the eyes for extended coding sessions.
+- **`Cyberpunk Glow`**: Ultra-vibrant electric neon on deep OLED pitch black.
+
+```sh
+theme             # Open interactive fuzzy picker with live preview
+theme red-torii   # Instantly switch to Red Forest Torii
+theme tokyo-night # Instantly switch to Tokyo Night
+theme rose-pine   # Instantly switch to Rosé Pine
+```
+
+### Visual Enhancements:
+- **High-Visibility Selection**: Text highlight uses non-destructive luminous accents (`#33467c` / `#45475a`) ensuring syntax colors remain crystal clear under selection.
+- **Fluid Cursor Trail**: Smooth animated cursor motion (`cursor_trail 3`) with glowing beam/block indicator.
+- **Enhanced Syntax Highlighting**: Vivid color hierarchy for commands (cyan), aliases (green), paths (amber underline), flags (violet), and errors (coral red).
+- **Material Blur (Frosted Glass)**: 82% opacity with GPU-accelerated material background blur (`background_blur 32`) for a sleek frosted acrylic aesthetic with high text contrast. Dynamic opacity shortcuts: `Ctrl+Shift+A > M / L`.
 
 ### Key Shortcuts in Kitty:
 | Shortcut | Action |
@@ -64,11 +82,23 @@ The installer downloads Zsh plugins itself. If you also want the optional reposi
 | `Ctrl+Shift+Z` | Toggle zoom (stack layout) |
 | `Ctrl+Shift+T` | New tab (in current directory) |
 | `Ctrl+Shift+W` | Close tab |
-| `Ctrl+Shift+1..4` | Jump to tab 1–4 |
+| `Ctrl+Shift+1..9` | Jump to tab 1–9 |
 | `Ctrl+Shift+Plus/Minus` | Zoom font in / out |
-| `Ctrl+Shift+P > F` | Kitten hint: Pick and paste file paths |
-| `Ctrl+Shift+P > L` | Kitten hint: Pick line numbers |
+| `Ctrl+Shift+U` | **Kitten URL Picker**: Open any on-screen link with 1 key |
+| `Ctrl+Shift+E` | **Kitten File Picker**: Open any on-screen path directly in Neovim |
+| `Ctrl+Shift+S` | **Interactive Cheatsheet**: Search and execute commands with `scmd` |
+| `Ctrl+Shift+Shift+R` | **Aesthetic Lounge**: Launch 3-pane Cava + Btop + Clock session |
 | `Ctrl+Shift+A > M/L` | Increase / decrease window opacity |
+| `Ctrl+Shift+F5` | Hot reload Kitty configuration |
+
+### ✨ Aesthetic Commands & Visual Rice:
+- **`torii`** (or `torii-banner`): 24-bit TrueColor Red Torii shrine ASCII art & system spec readout.
+- **`rice`**: Launches the 3-pane aesthetic lounge (Cava visualizer + Btop + Tty-Clock).
+- **`scmd`**: Interactive fuzzy finder cheatsheet for all shell aliases and Kitty shortcuts.
+- **`cool`**: Interactive launcher for terminal screensavers, visualizers, and art.
+- **`matrix-red`**: Crimson Red Torii Matrix digital rain screensaver.
+- **`theme`**: Interactive fuzzy theme switcher with live reload.
+- **`live-wallpaper`**: Toggle or apply the 4K Red Forest Torii wallpaper.
 
 ---
 

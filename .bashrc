@@ -145,7 +145,26 @@ if command -v nvim >/dev/null 2>&1; then
     export VISUAL='nvim'
 fi
 
-# Animation & fun screensavers
+# Yazi (terminal file manager) with dynamic directory switching on exit
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+alias y='yy'
+
+# Animation & fun screensavers / aesthetic tools
+alias theme='theme-switch'
+alias themes='theme-switch'
+alias scmd='scmd'
+alias cheatsheet='scmd'
+alias torii='torii-banner'
+alias torii-banner='torii-banner'
+alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
+alias matrix-red='matrix-red'
 alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
 alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Run: cargo install pipes-rs or install pipes.sh")'
 alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
@@ -352,7 +371,10 @@ if [ -d ~/.bashrc.d ]; then
         fi
     done
 fi
-unset rc
-
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+# ── Auto-run Fastfetch on Shell Launch ──
+if [[ $- == *i* ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+fi

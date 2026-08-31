@@ -1,0 +1,45 @@
+# ~/.config/yazi/yazi.toml
+# Aesthetic Yazi Configuration for Kitty Terminal
+
+[manager]
+ratio          = [ 1, 4, 3 ]
+sort_by        = "alphabetical"
+sort_sensitive = false
+sort_reverse   = false
+sort_dir_first = true
+linemode       = "size"
+show_hidden    = true
+show_symlink   = true
+
+[preview]
+wrap            = "no"
+tab_size        = 2
+max_width       = 1200
+max_height      = 1500
+image_filter    = "lanczos3"
+image_quality   = 90
+sixel_fraction  = 15
+ueberzug_scale  = 1
+ueberzug_offset = [ 0, 0, 0, 0 ]
+
+[opener]
+edit = [
+	{ run = 'nvim "$@"', block = true, desc = "Neovim" },
+]
+play = [
+	{ run = 'mpv "$@"', orphan = true, desc = "MPV Player" },
+]
+open = [
+	{ run = 'xdg-open "$@"', desc = "Open with default app" },
+]
+
+[open]
+rules = [
+	{ name = "*/", use = [ "edit", "open" ] },
+	{ mime = "text/*", use = [ "edit", "open" ] },
+	{ mime = "image/*", use = [ "open" ] },
+	{ mime = "video/*", use = [ "play", "open" ] },
+	{ mime = "audio/*", use = [ "play", "open" ] },
+	{ mime = "application/json", use = [ "edit", "open" ] },
+	{ mime = "*/javascript", use = [ "edit", "open" ] },
+]

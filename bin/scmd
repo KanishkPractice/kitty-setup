@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# scmd - Interactive Command, Alias, and Keybinding Fuzzy Explorer
+# Instant search with formatted syntax cheatsheet and live execute
+
+if ! command -v fzf >/dev/null 2>&1; then
+    echo "fzf is required for interactive search."
+    exit 1
+fi
+
+CHEATSHEET=$(cat << 'DATA'
+THEMES & RICE │ theme │ Open interactive Kitty theme switcher with live preview
+THEMES & RICE │ theme red-torii │ Activate Red Forest Torii Japanese aesthetic theme
+THEMES & RICE │ theme tokyo-night │ Activate Tokyo Night theme
+THEMES & RICE │ theme catppuccin-mocha │ Activate Catppuccin Mocha Enhanced theme
+THEMES & RICE │ theme rose-pine │ Activate Rosé Pine Moon theme
+THEMES & RICE │ theme dracula │ Activate Dracula Pro theme
+THEMES & RICE │ theme gruvbox-dark │ Activate Gruvbox Dark Material theme
+THEMES & RICE │ cool │ Open interactive Aesthetic Visual Tools launcher
+THEMES & RICE │ rice │ Launch 3-pane Aesthetic Lounge session (cava + btop + tty-clock)
+THEMES & RICE │ torii-banner │ Display 24-bit TrueColor Torii ASCII shrine banner
+THEMES & RICE │ live-wallpaper │ Set or manage 4K Torii desktop wallpaper
+THEMES & RICE │ matrix-red │ Launch Matrix digital rain in glowing Torii crimson colors
+KITTY SHORTCUTS │ Ctrl+Shift+Enter │ Split pane horizontally (current directory)
+KITTY SHORTCUTS │ Ctrl+Shift+- │ Split pane vertically (current directory)
+KITTY SHORTCUTS │ Ctrl+Shift+H/J/K/L │ Move between panes (left, down, up, right)
+KITTY SHORTCUTS │ Ctrl+Shift+Z │ Toggle pane zoom (maximize/restore)
+KITTY SHORTCUTS │ Ctrl+Shift+T │ Open new tab in current directory
+KITTY SHORTCUTS │ Ctrl+Shift+W │ Close current window / tab
+KITTY SHORTCUTS │ Ctrl+Shift+1..9 │ Jump directly to tab 1 through 9
+KITTY SHORTCUTS │ Ctrl+Shift+Plus/Minus │ Increase / decrease font size
+KITTY SHORTCUTS │ Ctrl+Shift+P > F │ Kitten hint: Pick and paste file paths
+KITTY SHORTCUTS │ Ctrl+Shift+P > L │ Kitten hint: Pick and paste line numbers
+KITTY SHORTCUTS │ Ctrl+Shift+P > Y │ Kitten hint: Pick words from terminal output
+KITTY SHORTCUTS │ Ctrl+Shift+U │ Kitten hint: Pick and open URL in default browser
+KITTY SHORTCUTS │ Ctrl+Shift+E │ Kitten hint: Pick path and open in Neovim
+KITTY SHORTCUTS │ Ctrl+Shift+A > M/L │ Increase / decrease background opacity
+KITTY SHORTCUTS │ Ctrl+Shift+F5 │ Hot reload Kitty configuration without restart
+NAVIGATION │ z <dir> │ Smart frecency jump to any directory with Zoxide
+NAVIGATION │ .. / ... │ Jump up 1 or 2 directory levels
+NAVIGATION │ reload │ Source and reload shell configuration (.zshrc / .bashrc)
+MODERN CLI │ ls / ll / la / lt │ eza modern file listings with icons & tree view
+MODERN CLI │ catp <file> │ bat syntax-highlighted file viewer with pager
+MODERN CLI │ fzf │ Interactive fuzzy finder for files and text
+MODERN CLI │ btop │ Cyberpunk animated system & GPU monitor
+MODERN CLI │ cava │ Audio spectrum visualizer with custom color gradient
+MODERN CLI │ lazygit │ Full interactive floating Git terminal UI
+GIT SHORTCUTS │ gs │ Git status summary
+GIT SHORTCUTS │ ga │ Git add interactive or all
+GIT SHORTCUTS │ gc │ Git commit
+GIT SHORTCUTS │ gp │ Git push
+GIT SHORTCUTS │ gl │ Git visual one-line commit log graph
+GIT SHORTCUTS │ gd │ Git diff with delta syntax highlighting
+DATA
+)
+
+selected=$(echo "$CHEATSHEET" | fzf \
+    --delimiter=' │ ' \
+    --with-nth=1,2 \
+    --height=50% \
+    --layout=reverse \
+    --border=rounded \
+    --header="✨ [INTERACTIVE CHEATSHEET & RUNNER] (Enter to Run/Paste, Esc to Exit)" \
+    --prompt="⚡ Search Command > " \
+    --preview='echo -e "\033[1;35mCategory:\033[0m    {1}\n\033[1;36mCommand/Key:\033[0m {2}\n\033[1;32mDescription:\033[0m {3}"' \
+    --preview-window=right:50%:wrap
+)
+
+if [ -n "$selected" ]; then
+    cmd=$(echo "$selected" | awk -F ' │ ' '{print $2}')
+    # If it's a runnable shell command (doesn't contain Ctrl+), offer to run it
+    if [[ ! "$cmd" =~ "Ctrl+" ]]; then
+        echo -e "\033[1;36mExecuting:\033[0m \033[1m$cmd\033[0m"
+        eval "$cmd"
+    else
+        echo -e "\033[1;33mShortcut selected:\033[0m \033[1m$cmd\033[0m"
+    fi
+fi

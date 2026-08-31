@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# matrix-red - Crimson Torii Matrix Rain
+if command -v cmatrix >/dev/null 2>&1; then
+    cmatrix -C red -b -u 2
+elif command -v pipes-rs >/dev/null 2>&1; then
+    pipes-rs
+else
+    echo "Install cmatrix with: sudo dnf install cmatrix"
+fi
