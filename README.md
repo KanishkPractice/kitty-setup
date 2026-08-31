@@ -135,18 +135,16 @@ Kitty will automatically launch Zsh on next startup!
 
 ---
 
-## 🚀 Neovim (Lazy.nvim / LazyVim Modular Setup)
+## 🚀 Neovim (LazyVim Modern IDE Setup)
 
-Fully configured Neovim environment bundled inside:
-- **Package Manager**: Lazy.nvim with fast asynchronous bootstrapping.
-- **Theme**: Catppuccin Mocha with transparent background.
-- **Animations**:
-  - `neoscroll.nvim`: Smooth scrolling animations for `<C-u>`, `<C-d>`, `<C-b>`, `<C-f>`, `zt`, `zz`, `zb`.
-  - `smear-cursor.nvim`: Fluid cursor smear / trailing animations inside the editor.
-- **LSP & Autocompletion**: `nvim-lspconfig`, `mason.nvim`, `mason-lspconfig`, `nvim-cmp`, `LuaSnip` (pre-configured for Lua, Python, Bash, and more).
-- **Syntax Highlighting**: Treesitter with auto-indent and rich language parsers.
-- **Navigation & Explorer**: `telescope.nvim` (fuzzy file finder) + `nvim-tree.lua` (`<leader>e` file explorer).
-- **UI & Git**: `lualine.nvim` (Catppuccin Mocha), `which-key.nvim` (interactive keymap popup), `gitsigns.nvim`.
+Complete state-of-the-art Neovim IDE environment built on **LazyVim**:
+- **Package Manager**: Lazy.nvim with fast asynchronous bootstrapping and health validation.
+- **Themes**: Tokyo Night (default), Catppuccin Mocha, and Rosé Pine with transparent backgrounds matching Kitty.
+- **LSP & Tools**: `nvim-lspconfig`, `mason.nvim`, `mason-lspconfig`, `conform.nvim` (auto-formatting on save with stylua, ruff, prettierd, shfmt).
+- **Completion**: `blink.cmp` / `nvim-cmp` with fast fuzzy matching and snippets.
+- **Syntax Highlighting**: Treesitter parsers for Python, TypeScript, Lua, Rust, Go, Bash, Docker, Markdown, JSON, YAML, TOML, and more.
+- **Navigation & Search**: `snacks.nvim` picker / explorer, `folke/flash.nvim` instant jump, `grug-far.nvim` search & replace.
+- **UI & Diagnostics**: `lualine.nvim` (custom powerline statusline), `bufferline.nvim` (sleek tabs), `snacks.nvim` dashboard with Japanese Torii ASCII art, `trouble.nvim` diagnostics viewer, `todo-comments.nvim`, `which-key.nvim`.
 
 ---
 
@@ -154,29 +152,43 @@ Fully configured Neovim environment bundled inside:
 
 ```
 kitty-setup/
-├── install.sh                                # Automated fail-proof installer
+├── install.sh                                # Automated fail-proof installer (DNF, configs, tools)
 ├── uninstall.sh                              # Safe uninstaller and backup restore utility
 ├── README.md                                 # Main overview & quick start
 ├── USER_GUIDE.md                             # Complete in-depth usage & shortcut guide
 ├── terminal.conf                             # Environment variable (TERMINAL=kitty)
-├── starship.toml                             # Starship prompt Catppuccin configuration
-├── .zshrc                                    # Zsh configuration (plugins, FZF, eza, helpers)
-├── .bashrc                                   # Bash configuration (synced tools & aliases)
+├── starship.toml                             # Starship prompt configuration (Nerd Font glyphs)
+├── .zshrc                                    # Zsh configuration (plugins, FZF Torii theme, aliases)
+├── .bashrc                                   # Bash configuration (synced tools & FZF Torii theme)
 ├── .bash_profile                             # Profile environment loader
-├── .gitconfig                                # Git delta & diff3 syntax-highlighted pager
-├── .tmux.conf                                # Tmux fallback config (Catppuccin Mocha)
-├── kitty/
+├── .gitconfig                                # Git delta syntax-highlighted pager
+├── .tmux.conf                                # Tmux fallback config (truecolor & vi-mode)
+├── bin/                                      # CLI tools & aesthetic runners
+│   ├── cool                                  # Aesthetic visual tools hub & FZF launcher
+│   ├── live-wallpaper                        # 4K Torii desktop wallpaper manager
+│   ├── matrix-red                            # Crimson Red Torii Matrix rain
+│   ├── scmd                                  # Fuzzy command / shortcut cheatsheet & runner
+│   ├── set-login-wallpaper                   # SDDM/Login wallpaper setup helper
+│   ├── theme-switch (or theme)               # Interactive theme switcher with live reload
+│   └── torii-banner (or torii)               # 24-bit TrueColor Torii ASCII shrine banner
+├── cava/                                     # Audio visualizer config & shaders
+│   ├── config                                # Cava gradient & framerate config
+│   └── shaders/                              # Custom Cava fragment shaders
+├── fastfetch/                                # System information tool config
+│   └── config.jsonc                          # Cyberpunk / Torii layout & color blocks
+├── kitty/                                    # Kitty terminal configuration
 │   ├── kitty.conf                            # Main Kitty configuration
 │   ├── keybindings.conf                      # Modular Kitty keybindings & hints
 │   ├── open-actions.conf                     # File type handlers & preview triggers
-│   ├── sessions/                             # Predefined multi-window sessions (e.g. dev.session)
-│   └── themes/                               # Catppuccin Mocha color palette
-├── nvim/                                     # Complete Neovim configuration (Lazy.nvim setup)
+│   ├── sessions/                             # Multi-pane sessions (rice, dashboard, dev)
+│   └── themes/                               # 8 curated color themes
+├── nvim/                                     # LazyVim Neovim IDE configuration
 │   ├── init.lua                              # Neovim entry point
-│   ├── lazy-lock.json                        # Locked plugin specifications
 │   └── lua/
-│       ├── config/                           # options, keymaps, lazy bootstrap
-│       └── plugins/                          # UI, LSP, Treesitter, animations, telescope
+│       ├── config/                           # options, keymaps, autocmds, lazy bootstrap
+│       └── plugins/                          # colorscheme, UI, LSP, treesitter, coding, tools
+├── yazi/                                     # Yazi terminal file manager config
+│   └── yazi.toml                             # File opener & Kitty image preview config
 ├── fonts/
 │   └── fantasque-sans-mono-nerd-fonts/       # Fantasque Sans Mono TTF files
 └── zsh/

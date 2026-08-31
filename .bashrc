@@ -378,3 +378,10 @@ fi
 if [[ $- == *i* ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
     fastfetch
 fi
+
+# ── Red Forest Torii FZF Theme ──
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#4a1525,bg:#100b14,spinner:#ff758f,hl:#ff3355 \
+--color=fg:#f2edf5,header:#ff758f,info:#ffb703,pointer:#ff3355 \
+--color=marker:#52b788,fg+:#ffffff,prompt:#ff3355,hl+:#ff4d6d \
+--prompt='󰄯 ' --pointer='▶' --marker='✓' --layout=reverse --border"

@@ -39,7 +39,7 @@ read_only_style = "bold red"
 [git_branch]
 style = "bold mauve"
 format = "[$symbol$branch(:$remote_branch)]($style) "
-symbol = " "
+symbol = " "
 
 [git_state]
 style = "bold red"
@@ -126,22 +126,22 @@ disabled = false
 
 [python]
 format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
-symbol = " "
+symbol = " "
 style = "yellow"
 
 [nodejs]
 format = "[$symbol($version )]($style)"
-symbol = " "
+symbol = " "
 style = "green"
 
 [rust]
 format = "[$symbol($version )]($style)"
-symbol = " "
+symbol = "󱘗 "
 style = "peach"
 
 [golang]
 format = "[$symbol($version )]($style)"
-symbol = " "
+symbol = " "
 style = "teal"
 
 [package]

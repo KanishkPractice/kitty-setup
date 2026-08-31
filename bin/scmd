@@ -44,6 +44,15 @@ MODERN CLI │ fzf │ Interactive fuzzy finder for files and text
 MODERN CLI │ btop │ Cyberpunk animated system & GPU monitor
 MODERN CLI │ cava │ Audio spectrum visualizer with custom color gradient
 MODERN CLI │ lazygit │ Full interactive floating Git terminal UI
+LAZYVIM │ v / vim / nvim │ Open Neovim with full LazyVim IDE suite
+LAZYVIM │ <leader>ff │ Find files with Snacks picker
+LAZYVIM │ <leader>fg │ Live grep search across workspace
+LAZYVIM │ <leader>e │ Toggle file tree explorer (Snacks)
+LAZYVIM │ <leader>gg │ Open LazyGit inside Neovim
+LAZYVIM │ <leader>xx │ Toggle diagnostics list (Trouble)
+LAZYVIM │ <leader>cf │ Format current buffer (Conform)
+LAZYVIM │ s / S │ Flash instant jump anywhere on screen
+LAZYVIM │ <leader>w / <leader>q │ Fast save file / fast quit window
 GIT SHORTCUTS │ gs │ Git status summary
 GIT SHORTCUTS │ ga │ Git add interactive or all
 GIT SHORTCUTS │ gc │ Git commit
