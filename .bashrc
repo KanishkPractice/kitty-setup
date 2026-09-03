@@ -162,7 +162,15 @@ alias themes='theme-switch'
 alias scmd='scmd'
 alias cheatsheet='scmd'
 alias torii='torii-banner'
-alias torii-banner='torii-banner'
+alias trident='trident-banner'
+alias samurai='samurai-banner'
+alias fastfetch='[ -x ~/.config/fastfetch/fastfetch-random.sh ] && ~/.config/fastfetch/fastfetch-random.sh || command fastfetch'
+# Random banner picker — randomly shows one of the three braille art banners
+banner() {
+    local banners=(torii-banner trident-banner samurai-banner)
+    local pick=${banners[$((RANDOM % 3))]}
+    command -v "$pick" >/dev/null 2>&1 && "$pick" || torii-banner
+}
 alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
 alias matrix-red='matrix-red'
 alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
@@ -376,7 +384,11 @@ fi
 
 # ── Auto-run Fastfetch on Shell Launch ──
 if [[ $- == *i* ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
-    fastfetch
+    if [[ -x "$HOME/.config/fastfetch/fastfetch-random.sh" ]]; then
+        "$HOME/.config/fastfetch/fastfetch-random.sh"
+    else
+        fastfetch
+    fi
 fi
 
 # ── Red Forest Torii FZF Theme ──

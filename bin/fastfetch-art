@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# ── fastfetch-art CLI Switcher ──
+# View, test, or pick fastfetch braille arts interactively.
+
+ARTS_DIR="${FASTFETCH_ARTS_DIR:-$HOME/.config/fastfetch/arts}"
+
+usage() {
+    echo -e "\033[1;36mFastfetch Braille Art Manager\033[0m"
+    echo "Usage: fastfetch-art [COMMAND|ART_NAME]"
+    echo ""
+    echo "Commands:"
+    echo "  list, ls           List all available braille arts"
+    echo "  random, r          Run fastfetch with a random art"
+    echo "  preview-all, all   Show preview of each art"
+    echo "  <name>             Run fastfetch using specific art (e.g. cat, fox, warrior, spider)"
+    echo ""
+}
+
+list_arts() {
+    echo -e "\033[1;35mAvailable Braille Arts:\033[0m"
+    for f in "$ARTS_DIR"/*.txt; do
+        [[ -f "$f" ]] && echo "  - $(basename "$f" .txt)"
+    done
+}
+
+preview_all() {
+    for f in "$ARTS_DIR"/*.txt; do
+        if [[ -f "$f" ]]; then
+            echo -e "\n\033[1;33m=== $(basename "$f" .txt) ===\033[0m"
+            fastfetch --file "$f"
+        fi
+    done
+}
+
+case "$1" in
+    ""|random|r)
+        "$HOME/.config/fastfetch/fastfetch-random.sh" "${@:2}"
+        ;;
+    list|ls)
+        list_arts
+        ;;
+    preview-all|all)
+        preview_all
+        ;;
+    -h|--help|help)
+        usage
+        ;;
+    *)
+        target_art="$ARTS_DIR/$1.txt"
+        if [[ -f "$target_art" ]]; then
+            fastfetch --file "$target_art" "${@:2}"
+        else
+            echo -e "\033[1;31mArt '$1' not found in $ARTS_DIR\033[0m"
+            list_arts
+            exit 1
+        fi
+        ;;
+esac

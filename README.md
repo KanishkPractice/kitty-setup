@@ -165,17 +165,26 @@ kitty-setup/
 ├── .tmux.conf                                # Tmux fallback config (truecolor & vi-mode)
 ├── bin/                                      # CLI tools & aesthetic runners
 │   ├── cool                                  # Aesthetic visual tools hub & FZF launcher
+│   ├── fastfetch-art                         # Braille art switcher & fastfetch runner
 │   ├── live-wallpaper                        # 4K Torii desktop wallpaper manager
 │   ├── matrix-red                            # Crimson Red Torii Matrix rain
+│   ├── samurai-banner                        # Braille samurai banner
 │   ├── scmd                                  # Fuzzy command / shortcut cheatsheet & runner
 │   ├── set-login-wallpaper                   # SDDM/Login wallpaper setup helper
 │   ├── theme-switch (or theme)               # Interactive theme switcher with live reload
-│   └── torii-banner (or torii)               # 24-bit TrueColor Torii ASCII shrine banner
+│   ├── torii-banner (or torii)               # 24-bit TrueColor Torii ASCII shrine banner
+│   └── trident-banner                        # Braille trident banner
 ├── cava/                                     # Audio visualizer config & shaders
 │   ├── config                                # Cava gradient & framerate config
 │   └── shaders/                              # Custom Cava fragment shaders
-├── fastfetch/                                # System information tool config
-│   └── config.jsonc                          # Cyberpunk / Torii layout & color blocks
+├── fastfetch/                                # System information tool config & arts
+│   ├── config.jsonc                          # Fastfetch layout, progress bars, thermals & colors
+│   ├── fastfetch-random.sh                   # Shell startup randomizer script
+│   └── arts/                                 # Colored braille artwork collection
+│       ├── cat.txt                           # Neon Crimson Cat braille art
+│       ├── fox.txt                           # Amber Gold Kitsune braille art
+│       ├── spider.txt                        # Miles Morales Crimson Spider braille art
+│       └── warrior.txt                       # Electric Violet Warrior braille art
 ├── kitty/                                    # Kitty terminal configuration
 │   ├── kitty.conf                            # Main Kitty configuration
 │   ├── keybindings.conf                      # Modular Kitty keybindings & hints

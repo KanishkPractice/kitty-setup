@@ -359,6 +359,8 @@ deploy_config() {
         done
         run_as_user ln -sfn "$USER_BIN/theme-switch" "$USER_BIN/theme" 2>/dev/null || true
         run_as_user ln -sfn "$USER_BIN/torii-banner" "$USER_BIN/torii" 2>/dev/null || true
+        run_as_user ln -sfn "$USER_BIN/trident-banner" "$USER_BIN/trident" 2>/dev/null || true
+        run_as_user ln -sfn "$USER_BIN/samurai-banner" "$USER_BIN/samurai" 2>/dev/null || true
     fi
 
     # 3. Starship, Environment, Cava, Shells
@@ -388,6 +390,16 @@ deploy_config() {
     # 5. Fastfetch & Yazi
     if [[ -f "$SCRIPT_DIR/fastfetch/config.jsonc" ]]; then
         copy_file "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc"
+    fi
+    if [[ -d "$SCRIPT_DIR/fastfetch/arts" ]]; then
+        ensure_dir "$TARGET_HOME/.config/fastfetch/arts"
+        find "$SCRIPT_DIR/fastfetch/arts" -type f -name "*.txt" | while read -r art_file; do
+            copy_file "$art_file" "$TARGET_HOME/.config/fastfetch/arts/$(basename "$art_file")"
+        done
+    fi
+    if [[ -f "$SCRIPT_DIR/fastfetch/fastfetch-random.sh" ]]; then
+        copy_file "$SCRIPT_DIR/fastfetch/fastfetch-random.sh" "$TARGET_HOME/.config/fastfetch/fastfetch-random.sh"
+        chmod +x "$TARGET_HOME/.config/fastfetch/fastfetch-random.sh" 2>/dev/null || true
     fi
     if [[ -f "$SCRIPT_DIR/yazi/yazi.toml" ]]; then
         copy_file "$SCRIPT_DIR/yazi/yazi.toml" "$TARGET_HOME/.config/yazi/yazi.toml"

@@ -6,5 +6,6 @@ new_tab aesthetic
 layout splits
 cd ~
 launch --title visualizer zsh -c 'cava 2>/dev/null || pipes-rs 2>/dev/null || cmatrix -C red'
-launch --location=vsplit --title monitor zsh -c 'btop 2>/dev/null || htop 2>/dev/null || top'
-launch --location=hsplit --title clock zsh -c 'tty-clock -C 1 -c -s -b 2>/dev/null || pipes-rs 2>/dev/null || cbonsai -l 2>/dev/null || zsh'
+launch --location=vsplit --title monitor --bias=55 zsh -c 'btop --preset 1 2>/dev/null || btop 2>/dev/null || htop 2>/dev/null || top'
+launch --location=hsplit --title clock --bias=40 zsh -c 'tty-clock -C 1 -c -s -b 2>/dev/null || pipes-rs 2>/dev/null || cbonsai -l 2>/dev/null || zsh'
+

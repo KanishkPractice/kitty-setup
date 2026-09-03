@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# trident-banner - Braille Art Trident Banner with System Info
+# Part of the kitty-setup aesthetic banner collection
+
+# Fast exit if not a terminal
+[ -t 1 ] || exit 0
+
+# TrueColor ANSI Palette (Red Forest Torii)
+RED='\033[38;2;255;51;85m'
+CRIMSON='\033[38;2;230;57;70m'
+DEEP_RED='\033[38;2;178;18;43m'
+GOLD='\033[38;2;255;183;3m'
+AMBER='\033[38;2;255;158;0m'
+MINT='\033[38;2;116;198;157m'
+JADE='\033[38;2;82;183;136m'
+VIOLET='\033[38;2;123;97;255m'
+SAKURA='\033[38;2;255;158;187m'
+WHITE='\033[38;2;242;237;245m'
+DIM='\033[38;2;105;92;115m'
+BOLD='\033[1m'
+NC='\033[0m'
+
+# System Metrics
+USER_NAME=$(whoami)
+HOST_NAME=$(hostname)
+SHELL_NAME=$(basename "${SHELL:-zsh}")
+DATE_TIME=$(date +"%a %d %b • %I:%M %p")
+UPTIME=$(uptime -p 2>/dev/null | sed 's/up //' | sed 's/ hours\?,/h/' | sed 's/ minutes\?/m/' | sed 's/ days\?,/d/')
+[ -z "$UPTIME" ] && UPTIME="just booted"
+
+echo ""
+echo -e "  ${CRIMSON}⠀⠀⠀⠀⠀⠀⠀⢀⠆⠀⢀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡀⠀⠰⡀${NC}"
+echo -e "  ${CRIMSON}⠀⠀⠀⠀⠀⠀⢠⡏⠀⢀⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢷⡀⠀⢹⣄${NC}"
+echo -e "  ${RED}⠀⠀⠀⠀⠀⣰⡟⠀⠀⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣧⠀⠀⢻⣆${NC}"
+echo -e "  ${RED}⠀⠀⠀⠀⢠⣿⠁⠀⣸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣇⠀⠈⣿⡆${NC}"
+echo -e "  ${RED}⠀⠀⠀⠀⣾⡇⠀⢀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡀⠀⢸⣿${NC}    ${BOLD}${WHITE}${USER_NAME}${NC}${RED} 🔱 ${NC}${VIOLET}${HOST_NAME}${NC}"
+echo -e "  ${RED}⠀⠀⠀⢸⣿⠀⠀⣸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣇⠀⠀⣿⡇${NC}   ${DIM}───────────────────────${NC}"
+echo -e "  ${GOLD}⠀⠀⠀⣿⣿⠀⠀⣿⣿⣧⣤⣤⣤⣤⣤⣤⡀⠀⣀⠀⠀⣀⠀⢀⣤⣤⣤⣤⣤⣤⣼⣿⣿⠀⠀⣿⣿${NC}   ${RED}Shell:${NC}   ${WHITE}${SHELL_NAME}${NC}"
+echo -e "  ${GOLD}⠀⠀⢸⣿⡏⠀⠀⠀⠙⢉⣉⣩⣴⣶⣤⣙⣿⣶⣯⣦⣴⣼⣷⣿⣋⣤⣶⣦⣍⣉⡉⠋⠀⠀⠀⢸⣿⡇${NC}  ${GOLD}Uptime:${NC}  ${WHITE}${UPTIME}${NC}"
+echo -e "  ${AMBER}⠀⠀⢿⣿⣷⣤⣶⣶⠿⠿⠛⠋⣉⡉⠙⢛⣿⣿⣿⣿⣿⣿⣿⣿⡛⠛⢉⣉⠙⠛⠿⠿⣶⣶⣤⣾⣿⡿${NC}  ${MINT}Time:${NC}    ${WHITE}${DATE_TIME}${NC}"
+echo -e "  ${AMBER}⠀⠀⠀⠙⠻⠋⠉⠀⠀⠀⣠⣾⡿⠟⠛⣻⣿⣿⣿⣿⣿⣿⣿⣿⣟⠛⠻⢿⣷⣄⠀⠀⠀⠉⠙⠟⠋${NC}"
+echo -e "  ${DEEP_RED}⠀⠀⠀⠀⠀⠀⠀⢀⣤⣾⠿⠋⢀⣠⣾⠟⢫⣿⣿⣿⣿⣿⣿⡍⠻⣷⣄⡀⠙⠿⣷⣤⡀${NC}"
+echo -e "  ${DEEP_RED}⠀⠀⠀⠀⠀⣠⣴⡿⠛⠁⠀⢸⣿⣿⠋⠀⢸⣿⣿⣿⣿⣿⣿⡗⠀⠙⣿⣿⡇⠀⠈⠛⢿⣦⣄${NC}"
+echo -e "  ${CRIMSON}⢀⠀⣀⣴⣾⠟⠋⠀⠀⠀⠀⢸⣿⣿⠀⠀⢸⣿⣿⣿⣿⣿⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠙⠻⣷⣦⣀⠀⣀${NC}"
+echo -e "  ${RED}⢸⣿⣿⠋⠁⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠈⣿⣿⣿⣿⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠈⠙⣿⣿⡟${NC}"
+echo -e "  ${RED}⢸⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠀⢹⣿⣿⣿⣿⡏⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⡇${NC}"
+echo -e "  ${CRIMSON}⢸⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠀⠀⢿⣿⣿⡿⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⡇${NC}"
+echo -e "  ${DEEP_RED}⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠀⠀⠈⠿⠿⠁⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿${NC}"
+echo -e "  ${DEEP_RED}⠀⢻⣿⡄⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀⢀⣿⡟${NC}"
+echo -e "  ${DIM}⠀⠘⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠃${NC}"
+echo -e "  ${DIM}⠀⠀⠸⣷⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣾⠏${NC}"
+echo -e "  ${DIM}⠀⠀⠀⢻⡆⠀⠀⠀⠀⠀⠀⠀⠸⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⠇⠀⠀⠀⠀⠀⠀⠀⢰⡟${NC}"
+echo -e "  ${DIM}⠀⠀⠀⠀⢷⠀⠀⠀⠀⠀⠀⠀⠀⢿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡿⠀⠀⠀⠀⠀⠀⠀⠀⡾${NC}"
+echo -e "  ${DIM}⠀⠀⠀⠀⠈⢧⠀⠀⠀⠀⠀⠀⠀⠸⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⠇⠀⠀⠀⠀⠀⠀⠀⡸⠁${NC}"
+echo -e "  ${DIM}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡆⠀⠀⠀⠀⠀⠀⠀⠀⢰⡟${NC}"
+echo -e "  ${DIM}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢳⠀⠀⠀⠀⠀⠀⠀⠀⡞${NC}"
+echo -e "  ${DIM}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠣⠀⠀⠀⠀⠀⠀⠜${NC}"
+echo -e "  ${DIM}●${NC} ${DEEP_RED}●${NC} ${CRIMSON}●${NC} ${RED}●${NC} ${GOLD}●${NC} ${MINT}●${NC} ${VIOLET}●${NC} ${SAKURA}●${NC} ${WHITE}●${NC}   ${DIM}│ ${BOLD}trident${NC} ${DIM}• ${BOLD}samurai${NC} ${DIM}• ${BOLD}torii${NC} ${DIM}banners${NC}"
+echo ""

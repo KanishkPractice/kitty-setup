@@ -78,6 +78,49 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 # Automatic directory correction for cd typos (e.g. cd dokctop -> Desktop)
 setopt CORRECT
 
+# ── FZF-TAB FLOATING POPUP WITH LIVE PREVIEW ─────────────────
+if [ -f ~/.zsh/fzf-tab/fzf-tab.plugin.zsh ]; then
+    source ~/.zsh/fzf-tab/fzf-tab.plugin.zsh
+
+    # Disable sort when completing git checkout
+    zstyle ':completion:*:git-checkout:*' sort false
+
+    # Set descriptions format to enable group support
+    zstyle ':completion:*:descriptions' format '[%d]'
+
+    # Force zsh not to show standard completion menu, allowing fzf-tab to capture it
+    zstyle ':completion:*' menu no
+
+    # Preview directory content with eza or ls when completing cd / z
+    if command -v eza >/dev/null 2>&1; then
+        zstyle ':fzf-tab:complete:(cd|z|pushd):*' fzf-preview 'eza -1 --color=always --icons $realpath'
+    else
+        zstyle ':fzf-tab:complete:(cd|z|pushd):*' fzf-preview 'ls -1 --color=always $realpath'
+    fi
+
+    # Preview files with bat when completing editors, pagers, or viewers
+    if command -v bat >/dev/null 2>&1; then
+        zstyle ':fzf-tab:complete:(nvim|vim|vi|nano|bat|cat|less):*' fzf-preview '[[ -f $realpath ]] && bat --style=numbers --color=always --line-range :250 $realpath || eza -1 --color=always --icons $realpath 2>/dev/null'
+    fi
+
+    # Process kill preview with ps
+    zstyle ':fzf-tab:complete:(kill|ps):*' fzf-preview 'ps --pid=$word -o cmd,pid,%cpu,%mem 2>/dev/null'
+
+    # Systemctl status preview
+    zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word 2>/dev/null'
+
+    # Tokyo Night Floating Popup Styling
+    zstyle ':fzf-tab:*' fzf-flags \
+      --height=50% --layout=reverse --border=rounded \
+      --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7 \
+      --color=fg+:#ffffff,bg+:#283457,hl+:#7dcfff \
+      --color=info:#e0af68,prompt:#7aa2f7,pointer:#7dcfff \
+      --color=marker:#9ece6a,spinner:#bb9af7,header:#565f89,border:#7aa2f7
+
+    # Switch group using `<` and `>`
+    zstyle ':fzf-tab:*' switch-group '<' '>'
+fi
+
 # ── 5. KEYBINDINGS & HISTORY SEARCH ──────────────────────────
 autoload -U up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
@@ -145,25 +188,25 @@ fi
 # ── 7. AUTOSUGGESTIONS & SYNTAX HIGHLIGHTING ─────────────────
 [ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
     source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-# Crisp, readable suggestion preview (Tokyo Slate)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#565f89,italic"
+# High visibility recommendation / suggestion color (Crisp subtle slate)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086,italic"
 
 # Syntax highlighting custom styling & activation (MUST be sourced last)
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[command]='fg=#7dcfff,bold'          # Electric Cyan for commands
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#7aa2f7,bold'          # Bright Azure for builtins
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#9ece6a,bold'            # Vibrant Emerald Green for aliases
-ZSH_HIGHLIGHT_STYLES[function]='fg=#73daca,bold'         # Radiant Mint for shell functions
-ZSH_HIGHLIGHT_STYLES[path]='fg=#e0af68,underline'        # Warm Golden Amber with underline for valid paths
-ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#e0af68'           # Golden Amber for partial paths
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#ff9e64' # Orange for single quotes
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#ff9e64' # Orange for double quotes
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#ff9e64' # Orange for $'' strings
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#bb9af7'   # Luminous Violet for command substitutions
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#bb9af7'   # Violet for short flags (-a)
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#bb9af7'   # Violet for long flags (--all)
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f7768e,bold'     # Vivid Coral Red for typos/unknown commands
-ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b4befe,bold'     # Soft Lavender for keywords (if/then/for)
+ZSH_HIGHLIGHT_STYLES[command]='fg=#89b4fa,bold'          # Radiant sky blue for commands
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#74c7ec,bold'          # Cyan for builtins
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6e3a1,bold'            # Vibrant Emerald Green for aliases
+ZSH_HIGHLIGHT_STYLES[function]='fg=#94e2d5,bold'         # Mint Teal for shell functions
+ZSH_HIGHLIGHT_STYLES[path]='fg=#f9e2af,underline'        # Warm gold underline for valid paths
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#fab387'           # Peach for partial paths
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#fab387' # Peach for single quotes
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#fab387' # Peach for double quotes
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#fab387' # Peach for $'' strings
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#cba6f7'   # Lavender/Mauve for substitutions
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#b4befe'   # Light Blue/Periwinkle for flags (-a)
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#b4befe'   # Light Blue/Periwinkle for flags (--all)
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8,bold'     # Vivid Coral Red for typos/unknown commands
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#cba6f7,bold'     # Mauve for keywords (if/then/for)
 
 # Extra completions for common tools (docker, cargo, nix, etc.)
 [ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)
@@ -239,8 +282,8 @@ alias theme='theme-switch'
 alias themes='theme-switch'
 alias scmd='scmd'
 alias cheatsheet='scmd'
-alias torii='torii-banner'
-alias torii-banner='torii-banner'
+alias samurai='samurai-banner'
+alias fastfetch='[ -x ~/.config/fastfetch/fastfetch-random.sh ] && ~/.config/fastfetch/fastfetch-random.sh || command fastfetch'
 alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
 alias matrix-red='matrix-red'
 alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
@@ -248,15 +291,26 @@ alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipe
 alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
 alias aquarium='command -v asciiquarium >/dev/null 2>&1 && asciiquarium || echo "Install asciiquarium with: sudo dnf install asciiquarium"'
 
-# Kitty terminal features (image protocol, SSH, sessions)
+# Kitty terminal features (image protocol, SSH, themes, diff, unicode)
 if [[ "$TERM" == "xterm-kitty" || -n "$KITTY_PID" ]]; then
     alias icat='kitten icat'
     alias img='kitten icat --align=left'
     alias imgfit='kitten icat --place=80x24@0x0'
     alias kssh='kitten ssh'
     alias kdiff='kitten diff'
+    alias ktheme='kitten themes'
+    alias kunicode='kitten unicode_input'
+    alias kshow='kitten show_key'
     alias dev='kitty --session ~/.config/kitty/sessions/dev.session &>/dev/null &'
 fi
+
+# Fastfetch Graphic Art Switchers
+alias ff='fastfetch'
+alias ff-miles='~/.config/fastfetch/fastfetch-random.sh miles'
+alias ff-spider='~/.config/fastfetch/fastfetch-random.sh spider'
+alias ff-fedora='~/.config/fastfetch/fastfetch-random.sh fedora'
+alias ff-cyber='~/.config/fastfetch/fastfetch-random.sh cyber'
+alias ff-random='~/.config/fastfetch/fastfetch-random.sh random'
 
 # Git with delta pager integration
 alias gs='git status'
@@ -459,14 +513,10 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # ── Auto-run Fastfetch on Shell Launch ──
 if [[ -o interactive ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
-    fastfetch
+    if [[ -x "$HOME/.config/fastfetch/fastfetch-random.sh" ]]; then
+        "$HOME/.config/fastfetch/fastfetch-random.sh"
+    else
+        fastfetch
+    fi
 fi
 
-
-
-# ── Red Forest Torii FZF Theme ──
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#4a1525,bg:#100b14,spinner:#ff758f,hl:#ff3355 \
---color=fg:#f2edf5,header:#ff758f,info:#ffb703,pointer:#ff3355 \
---color=marker:#52b788,fg+:#ffffff,prompt:#ff3355,hl+:#ff4d6d \
---prompt='󰄯 ' --pointer='▶' --marker='✓' --layout=reverse --border"

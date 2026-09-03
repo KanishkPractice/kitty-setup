@@ -1,150 +1,119 @@
 # ~/.config/starship.toml
-# Minimal Catppuccin Mocha prompt — clean and distraction-free
+# Tokyo Night Segmented Prompt with Modern Nerd Font Glyphs
 
-format = """$directory$git_branch$git_state$git_status$kubernetes$helm$terraform$aws$gcloud$docker_context$python$nodejs$rust$golang$sudo$cmd_duration$time
+format = """
+[](#7aa2f7)$os$username[](bg:#3b4261 fg:#7aa2f7)$directory[](bg:#7dcfff fg:#3b4261)$git_branch$git_status[](bg:#24283b fg:#7dcfff)$c$rust$golang$nodejs$python[](fg:#24283b)$cmd_duration$time
 $character"""
 
-palette = "catppuccin_mocha"
+palette = "tokyo_night"
 
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo  = "#f2cdcd"
-pink      = "#f5c2e7"
-mauve     = "#cba6f7"
-red       = "#f38ba8"
-maroon    = "#eba0ac"
-peach     = "#fab387"
-yellow    = "#f9e2af"
-green     = "#a6e3a1"
-teal      = "#94e2d5"
-sky       = "#89dceb"
-sapphire  = "#74c7ec"
-blue      = "#89b4fa"
-lavender  = "#b4befe"
-text      = "#cdd6f4"
-base      = "#1e1e2e"
-surface0  = "#313244"
-surface1  = "#45475a"
-surface2  = "#585b70"
-overlay0  = "#6c7086"
+[palettes.tokyo_night]
+bg = "#1a1b26"
+bg_dark = "#16161e"
+bg_highlight = "#292e42"
+terminal_black = "#414868"
+fg = "#c0caf5"
+fg_dark = "#a9b1d6"
+fg_gutter = "#3b4261"
+dark3 = "#545c7e"
+comment = "#565f89"
+dark5 = "#737aa2"
+blue0 = "#3d59a1"
+blue = "#7aa2f7"
+cyan = "#7dcfff"
+blue1 = "#2ac3de"
+blue2 = "#0db9d7"
+blue5 = "#89ddff"
+blue6 = "#b4f9f8"
+blue7 = "#394b70"
+magenta = "#bb9af7"
+magenta2 = "#ff007c"
+purple = "#9d7cd8"
+orange = "#ff9e64"
+yellow = "#e0af68"
+green = "#9ece6a"
+green1 = "#73daca"
+green2 = "#41a6b5"
+teal = "#1abc9c"
+red = "#f7768e"
+red1 = "#db4b4b"
+
+[os]
+disabled = false
+style = "bg:#7aa2f7 fg:#1a1b26 bold"
+symbols = { Fedora = "  ", Linux = "  " }
+format = "[$symbol]($style)"
+
+[username]
+show_always = false
+style_user = "bg:#7aa2f7 fg:#1a1b26 bold"
+style_root = "bg:#7aa2f7 fg:#f7768e bold"
+format = "[$user]($style)"
 
 [directory]
-style = "bold yellow"
-format = "[$path]($style)[$read_only]($read_only_style) "
-truncation_length = 0
+style = "bg:#3b4261 fg:#c0caf5 bold"
+format = "[ 󰝰 $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
 truncate_to_repo = false
-read_only = " 🔒"
-read_only_style = "bold red"
 
 [git_branch]
-style = "bold mauve"
-format = "[$symbol$branch(:$remote_branch)]($style) "
-symbol = " "
-
-[git_state]
-style = "bold red"
-format = '[\($state( $progress_current/$progress_total)\)]($style) '
+style = "bg:#7dcfff fg:#1a1b26 bold"
+symbol = ""
+format = "[ $symbol $branch ]($style)"
 
 [git_status]
-style = "peach"
-format = '([\[$all_status$ahead_behind\]]($style) )'
-conflicted = "⚔️ "
-ahead = "⇡${count} "
-behind = "⇣${count} "
+style = "bg:#7dcfff fg:#1a1b26 bold"
+format = '([\[$all_status$ahead_behind\] ]($style))'
+conflicted = "⚔️ $count "
+ahead = "⇡$count "
+behind = "⇣$count "
 diverged = "⇕⇡${ahead_count}⇣${behind_count} "
-up_to_date = "✓ "
-untracked = "?${count} "
-stashed = "📦 "
-modified = "!${count} "
-staged = "+${count} "
-renamed = "»${count} "
-deleted = "✘${count} "
+untracked = "?$count "
+stashed = "📦 $count "
+modified = "!$count "
+staged = "+$count "
+renamed = "»$count "
+deleted = "✘$count "
 
-[kubernetes]
-disabled = false
-format = '[$symbol$context(\($namespace\))]($style) '
-symbol = "☸ "
-style = "bold cyan"
+[nodejs]
+style = "bg:#24283b fg:#9ece6a bold"
+symbol = ""
+format = "[ $symbol ($version) ]($style)"
 
-[helm]
-disabled = false
-format = '[$symbol($version )]($style) '
-symbol = "⎈ "
-style = "bold white"
+[rust]
+style = "bg:#24283b fg:#ff9e64 bold"
+symbol = "󱘗"
+format = "[ $symbol ($version) ]($style)"
 
-[terraform]
-disabled = false
-format = '[$symbol$workspace]($style) '
-symbol = "󱁢 "
-style = "bold purple"
+[golang]
+style = "bg:#24283b fg:#7dcfff bold"
+symbol = ""
+format = "[ $symbol ($version) ]($style)"
 
-[aws]
-disabled = false
-format = '[$symbol($profile )(\($region\) )]($style)'
-symbol = "☁️ "
-style = "bold yellow"
+[python]
+style = "bg:#24283b fg:#e0af68 bold"
+symbol = ""
+format = "[ $symbol ($version) ]($style)"
 
-[gcloud]
-disabled = false
-format = '[$symbol($account )(\($project\) )]($style)'
-symbol = "🇬 "
-style = "bold blue"
-
-[docker_context]
-disabled = false
-format = "[$symbol$context]($style) "
-symbol = "🐳 "
-style = "bold blue"
-
-[sudo]
-disabled = true
-format = "[$symbol]($style)"
-symbol = "🛡️ "
-style = "bold red"
+[c]
+style = "bg:#24283b fg:#7aa2f7 bold"
+symbol = ""
+format = "[ $symbol ($version) ]($style)"
 
 [cmd_duration]
 min_time = 500
 show_milliseconds = false
-style = "bold yellow"
-format = "[⏱ took $duration]($style) "
+style = "bold #e0af68"
+format = " [⏱ $duration]($style)"
 
 [time]
 disabled = false
-format = '([\[$time\]]($style) )'
-style = "lavender"
-time_format = "%d %b %H:%M"
+format = ' [\[$time\]]($style)'
+style = "bold #565f89"
+time_format = "%H:%M"
 
 [character]
-success_symbol = "[──❯](bold mauve)"
-error_symbol   = "[──❯](bold red)"
-vimcmd_symbol  = "[──❮](bold green)"
-
-[line_break]
-disabled = false
-
-# ── Context-Aware Modules (only show when relevant) ──────────
-
-[python]
-format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
-symbol = " "
-style = "yellow"
-
-[nodejs]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "green"
-
-[rust]
-format = "[$symbol($version )]($style)"
-symbol = "󱘗 "
-style = "peach"
-
-[golang]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "teal"
-
-[package]
-format = "[$symbol$version]($style) "
-symbol = "📦 "
-style = "peach"
+success_symbol = "[╰─❯](bold #7dcfff) "
+error_symbol   = "[╰─❯](bold #f7768e) "
+vimcmd_symbol  = "[╰─❮](bold #bb9af7) "

@@ -28,10 +28,15 @@ reverse = 0
 show_idle_bar_heads = 1
 
 [color]
-# Clean White / Monochrome Theme
-foreground = '#ffffff'
-# Alternatively with gradient = 0 (solid white bars)
-gradient = 0
+# Tokyo Night Synthwave Gradient (Cyan -> Neon Blue -> Purple -> Hot Pink -> Crimson)
+gradient = 1
+gradient_count = 6
+gradient_color_1 = '#7aa2f7'
+gradient_color_2 = '#7dcfff'
+gradient_color_3 = '#b4f9f8'
+gradient_color_4 = '#bb9af7'
+gradient_color_5 = '#ff007c'
+gradient_color_6 = '#f7768e'
 
 [smoothing]
 # Monstercat dynamic audio smoothing
