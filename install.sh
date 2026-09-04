@@ -331,15 +331,17 @@ copy_file() {
 deploy_config() {
     section "Deploying Dotfiles & Theme Configurations"
 
-    # 1. Kitty configurations & themes
+    # 1. Kitty configurations, themes & textures
     copy_file "$SCRIPT_DIR/kitty/kitty.conf" "$TARGET_HOME/.config/kitty/kitty.conf"
     copy_file "$SCRIPT_DIR/kitty/keybindings.conf" "$TARGET_HOME/.config/kitty/keybindings.conf"
     copy_file "$SCRIPT_DIR/kitty/open-actions.conf" "$TARGET_HOME/.config/kitty/open-actions.conf"
+    [[ -f "$SCRIPT_DIR/kitty/theme.conf" ]] && copy_file "$SCRIPT_DIR/kitty/theme.conf" "$TARGET_HOME/.config/kitty/theme.conf"
 
-    if [[ -d "$SCRIPT_DIR/kitty/themes" ]]; then
-        for theme_file in "$SCRIPT_DIR/kitty/themes"/*.conf; do
-            [[ -f "$theme_file" ]] || continue
-            copy_file "$theme_file" "$TARGET_HOME/.config/kitty/themes/$(basename "$theme_file")"
+    if [[ -d "$SCRIPT_DIR/kitty/textures" ]]; then
+        ensure_dir "$TARGET_HOME/.config/kitty/textures"
+        for tex in "$SCRIPT_DIR/kitty/textures"/*; do
+            [[ -f "$tex" ]] || continue
+            copy_file "$tex" "$TARGET_HOME/.config/kitty/textures/$(basename "$tex")"
         done
     fi
 

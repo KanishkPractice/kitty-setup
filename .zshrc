@@ -12,22 +12,22 @@ setopt AUTO_CD              # Type directory name to cd into it
 setopt INTERACTIVE_COMMENTS # Allow inline #comments in shell
 unsetopt BEEP
 
-# ── 3. COLORS & EXPORTS (Catppuccin Mocha) ───────────────────
+# ── 3. COLORS & EXPORTS (Nordic Solar Palette) ───────────────
 autoload -U colors && colors
 
-# LS_COLORS categorized styling (Catppuccin Mocha Vibrant)
-c_dir="1;38;2;137;180;250"      # bold blue    — directories
-c_exec="1;38;2;166;227;161"     # bold green   — executables
-c_link="1;38;2;137;220;235"     # bold sky/cyan— symlinks
-c_image="38;2;245;194;231"      # vibrant pink — images
-c_video="38;2;250;179;135"      # peach        — video
-c_audio="38;2;249;226;175"      # yellow       — audio
-c_doc="38;2;243;139;168"        # red/rose     — documents
-c_archive="1;38;2;235;160;172"  # maroon       — archives / zips
-c_code="38;2;148;226;213"       # teal/mint    — source code
-c_config="38;2;203;166;247"     # mauve        — config/data
-c_lock="38;2;108;112;134"       # dim gray     — lockfiles
-c_build="38;2;180;190;254"      # lavender     — build artifacts
+# LS_COLORS categorized styling (Nordic Precision)
+c_dir="1;38;2;136;192;208"      # bold frost cyan — directories (#88c0d0)
+c_exec="1;38;2;163;190;140"     # bold aurora green— executables (#a3be8c)
+c_link="1;38;2;143;188;187"     # bold frost teal  — symlinks (#8fbcbb)
+c_image="38;2;235;203;139"      # solar amber      — images (#ebcb8b)
+c_video="38;2;208;135;112"      # aurora orange    — video (#d08770)
+c_audio="38;2;235;203;139"      # solar amber      — audio (#ebcb8b)
+c_doc="38;2;191;97;106"         # aurora red       — documents (#bf616a)
+c_archive="1;38;2;180;142;173"  # aurora purple    — archives / zips (#b48ead)
+c_code="38;2;129;161;193"       # frost blue       — source code (#81a1c1)
+c_config="38;2;235;203;139"     # solar amber      — config/data (#ebcb8b)
+c_lock="38;2;76;86;106"         # polar night dim  — lockfiles (#4c566a)
+c_build="38;2;180;142;173"      # aurora purple    — build artifacts (#b48ead)
 
 _ls_colors="di=${c_dir}:ex=${c_exec}:ln=${c_link}"
 _ls_colors+=":*.jpg=${c_image}:*.jpeg=${c_image}:*.png=${c_image}:*.gif=${c_image}:*.bmp=${c_image}:*.svg=${c_image}:*.webp=${c_image}:*.ico=${c_image}:*.tiff=${c_image}"
@@ -42,21 +42,21 @@ _ls_colors+=":*.o=${c_build}:*.so=${c_build}:*.dylib=${c_build}:*.dll=${c_build}
 export LS_COLORS="$_ls_colors"
 unset _ls_colors
 
-# Eza (modern ls) colors configuration (Vibrant Catppuccin)
-export EZA_COLORS="da=38;2;127;132;156:ur=38;2;243;139;168:uw=38;2;250;179;135:ux=1;38;2;166;227;161:ue=1;38;2;166;227;161:gr=38;2;180;190;254:gw=38;2;250;179;135:gx=38;2;166;227;161:tr=38;2;180;190;254:tw=38;2;250;179;135:tx=38;2;166;227;161:sn=38;2;148;226;213:sb=38;2;137;180;250:df=38;2;203;166;247:ds=1;38;2;137;180;250"
+# Eza colors configuration (Nordic Solar)
+export EZA_COLORS="da=38;2;76;86;106:ur=38;2;191;97;106:uw=38;2;208;135;112:ux=1;38;2;163;190;140:ue=1;38;2;163;190;140:gr=38;2;180;142;173:gw=38;2;208;135;112:gx=38;2;163;190;140:tr=38;2;180;142;173:tw=38;2;208;135;112:tx=38;2;163;190;140:sn=38;2;143;188;187:sb=38;2;136;192;208:df=38;2;180;142;173:ds=1;38;2;136;192;208"
 
 # Bat (modern cat) & Pager theme
-export BAT_THEME="Catppuccin Mocha"
+export BAT_THEME="Nord"
 export BAT_PAGER="less -RF"
 
 # Colored man pages via less termcap
-export LESS_TERMCAP_mb=$'\e[1;38;2;243;139;168m'      # begin blinking (red)
-export LESS_TERMCAP_md=$'\e[1;38;2;137;220;235m'      # begin bold / headings (sky blue)
+export LESS_TERMCAP_mb=$'\e[1;38;2;191;97;106m'        # begin blinking (red)
+export LESS_TERMCAP_md=$'\e[1;38;2;136;192;208m'        # begin bold / headings (frost cyan)
 export LESS_TERMCAP_me=$'\e[0m'                         # end mode
 export LESS_TERMCAP_se=$'\e[0m'                         # end standout-mode
-export LESS_TERMCAP_so=$'\e[38;2;0;0;0;48;2;203;166;247m' # standout (mauve bar)
+export LESS_TERMCAP_so=$'\e[38;2;0;0;0;48;2;235;203;139m' # standout (amber bar)
 export LESS_TERMCAP_ue=$'\e[0m'                         # end underline
-export LESS_TERMCAP_us=$'\e[4;38;2;166;227;161m'      # underline / flags (green)
+export LESS_TERMCAP_us=$'\e[4;38;2;163;190;140m'        # underline / flags (green)
 
 # ── 4. COMPLETION SYSTEM (FAST CACHED & CASE-INSENSITIVE) ───
 autoload -Uz compinit
@@ -75,51 +75,31 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-# Automatic directory correction for cd typos (e.g. cd dokctop -> Desktop)
+# Automatic directory correction & case tolerance for cd
 setopt CORRECT
+setopt CDABLE_VARS
+setopt AUTO_CD
 
-# ── FZF-TAB FLOATING POPUP WITH LIVE PREVIEW ─────────────────
-if [ -f ~/.zsh/fzf-tab/fzf-tab.plugin.zsh ]; then
-    source ~/.zsh/fzf-tab/fzf-tab.plugin.zsh
-
-    # Disable sort when completing git checkout
-    zstyle ':completion:*:git-checkout:*' sort false
-
-    # Set descriptions format to enable group support
-    zstyle ':completion:*:descriptions' format '[%d]'
-
-    # Force zsh not to show standard completion menu, allowing fzf-tab to capture it
-    zstyle ':completion:*' menu no
-
-    # Preview directory content with eza or ls when completing cd / z
-    if command -v eza >/dev/null 2>&1; then
-        zstyle ':fzf-tab:complete:(cd|z|pushd):*' fzf-preview 'eza -1 --color=always --icons $realpath'
+# Case-insensitive cd helper fallback for Linux case-sensitive filesystems
+cd() {
+    if [ "$#" -eq 0 ]; then
+        builtin cd
+        return
+    fi
+    if builtin cd "$1" 2>/dev/null; then
+        return 0
+    fi
+    # Search case-insensitively for the matching directory in current dir
+    local match
+    match=$(find . -maxdepth 1 -iname "$1" -type d 2>/dev/null | head -n 1)
+    if [ -n "$match" ]; then
+        builtin cd "$match"
     else
-        zstyle ':fzf-tab:complete:(cd|z|pushd):*' fzf-preview 'ls -1 --color=always $realpath'
+        builtin cd "$1"
     fi
+}
 
-    # Preview files with bat when completing editors, pagers, or viewers
-    if command -v bat >/dev/null 2>&1; then
-        zstyle ':fzf-tab:complete:(nvim|vim|vi|nano|bat|cat|less):*' fzf-preview '[[ -f $realpath ]] && bat --style=numbers --color=always --line-range :250 $realpath || eza -1 --color=always --icons $realpath 2>/dev/null'
-    fi
 
-    # Process kill preview with ps
-    zstyle ':fzf-tab:complete:(kill|ps):*' fzf-preview 'ps --pid=$word -o cmd,pid,%cpu,%mem 2>/dev/null'
-
-    # Systemctl status preview
-    zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word 2>/dev/null'
-
-    # Tokyo Night Floating Popup Styling
-    zstyle ':fzf-tab:*' fzf-flags \
-      --height=50% --layout=reverse --border=rounded \
-      --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7 \
-      --color=fg+:#ffffff,bg+:#283457,hl+:#7dcfff \
-      --color=info:#e0af68,prompt:#7aa2f7,pointer:#7dcfff \
-      --color=marker:#9ece6a,spinner:#bb9af7,header:#565f89,border:#7aa2f7
-
-    # Switch group using `<` and `>`
-    zstyle ':fzf-tab:*' switch-group '<' '>'
-fi
 
 # ── 5. KEYBINDINGS & HISTORY SEARCH ──────────────────────────
 autoload -U up-line-or-beginning-search down-line-or-beginning-search
@@ -175,10 +155,10 @@ fi
 
 export FZF_DEFAULT_OPTS="\
   --height 45% --layout=reverse --border=rounded \
-  --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7 \
-  --color=fg+:#ffffff,bg+:#283457,hl+:#7dcfff \
-  --color=info:#e0af68,prompt:#7aa2f7,pointer:#7dcfff \
-  --color=marker:#9ece6a,spinner:#bb9af7,header:#565f89,border:#7aa2f7"
+  --color=fg:#d8dee9,bg:#2e3440,hl:#88c0d0 \
+  --color=fg+:#eceff4,bg+:#434c5e,hl+:#ebcb8b \
+  --color=info:#ebcb8b,prompt:#88c0d0,pointer:#ebcb8b \
+  --color=marker:#a3be8c,spinner:#b48ead,header:#4c566a,border:#88c0d0"
 
 # zoxide initialization
 if command -v zoxide >/dev/null 2>&1; then
@@ -188,25 +168,25 @@ fi
 # ── 7. AUTOSUGGESTIONS & SYNTAX HIGHLIGHTING ─────────────────
 [ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
     source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-# High visibility recommendation / suggestion color (Crisp subtle slate)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086,italic"
+# High visibility suggestion preview (Crisp Nordic slate)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9ca3af,italic"
 
 # Syntax highlighting custom styling & activation (MUST be sourced last)
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[command]='fg=#89b4fa,bold'          # Radiant sky blue for commands
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#74c7ec,bold'          # Cyan for builtins
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6e3a1,bold'            # Vibrant Emerald Green for aliases
-ZSH_HIGHLIGHT_STYLES[function]='fg=#94e2d5,bold'         # Mint Teal for shell functions
-ZSH_HIGHLIGHT_STYLES[path]='fg=#f9e2af,underline'        # Warm gold underline for valid paths
-ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#fab387'           # Peach for partial paths
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#fab387' # Peach for single quotes
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#fab387' # Peach for double quotes
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#fab387' # Peach for $'' strings
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#cba6f7'   # Lavender/Mauve for substitutions
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#b4befe'   # Light Blue/Periwinkle for flags (-a)
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#b4befe'   # Light Blue/Periwinkle for flags (--all)
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8,bold'     # Vivid Coral Red for typos/unknown commands
-ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#cba6f7,bold'     # Mauve for keywords (if/then/for)
+ZSH_HIGHLIGHT_STYLES[command]='fg=#88c0d0,bold'          # Frost Cyan for commands
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#81a1c1,bold'          # Frost Blue for builtins
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#a3be8c,bold'            # Aurora Green for aliases
+ZSH_HIGHLIGHT_STYLES[function]='fg=#8fbcbb,bold'         # Frost Teal for functions
+ZSH_HIGHLIGHT_STYLES[path]='fg=#ebcb8b,underline'        # Solar Amber underline for valid paths
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#d08770'           # Aurora Orange for partial paths
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#ebcb8b' # Amber for strings
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#ebcb8b' # Amber for strings
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#ebcb8b' # Amber for vars
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#b48ead'   # Aurora Purple for substitutions
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#81a1c1'   # Frost Blue for flags (-a)
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#81a1c1'   # Frost Blue for flags (--all)
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#bf616a,bold'     # Aurora Red for errors
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b48ead,bold'     # Aurora Purple for keywords
 
 # Extra completions for common tools (docker, cargo, nix, etc.)
 [ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)

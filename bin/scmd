@@ -68,8 +68,8 @@ selected=$(echo "$CHEATSHEET" | fzf \
     --height=50% \
     --layout=reverse \
     --border=rounded \
-    --header="✨ [INTERACTIVE CHEATSHEET & RUNNER] (Enter to Run/Paste, Esc to Exit)" \
-    --prompt="⚡ Search Command > " \
+    --header="[INTERACTIVE CHEATSHEET & RUNNER] (Enter to Run/Paste, Esc to Exit)" \
+    --prompt="Search Command > " \
     --preview='echo -e "\033[1;35mCategory:\033[0m    {1}\n\033[1;36mCommand/Key:\033[0m {2}\n\033[1;32mDescription:\033[0m {3}"' \
     --preview-window=right:50%:wrap
 )
