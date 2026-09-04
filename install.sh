@@ -28,25 +28,191 @@ readonly TARGET_USER TARGET_HOME
 readonly USER_BIN="$TARGET_HOME/.local/bin"
 readonly BACKUP_DIR="$TARGET_HOME/.config/kitty-setup-backups/$TIMESTAMP"
 
-# 24-bit TrueColor and ANSI Styles
+# 24-bit TrueColor and ANSI Styles (Miles Morales / Cyberpunk & Catppuccin palette)
 bold='\033[1m'
 dim='\033[2m'
-blue='\033[38;2;137;180;250m'
-green='\033[38;2;166;227;161m'
-yellow='\033[38;2;249;226;175m'
-red='\033[38;2;243;139;168m'
-cyan='\033[38;2;137;220;235m'
-magenta='\033[38;2;203;166;247m'
-crimson='\033[38;2;255;51;85m'
-gold='\033[38;2;255;183;3m'
+italic='\033[3m'
+underline='\033[4m'
 reset='\033[0m'
 
-info()    { printf "${blue}•${reset} %s\n" "$*"; }
-ok()      { printf "${green}✓${reset} %s\n" "$*"; }
-warn()    { WARNINGS+=("$*"); printf "${yellow}!${reset} %s\n" "$*" >&2; }
-fail()    { ERRORS+=("$*"); printf "${red}✗${reset} %s\n" "$*" >&2; }
-section() { printf "\n${bold}${magenta}━━━ %s ━━━${reset}\n" "$*"; }
-has()     { command -v "$1" >/dev/null 2>&1; }
+# Rich RGB Palette
+c_red='\033[38;2;255;77;109m'
+c_crimson='\033[38;2;255;51;85m'
+c_coral='\033[38;2;255;117;143m'
+c_neon_blue='\033[38;2;0;245;212m'
+c_cyan='\033[38;2;137;220;235m'
+c_blue='\033[38;2;137;180;250m'
+c_green='\033[38;2;166;227;161m'
+c_yellow='\033[38;2;249;226;175m'
+c_gold='\033[38;2;255;183;3m'
+c_magenta='\033[38;2;203;166;247m'
+c_purple='\033[38;2;180;142;255m'
+c_gray='\033[38;2;108;112;134m'
+c_white='\033[38;2;248;249;250m'
+
+blue="$c_blue"
+green="$c_green"
+yellow="$c_yellow"
+red="$c_red"
+cyan="$c_cyan"
+magenta="$c_magenta"
+crimson="$c_crimson"
+gold="$c_gold"
+
+info() { printf "${c_cyan}◆${reset} %b\n" "$*"; }
+ok() { printf "${c_green}✔${reset} %b\n" "$*"; }
+warn() {
+    WARNINGS+=("$*")
+    printf "${c_yellow}▲${reset} %b\n" "$*" >&2
+}
+fail() {
+    ERRORS+=("$*")
+    printf "${c_red}✖${reset} %b\n" "$*" >&2
+}
+has() { command -v "$1" >/dev/null 2>&1; }
+
+animate_check() {
+    local label="$1"
+    local status_cmd="$2"
+    local delay=0.012
+    local -a spin=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+
+    if [[ ! -t 1 ]] || "$AUTO_YES" || "$DRY_RUN"; then
+        if eval "$status_cmd" >/dev/null 2>&1; then
+            ok "$label"
+            return 0
+        else
+            warn "$label (check failed or not found)"
+            return 1
+        fi
+    fi
+
+    for s in "${spin[@]}"; do
+        printf "\r${c_neon_blue}%s${reset} Checking %s..." "$s" "$label"
+        sleep "$delay"
+    done
+
+    if eval "$status_cmd" >/dev/null 2>&1; then
+        printf "\r\033[K${c_green}✔${reset} %s\n" "$label"
+        return 0
+    else
+        printf "\r\033[K${c_yellow}▲${reset} %s is not active/found\n" "$label"
+        return 1
+    fi
+}
+
+animate_text() {
+    local text="$1"
+    local delay="${2:-0.0008}"
+    local color="${3:-}"
+    if [[ ! -t 1 ]] || "$AUTO_YES" || "$DRY_RUN"; then
+        printf "%b%s%b\n" "$color" "$text" "$reset"
+        return
+    fi
+    printf "%b" "$color"
+    local i char
+    for (( i=0; i<${#text}; i++ )); do
+        char="${text:$i:1}"
+        printf "%s" "$char"
+        sleep "$delay"
+    done
+    printf "%b\n" "$reset"
+}
+
+cyber_progress_bar() {
+    local title="$1"
+    local steps="${2:-20}"
+    local delay="${3:-0.005}"
+
+    if [[ ! -t 1 ]] || "$AUTO_YES" || "$DRY_RUN"; then
+        return 0
+    fi
+
+    printf "  ${c_coral}⚡ %s:${reset} [" "$title"
+    local filled=""
+    for ((i=1; i<=steps; i++)); do
+        local percent=$(( (i * 100) / steps ))
+        printf "\r  ${c_coral}⚡ %-28s${reset} ${c_neon_blue}[${c_red}%-${steps}s${c_neon_blue}] ${c_yellow}%3d%%${reset}" "$title" "$(printf '█%.0s' $(seq 1 $i))" "$percent"
+        sleep "$delay"
+    done
+    printf "\r\033[K  ${c_green}✔ %-28s${reset} ${c_neon_blue}[${c_green}%-${steps}s${c_neon_blue}] ${c_green}100%% DONE${reset}\n" "$title" "$(printf '█%.0s' $(seq 1 $steps))"
+}
+
+show_celebration_animation() {
+    if [[ ! -t 1 ]] || "$AUTO_YES" || "$DRY_RUN"; then
+        return 0
+    fi
+
+    local -a sparks=(
+        "        ✨  ✦   .  *  .  ✦  ✨       "
+        "      ✦  .  *  [ SYSTEM READY ] *  .  ✦      "
+        "        ✨  ✦   .  *  .  ✦  ✨       "
+    )
+
+    for spark in "${sparks[@]}"; do
+        printf "${c_gold}${bold}%s${reset}\n" "$spark"
+        sleep 0.02
+    done
+}
+
+section() {
+    local title="$*"
+    if [[ ! -t 1 ]] || "$AUTO_YES" || "$DRY_RUN"; then
+        printf "\n${bold}${c_purple}━━━ %s ━━━${reset}\n" "$title"
+        return
+    fi
+    printf "\n"
+    animate_text "━━━ ✦ $title ✦ ━━━" 0.0005 "${bold}${c_purple}"
+}
+
+show_intro_animation() {
+    if [[ ! -t 1 ]] || "$AUTO_YES" || "$DRY_RUN"; then
+        printf "\n${c_crimson}${bold} ╭──────────────────────────────────────────────────────────╮\n"
+        printf " │      🕷️  KITTY & MODERN TERMINAL RICE / LAZYVIM          │\n"
+        printf " │             Dedicated Fedora & DNF Edition               │\n"
+        printf " ╰──────────────────────────────────────────────────────────╯${reset}\n\n"
+        return
+    fi
+
+    clear 2>/dev/null || true
+    printf "\n"
+
+    local -a spider_art=(
+        "              \033[38;2;255;77;109m⡔      ⣆\033[0m"
+        "             \033[38;2;255;77;109m⣼⠁      ⠸⣆\033[0m"
+        "           \033[38;2;255;51;85m⡀⢰⣿        ⣿ ⢀\033[0m"
+        "          \033[38;2;255;51;85m⣾ ⢸⣿        ⣿⠇⠘⣇\033[0m"
+        "         \033[38;2;255;77;109m⢰⣿ ⠘⠿⣦⣄\033[38;2;0;245;212m⣴⣀⣸⡦\033[38;2;255;77;109m⣠⡼⠿  ⣿\033[0m"
+        "         \033[38;2;255;51;85m⢸⣿⡶⠶⠶⠶\033[38;2;0;245;212m⣽⣿⣿⣿⣿⣵\033[38;2;255;51;85m⠶⠶⠶⢶⣿\033[0m"
+        "        \033[38;2;255;77;109m⣤⣤⣶⡶⠾\033[38;2;0;245;212m⣛⣫⣽⣿⣿⣿⣿⣯⣟⡛\033[38;2;255;77;109m⠷⣶⣶⣤⣄\033[0m"
+        "        \033[38;2;255;51;85m⣿⣿⠁\033[38;2;255;77;109m⣴⡿⠋\033[38;2;0;245;212m⢹⣿⣿⣿⣿⣿⣿⡎\033[38;2;255;77;109m⠙⢷⣦\033[38;2;255;51;85m⢨⣿⡟\033[0m"
+        "        \033[38;2;255;77;109m⢹⣿⡀⣿⡇ \033[38;2;0;245;212m⢸⣟⢿⣿⣿⡿⣹⡇ \033[38;2;255;77;109m⢸⡏⢸⣿⠇\033[0m"
+        "        \033[38;2;255;51;85m⠈⣿⡇⢹⡇  \033[38;2;0;245;212m⠻⣦⣙⣫⣼⠏  \033[38;2;255;51;85m⣿⡇⣼⡿\033[0m"
+        "         \033[38;2;255;77;109m⠹⣿⡈\033[38;2;255;51;85m⣷   ⠈⠛⠋⠁   \033[38;2;255;51;85m⡿⢠⣿⠃\033[0m"
+        "          \033[38;2;255;51;85m⠹⣧\033[38;2;255;77;109m⠹⡄        ⣸⢃\033[38;2;255;51;85m⣾⠋\033[0m"
+        "           \033[38;2;255;77;109m⠙⢧⠱       ⠠⢃⡾⠁\033[0m"
+        "            \033[38;2;255;51;85m⠈⠳⡀      ⢠⠎\033[0m"
+    )
+
+    for line in "${spider_art[@]}"; do
+        printf "%b\n" "$line"
+        sleep 0.008
+    done
+    printf "\n"
+
+    # Animated glowing header box
+    local top_border=" ╭──────────────────────────────────────────────────────────╮"
+    local title_line=" │        🕷️  KITTY & MODERN TERMINAL RICE / LAZYVIM         │"
+    local sub_line=" │             Dedicated Fedora & DNF Edition               │"
+    local bot_border=" ╰──────────────────────────────────────────────────────────╯"
+
+    animate_text "$top_border" 0.0008 "${c_crimson}${bold}"
+    animate_text "$title_line" 0.0008 "${c_coral}${bold}"
+    animate_text "$sub_line"   0.0008 "${c_neon_blue}${bold}"
+    animate_text "$bot_border" 0.0008 "${c_crimson}${bold}"
+    printf "\n"
+    sleep 0.05
+}
 
 usage() {
     cat <<EOF
@@ -67,20 +233,27 @@ ${bold}Included Suite:${reset}
   • ${bold}IDE:${reset} LazyVim (Neovim v0.12+ with TokyoNight/Torii theme, Mason LSP, Conform formatting)
   • ${bold}Shell:${reset} Zsh & Bash (Torii FZF theme, Zoxide, Starship prompt, syntax highlighting, autosuggestions)
   • ${bold}Modern CLI:${reset} Yazi, Fastfetch, Cava (with shaders), LazyGit, Bat, Eza, Ripgrep, Btop, Cmatrix, Cbonsai
-  • ${bold}CLI Helpers:${reset} cool (visual launcher), theme (live theme switcher), torii, scmd (fuzzy cheatsheet)
+  • ${bold}CLI Helpers:${reset} cool (visual launcher), samurai / trident (banners), scmd (fuzzy cheatsheet)
 EOF
 }
 
 # Parse CLI arguments
 for arg in "$@"; do
     case $arg in
-        -y|--yes|--non-interactive) AUTO_YES=true ;;
-        --change-shell) CHANGE_SHELL=true ;;
-        --only-configs) ONLY_CONFIGS=true ;;
-        --no-pkg) SKIP_PKGS=true ;;
-        --dry-run) DRY_RUN=true ;;
-        -h|--help) usage; exit 0 ;;
-        *) fail "Unknown option: $arg"; usage; exit 2 ;;
+    -y | --yes | --non-interactive) AUTO_YES=true ;;
+    --change-shell) CHANGE_SHELL=true ;;
+    --only-configs) ONLY_CONFIGS=true ;;
+    --no-pkg) SKIP_PKGS=true ;;
+    --dry-run) DRY_RUN=true ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    *)
+        fail "Unknown option: $arg"
+        usage
+        exit 2
+        ;;
     esac
 done
 
@@ -112,7 +285,10 @@ run_elevated() {
 }
 
 ensure_dir() {
-    run_as_user mkdir -p "$1" || { fail "Cannot create directory: $1"; return 1; }
+    run_as_user mkdir -p "$1" || {
+        fail "Cannot create directory: $1"
+        return 1
+    }
 }
 
 preflight_checks() {
@@ -297,7 +473,10 @@ install_plugin() {
         ok "Zsh plugin '$name' up-to-date"
         return 0
     fi
-    has git || { warn "Cannot clone '$name' (git missing)."; return 1; }
+    has git || {
+        warn "Cannot clone '$name' (git missing)."
+        return 1
+    }
     ensure_dir "$TARGET_HOME/.zsh"
     [[ -e $dst ]] && run_as_user rm -rf "$dst"
     if "$DRY_RUN"; then
@@ -313,7 +492,10 @@ install_plugin() {
 
 copy_file() {
     local src=$1 dst=$2 backup
-    [[ -f $src ]] || { fail "Source file missing: $src"; return 1; }
+    [[ -f $src ]] || {
+        fail "Source file missing: $src"
+        return 1
+    }
     ensure_dir "$(dirname "$dst")" || return 1
     if [[ -L $dst ]]; then
         warn "Skipped symlink $dst to preserve custom link."
@@ -322,7 +504,10 @@ copy_file() {
     if [[ -e $dst ]] && ! cmp -s "$src" "$dst"; then
         backup="$BACKUP_DIR/${dst#"$TARGET_HOME"/}"
         ensure_dir "$(dirname "$backup")" || return 1
-        run_as_user cp -a "$dst" "$backup" || { fail "Failed to backup $dst"; return 1; }
+        run_as_user cp -a "$dst" "$backup" || {
+            fail "Failed to backup $dst"
+            return 1
+        }
         info "Backed up existing ${dst#"$TARGET_HOME"/}"
     fi
     run_as_user install -m 0644 "$src" "$dst" && ok "Installed ${dst#"$TARGET_HOME"/}" || fail "Could not install $dst"
@@ -359,10 +544,6 @@ deploy_config() {
             [[ -f "$bin_file" ]] || continue
             run_as_user install -m 0755 "$bin_file" "$USER_BIN/$(basename "$bin_file")" && ok "Installed CLI helper $(basename "$bin_file")" || warn "Could not install $(basename "$bin_file")"
         done
-        run_as_user ln -sfn "$USER_BIN/theme-switch" "$USER_BIN/theme" 2>/dev/null || true
-        run_as_user ln -sfn "$USER_BIN/torii-banner" "$USER_BIN/torii" 2>/dev/null || true
-        run_as_user ln -sfn "$USER_BIN/trident-banner" "$USER_BIN/trident" 2>/dev/null || true
-        run_as_user ln -sfn "$USER_BIN/samurai-banner" "$USER_BIN/samurai" 2>/dev/null || true
     fi
 
     # 3. Starship, Environment, Cava, Shells
@@ -432,7 +613,10 @@ deploy_config() {
 
 change_login_shell() {
     "$CHANGE_SHELL" || return 0
-    has zsh || { warn "Zsh is not installed; login shell unchanged."; return 1; }
+    has zsh || {
+        warn "Zsh is not installed; login shell unchanged."
+        return 1
+    }
     local zsh_bin
     zsh_bin=$(command -v zsh)
     if "$AUTO_YES" || { [[ -t 0 ]] && read -r -p "Make $zsh_bin your default login shell? [y/N] " reply && [[ $reply =~ ^[Yy]$ ]]; }; then
@@ -451,26 +635,22 @@ change_login_shell() {
 
 verify() {
     section "Verification & Health Check"
-    local -a core_bins=(kitty starship zoxide fzf nvim)
+    
+    local -a core_bins=(kitty starship zoxide fzf nvim lazygit yazi fastfetch cava btop)
     for b in "${core_bins[@]}"; do
-        if has "$b" || [[ -x "$USER_BIN/$b" ]]; then
-            ok "$b is ready"
-        else
-            warn "$b is not available in PATH yet"
-        fi
+        animate_check "${bold}$b${reset} binary" "has $b || [[ -x $USER_BIN/$b ]]"
     done
-    [[ -f "$TARGET_HOME/.config/kitty/kitty.conf" ]] && ok "Kitty terminal config active" || fail "Kitty config missing"
-    [[ -f "$TARGET_HOME/.config/nvim/init.lua" ]] && ok "LazyVim configuration active" || fail "LazyVim config missing"
+    
+    animate_check "${bold}Kitty terminal config${reset}" "[[ -f $TARGET_HOME/.config/kitty/kitty.conf ]]"
+    animate_check "${bold}LazyVim configuration${reset}" "[[ -f $TARGET_HOME/.config/nvim/init.lua ]]"
+    animate_check "${bold}Starship prompt config${reset}" "[[ -f $TARGET_HOME/.config/starship.toml ]]"
+    animate_check "${bold}Zsh theme & completions${reset}" "[[ -f $TARGET_HOME/.zshrc ]]"
 }
 
 main() {
-    printf "${bold}${crimson}
-  ⛩️  ╭──────────────────────────────────────────────────────────╮
-     │         KITTY & MODERN TERMINAL RICE / LAZYVIM           │
-     │            Dedicated Fedora & DNF Edition                │
-     ╰──────────────────────────────────────────────────────────╯${reset}\n"
+    show_intro_animation
 
-    "$DRY_RUN" && info "Mode: ${yellow}DRY-RUN (Simulating changes without writing files)${reset}"
+    "$DRY_RUN" && info "Mode: ${c_yellow}DRY-RUN (Simulating changes without writing files)${reset}"
 
     ensure_dir "$USER_BIN" || exit 1
     export PATH="$USER_BIN:$PATH"
@@ -501,23 +681,25 @@ main() {
     end_time=$(date +%s)
     local elapsed=$((end_time - START_TIME))
 
-    printf "\n${bold}${cyan}━━━━━━━━━━━━━━━━━━━━━━ Installation Summary ━━━━━━━━━━━━━━━━━━━━━━${reset}\n"
+    printf "\n"
+    show_celebration_animation
+    printf "${bold}${c_purple}━━━━━━━━━━━━━━━━━━━━━━ Installation Summary ━━━━━━━━━━━━━━━━━━━━━━${reset}\n"
     if ((${#ERRORS[@]} == 0)); then
-        printf "${green}${bold}✨ Setup completed successfully in %d second(s)!${reset}\n\n" "$elapsed"
-        printf "  ${bold}Quick Launch Commands:${reset}\n"
-        printf "  • ${cyan}kitty${reset}          → Launch Kitty Terminal\n"
-        printf "  • ${cyan}v${reset} (or ${cyan}nvim${reset})     → Open LazyVim IDE\n"
-        printf "  • ${cyan}theme${reset}          → Interactive Kitty & Rice Theme Switcher\n"
-        printf "  • ${cyan}cool${reset}           → Visual Screensavers, Audio & Art Launcher\n"
-        printf "  • ${cyan}rice${reset}           → Launch 3-Pane Aesthetic Lounge (Cava+Btop+Clock)\n"
-        printf "  • ${cyan}scmd${reset}           → Fuzzy Command & Hotkey Cheatsheet\n"
-        printf "  • ${cyan}torii${reset}          → 24-bit TrueColor ASCII Torii Banner\n\n"
+        printf "${c_green}${bold}✨ Setup completed successfully in %d second(s)!${reset}\n\n" "$elapsed"
+        printf "  ${bold}${c_coral}Quick Launch Commands:${reset}\n"
+        printf "  • ${c_neon_blue}kitty${reset}          → Launch Kitty Terminal\n"
+        printf "  • ${c_neon_blue}v${reset} (or ${c_neon_blue}nvim${reset})     → Open LazyVim IDE\n"
+        printf "  • ${c_neon_blue}cool${reset}           → Visual Screensavers, Audio & Art Launcher\n"
+        printf "  • ${c_neon_blue}rice${reset}           → Launch 3-Pane Aesthetic Lounge (Cava+Btop+Clock)\n"
+        printf "  • ${c_neon_blue}scmd${reset}           → Fuzzy Command & Hotkey Cheatsheet\n"
+        printf "  • ${c_neon_blue}fastfetch${reset}      → Display Fastfetch Spec Banner\n"
+        printf "  • ${c_neon_blue}matrix-red${reset}     → Crimson Matrix Digital Rain\n\n"
     else
-        printf "${red}${bold}Completed with %d error(s). Review logs above.${reset}\n" "${#ERRORS[@]}"
+        printf "${c_red}${bold}Completed with %d error(s). Review logs above.${reset}\n" "${#ERRORS[@]}"
     fi
 
     if ((${#WARNINGS[@]} > 0)); then
-        printf "${yellow}%d warning(s) noted above.${reset}\n" "${#WARNINGS[@]}"
+        printf "${c_yellow}%d warning(s) noted above.${reset}\n" "${#WARNINGS[@]}"
     fi
 
     ((${#ERRORS[@]} == 0))

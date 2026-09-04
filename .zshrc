@@ -258,11 +258,8 @@ function yy() {
 alias y='yy'
 
 # Animation & fun screensavers / aesthetic tools
-alias theme='theme-switch'
-alias themes='theme-switch'
 alias scmd='scmd'
 alias cheatsheet='scmd'
-alias samurai='samurai-banner'
 alias fastfetch='[ -x ~/.config/fastfetch/fastfetch-random.sh ] && ~/.config/fastfetch/fastfetch-random.sh || command fastfetch'
 alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
 alias matrix-red='matrix-red'

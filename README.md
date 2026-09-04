@@ -92,13 +92,10 @@ theme rose-pine   # Instantly switch to Rosé Pine
 | `Ctrl+Shift+F5` | Hot reload Kitty configuration |
 
 ### ✨ Aesthetic Commands & Visual Rice:
-- **`torii`** (or `torii-banner`): 24-bit TrueColor Red Torii shrine ASCII art & system spec readout.
 - **`rice`**: Launches the 3-pane aesthetic lounge (Cava visualizer + Btop + Tty-Clock).
 - **`scmd`**: Interactive fuzzy finder cheatsheet for all shell aliases and Kitty shortcuts.
 - **`cool`**: Interactive launcher for terminal screensavers, visualizers, and art.
-- **`matrix-red`**: Crimson Red Torii Matrix digital rain screensaver.
-- **`theme`**: Interactive fuzzy theme switcher with live reload.
-- **`live-wallpaper`**: Toggle or apply the 4K Red Forest Torii wallpaper.
+- **`matrix-red`**: Crimson Red Matrix digital rain screensaver.
 
 ---
 
@@ -165,15 +162,10 @@ kitty-setup/
 ├── .tmux.conf                                # Tmux fallback config (truecolor & vi-mode)
 ├── bin/                                      # CLI tools & aesthetic runners
 │   ├── cool                                  # Aesthetic visual tools hub & FZF launcher
-│   ├── fastfetch-art                         # Braille art switcher & fastfetch runner
-│   ├── live-wallpaper                        # 4K Torii desktop wallpaper manager
-│   ├── matrix-red                            # Crimson Red Torii Matrix rain
-│   ├── samurai-banner                        # Braille samurai banner
+│   ├── matrix-red                            # Crimson Red Matrix rain
+│   ├── rice                                  # Aesthetic Lounge 3-pane session runner
 │   ├── scmd                                  # Fuzzy command / shortcut cheatsheet & runner
-│   ├── set-login-wallpaper                   # SDDM/Login wallpaper setup helper
-│   ├── theme-switch (or theme)               # Interactive theme switcher with live reload
-│   ├── torii-banner (or torii)               # 24-bit TrueColor Torii ASCII shrine banner
-│   └── trident-banner                        # Braille trident banner
+│   └── set-login-wallpaper                   # SDDM/Login wallpaper setup helper
 ├── cava/                                     # Audio visualizer config & shaders
 │   ├── config                                # Cava gradient & framerate config
 │   └── shaders/                              # Custom Cava fragment shaders

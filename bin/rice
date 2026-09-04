@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# rice - Launch 3-Pane Aesthetic Lounge (Cava + Btop + Tty-Clock)
+# Launch dedicated aesthetic session in a new window or current kitty
+
+SESSION_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/sessions/rice.session"
+
+if [ ! -f "$SESSION_FILE" ]; then
+    # Fallback path if running directly from git repository
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    if [ -f "$SCRIPT_DIR/kitty/sessions/rice.session" ]; then
+        SESSION_FILE="$SCRIPT_DIR/kitty/sessions/rice.session"
+    fi
+fi
+
+if command -v kitty >/dev/null 2>&1; then
+    kitty --session "$SESSION_FILE" &
+else
+    echo "Kitty terminal is required to launch rice session."
+    exit 1
+fi

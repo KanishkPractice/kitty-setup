@@ -12,32 +12,28 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 show_banner() {
-    echo -e "  \033[1;38;2;112;169;255m╭──────────────────────────────────────────────────────────────────────────╮\033[0m"
-    echo -e "  \033[1;38;2;112;169;255m│\033[0m                 \033[1;38;2;86;207;225m✦ AESTHETIC & CREATIVE TERMINAL TOOLS ✦\033[0m                  \033[1;38;2;112;169;255m│\033[0m"
-    echo -e "  \033[1;38;2;112;169;255m╰──────────────────────────────────────────────────────────────────────────╯\033[0m"
+    echo -e "  \033[1;38;2;255;51;85m╭──────────────────────────────────────────────────────────────────────────╮\033[0m"
+    echo -e "  \033[1;38;2;255;51;85m│\033[0m            \033[1;38;2;0;245;212m🕷️  AESTHETIC & CREATIVE TERMINAL SUITE (CYBERPUNK) ✦\033[0m          \033[1;38;2;255;51;85m│\033[0m"
+    echo -e "  \033[1;38;2;255;51;85m╰──────────────────────────────────────────────────────────────────────────╯\033[0m"
     echo ""
 }
 
 list_tools() {
     show_banner
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[1;38;2;248;249;250m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[1;38;2;82;183;136m%s\033[0m\n" "COMMAND" "CATEGORY / DESCRIPTION" "QUICK LAUNCH USAGE"
-    echo -e "  \033[38;2;75;85;99m─────────────────┼──────────────────────────────────────────┼──────────────────────────────────────\033[0m"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "rice" "Aesthetic Lounge (Cava+Btop+Clock)" "rice"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "fastfetch-art" "Braille Art Picker & Fastfetch Switch" "fastfetch-art list"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "scmd" "Fuzzy Command & Shortcut Cheatsheet" "scmd"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "samurai-banner" "24-bit TrueColor Samurai Banner Art" "samurai-banner"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "trident-banner" "24-bit TrueColor Trident Banner Art" "trident-banner"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "cava" "Audio Visualizer (Monochrome/Gradient)" "cava"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "tty-clock" "Minimalist Floating Digital Clock" "tty-clock -C 4 -c -s -b"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "pipes-rs" "Animated 3D Pipes Screensaver" "pipes-rs"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "fastfetch" "Modern Hardware Specs & ASCII Art" "fastfetch"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "matrix-red" "Crimson Matrix Digital Rain" "matrix-red"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "btop" "Cyberpunk System & GPU Monitor" "btop"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "asciiquarium" "ASCII Ocean Aquarium Screensaver" "asciiquarium"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "cbonsai" "Living Procedural Bonsai Tree" "cbonsai -l"
-    printf "  \033[1;38;2;112;169;255m%-16s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;75;85;99m│\033[0m \033[38;2;82;183;136m%s\033[0m\n" "lazygit" "Full Floating Git UI" "lazygit"
+    printf "  \033[1;38;2;0;245;212m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[1;38;2;248;249;250m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[1;38;2;166;227;161m%s\033[0m\n" "COMMAND" "CATEGORY / DESCRIPTION" "QUICK LAUNCH USAGE"
+    echo -e "  \033[38;2;108;112;134m─────────────────┼──────────────────────────────────────────┼──────────────────────────────────────\033[0m"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "rice" "Aesthetic Lounge (Cava+Btop+Clock)" "rice"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "scmd" "Fuzzy Command & Shortcut Cheatsheet" "scmd"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "matrix-red" "Crimson Matrix Digital Rain" "matrix-red"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "cava" "Audio Visualizer (Gradient Shaders)" "cava"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "tty-clock" "Minimalist Floating Digital Clock" "tty-clock -C 1 -c -s -b"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "fastfetch" "Modern Hardware Specs & ASCII Art" "fastfetch"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "btop" "Cyberpunk System & GPU Monitor" "btop"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "pipes-rs" "Animated 3D Pipes Screensaver" "pipes-rs"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "cbonsai" "Living Procedural Bonsai Tree" "cbonsai -l"
+    printf "  \033[1;38;2;255;77;109m%-16s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;229;231;235m%-40s\033[0m \033[38;2;108;112;134m│\033[0m \033[38;2;166;227;161m%s\033[0m\n" "lazygit" "Full Floating Git UI" "lazygit"
     echo ""
-    echo -e "  \033[1;38;2;112;169;255mTip:\033[0m Run \033[1;38;2;86;207;225mcool -i\033[0m (or \033[1;38;2;86;207;225mcool --menu\033[0m) for interactive selection with live preview!"
+    echo -e "  \033[1;38;2;255;117;143mTip:\033[0m Run \033[1;38;2;0;245;212mcool -i\033[0m (or \033[1;38;2;0;245;212mcool --menu\033[0m) for interactive fuzzy selector with live preview!"
     echo ""
 }
 
@@ -51,12 +47,8 @@ interactive_menu() {
     selected=$(
         {
             printf "%-14s │ %-38s │ %s\n" "rice" "Aesthetic Lounge (Cava+Btop+Clock)" "kitty --session ~/.config/kitty/sessions/rice.session &"
-            printf "%-14s │ %-38s │ %s\n" "fastfetch-art" "Braille Art Picker & Fastfetch Switch" "fastfetch-art list"
-            printf "%-14s │ %-38s │ %s\n" "samurai-banner" "24-bit TrueColor Samurai Banner Art" "samurai-banner"
-            printf "%-14s │ %-38s │ %s\n" "trident-banner" "24-bit TrueColor Trident Banner Art" "trident-banner"
             printf "%-14s │ %-38s │ %s\n" "scmd" "Fuzzy Command & Shortcut Cheatsheet" "scmd"
             printf "%-14s │ %-38s │ %s\n" "matrix-red" "Crimson Matrix Digital Rain" "matrix-red"
-            printf "%-14s │ %-38s │ %s\n" "live-wallpaper" "Manage 4K Desktop Wallpaper" "live-wallpaper"
             printf "%-14s │ %-38s │ %s\n" "cava" "Audio Visualizer (Gradient)" "cava"
             printf "%-14s │ %-38s │ %s\n" "tty-clock" "Minimalist Floating Digital Clock" "tty-clock -C 1 -c -s -b"
             printf "%-14s │ %-38s │ %s\n" "pipes-rs" "Animated 3D Pipes Screensaver" "pipes-rs"

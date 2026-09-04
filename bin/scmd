@@ -8,18 +8,9 @@ if ! command -v fzf >/dev/null 2>&1; then
 fi
 
 CHEATSHEET=$(cat << 'DATA'
-THEMES & RICE │ theme │ Open interactive Kitty theme switcher with live preview
-THEMES & RICE │ theme red-torii │ Activate Red Forest Torii Japanese aesthetic theme
-THEMES & RICE │ theme tokyo-night │ Activate Tokyo Night theme
-THEMES & RICE │ theme catppuccin-mocha │ Activate Catppuccin Mocha Enhanced theme
-THEMES & RICE │ theme rose-pine │ Activate Rosé Pine Moon theme
-THEMES & RICE │ theme dracula │ Activate Dracula Pro theme
-THEMES & RICE │ theme gruvbox-dark │ Activate Gruvbox Dark Material theme
 THEMES & RICE │ cool │ Open interactive Aesthetic Visual Tools launcher
 THEMES & RICE │ rice │ Launch 3-pane Aesthetic Lounge session (cava + btop + tty-clock)
-THEMES & RICE │ torii-banner │ Display 24-bit TrueColor Torii ASCII shrine banner
-THEMES & RICE │ live-wallpaper │ Set or manage 4K Torii desktop wallpaper
-THEMES & RICE │ matrix-red │ Launch Matrix digital rain in glowing Torii crimson colors
+THEMES & RICE │ matrix-red │ Launch Matrix digital rain in glowing crimson colors
 KITTY SHORTCUTS │ Ctrl+Shift+Enter │ Split pane horizontally (current directory)
 KITTY SHORTCUTS │ Ctrl+Shift+- │ Split pane vertically (current directory)
 KITTY SHORTCUTS │ Ctrl+Shift+H/J/K/L │ Move between panes (left, down, up, right)
