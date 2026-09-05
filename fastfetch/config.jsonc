@@ -1,111 +1,100 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "source": "~/.config/fastfetch/current_art.txt",
-    "type": "file-raw",
+    "source": "fedora",
+    "type": "builtin",
     "padding": {
-      "top": 0,
+      "top": 1,
       "left": 1,
       "right": 3
     }
   },
   "display": {
-    "separator": " \u001b[38;2;134;225;252m╱╱\u001b[0m ",
+    "separator": "  ",
     "color": {
-      "keys": "38;2;130;170;255",
-      "title": "38;2;134;225;252"
+      "keys": "38;2;160;219;211",
+      "title": "38;2;181;214;139"
     },
     "key": {
-      "width": 16
-    },
-    "percent": {
-      "type": 9
-    },
-    "bar": {
-      "char": {
-        "elapsed": "■",
-        "total": "□"
-      },
-      "width": 10
+      "width": 11
     }
   },
   "modules": [
     {
       "type": "title",
-      "format": "\u001b[1;38;2;134;225;252m┌──\u001b[0m \u001b[1;38;2;192;153;255m[ NODE: {user-name} // HOST: {host-name} ]\u001b[0m \u001b[1;38;2;134;225;252m──┐\u001b[0m"
+      "format": "\u001b[1;38;2;160;219;211m󰮯  {user-name}\u001b[0m\u001b[38;2;228;216;190m@\u001b[0m\u001b[1;38;2;181;214;139m{host-name}\u001b[0m"
     },
     {
       "type": "custom",
-      "format": "\u001b[38;2;68;74;115m├─ 󰋜 CORE SYSTEM ─────────────────────────\u001b[0m"
+      "format": "\u001b[38;2;101;115;126m──────────────────────────────────────────────\u001b[0m"
     },
     {
       "type": "os",
-      "key": "  󰣛 OS.BUILD",
-      "keyColor": "38;2;134;225;252"
+      "key": "󰣛 OS"
+    },
+    {
+      "type": "host",
+      "key": "󰋜 Host"
     },
     {
       "type": "kernel",
-      "key": "  󰅂 SYS.KERNEL",
-      "keyColor": "38;2;134;225;252"
-    },
-    {
-      "type": "wm",
-      "key": "  󱂬 DESKTOP.WM",
-      "keyColor": "38;2;134;225;252"
-    },
-    {
-      "type": "shell",
-      "key": "  󰞷 SHELL.ENV",
-      "keyColor": "38;2;134;225;252"
-    },
-    {
-      "type": "terminal",
-      "key": "  󰆍 TTY.CLIENT",
-      "keyColor": "38;2;134;225;252"
-    },
-    {
-      "type": "custom",
-      "format": "\u001b[38;2;68;74;115m├─ 󰍹 HARDWARE TELEMETRY ──────────────────\u001b[0m"
-    },
-    {
-      "type": "cpu",
-      "key": "  󰻠 CPU.FREQ",
-      "keyColor": "38;2;192;153;255"
-    },
-    {
-      "type": "gpu",
-      "key": "  󰢮 GPU.CORE",
-      "keyColor": "38;2;192;153;255"
-    },
-    {
-      "type": "memory",
-      "key": "  󰍛 MEM.LOAD",
-      "keyColor": "38;2;192;153;255"
-    },
-    {
-      "type": "disk",
-      "key": "  󰋊 VOL.BTRFS",
-      "keyColor": "38;2;192;153;255"
-    },
-    {
-      "type": "custom",
-      "format": "\u001b[38;2;68;74;115m├─ 󱑂 SESSION & PACKAGES ──────────────────\u001b[0m"
+      "key": "󰒋 Kernel"
     },
     {
       "type": "uptime",
-      "key": "  󱑂 SYS.UPTIME",
-      "keyColor": "38;2;255;199;119"
+      "key": "󱑂 Uptime"
     },
     {
       "type": "packages",
-      "key": "  󰏖 PKG.TOTAL",
-      "keyColor": "38;2;255;199;119"
+      "key": "󰏖 Packages"
+    },
+    {
+      "type": "shell",
+      "key": "󰞷 Shell"
+    },
+    {
+      "type": "display",
+      "key": "󰍹 Display",
+      "compactType": "original"
+    },
+    {
+      "type": "de",
+      "key": "󰧨 DE"
+    },
+    {
+      "type": "wm",
+      "key": "󱂬 WM"
+    },
+    {
+      "type": "terminal",
+      "key": "󰆍 Terminal"
+    },
+    {
+      "type": "cpu",
+      "key": "󰻠 CPU"
+    },
+    {
+      "type": "gpu",
+      "key": "󰢮 GPU",
+      "hideType": "integrated"
+    },
+    {
+      "type": "memory",
+      "key": "󰍛 Memory"
+    },
+    {
+      "type": "disk",
+      "key": "󰋊 Disk",
+      "folders": "/"
+    },
+    {
+      "type": "battery",
+      "key": "󰁹 Battery"
     },
     {
       "type": "custom",
-      "format": "\u001b[38;2;68;74;115m└─────────────────────────────────────────\u001b[0m"
+      "format": "\u001b[38;2;71;85;105m──────────────────────────────────────────────\u001b[0m"
     },
-    "break",
     {
       "type": "colors",
       "symbol": "circle"

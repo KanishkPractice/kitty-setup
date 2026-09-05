@@ -6,7 +6,7 @@
 framerate = 90
 autosens = 1
 overshoot = 20
-sensitivity = 65
+sensitivity = 35
 bars = 0
 bar_width = 3
 bar_spacing = 1
@@ -28,15 +28,9 @@ reverse = 0
 show_idle_bar_heads = 1
 
 [color]
-# Tokyo Night Synthwave Gradient (Cyan -> Neon Blue -> Purple -> Hot Pink -> Crimson)
-gradient = 1
-gradient_count = 6
-gradient_color_1 = '#7aa2f7'
-gradient_color_2 = '#7dcfff'
-gradient_color_3 = '#b4f9f8'
-gradient_color_4 = '#bb9af7'
-gradient_color_5 = '#ff007c'
-gradient_color_6 = '#f7768e'
+# Clean Soft White Bars
+gradient = 0
+foreground = '#e2e8f0'
 
 [smoothing]
 # Monstercat dynamic audio smoothing
@@ -46,9 +40,9 @@ gravity = 110
 noise_reduction = 60
 
 [eq]
-# Dynamic Equalizer curve (boosts mid and high frequencies so all bars dance together)
-1 = 0.85   # Sub-bass
-2 = 1.05   # Mid-bass
-3 = 1.30   # Mid-range
-4 = 1.65   # Upper mids
-5 = 1.95   # High treble
+# Lower intensity balanced equalizer curve
+1 = 0.60   # Sub-bass
+2 = 0.75   # Mid-bass
+3 = 0.85   # Mid-range
+4 = 0.95   # Upper mids
+5 = 1.05   # High treble

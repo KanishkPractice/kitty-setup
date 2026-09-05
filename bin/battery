@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Quick battery report and health diagnostics
+set -euo pipefail
+
+bat_dev=$(upower -e 2>/dev/null | grep 'BAT' | head -n 1)
+
+if [[ -n "$bat_dev" ]]; then
+    upower -i "$bat_dev"
+else
+    echo "No battery device found."
+    exit 1
+fi
