@@ -159,7 +159,7 @@ alias y='yy'
 # Animation & fun screensavers / aesthetic tools
 alias scmd='scmd'
 alias cheatsheet='scmd'
-alias fastfetch='[ -x ~/.config/fastfetch/fastfetch-random.sh ] && ~/.config/fastfetch/fastfetch-random.sh || command fastfetch'
+alias fastfetch='command fastfetch'
 alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
 alias matrix-red='matrix-red'
 alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
@@ -373,10 +373,6 @@ fi
 
 # ── Auto-run Fastfetch on Shell Launch ──
 if [[ $- == *i* ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
-    if [[ -x "$HOME/.config/fastfetch/fastfetch-random.sh" ]]; then
-        "$HOME/.config/fastfetch/fastfetch-random.sh"
-    else
-        fastfetch
-    fi
+    command fastfetch
 fi
 

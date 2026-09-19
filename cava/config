@@ -1,9 +1,9 @@
-## CAVA — Clean Monochrome White Theme
-## Ultra-smooth 90fps, balanced frequency response & crisp white bars
+## CAVA — Everforest Gradient Theme
+## Smooth 60fps, balanced frequency response & gradient bars
 
 [general]
-# High-definition 90 FPS rendering for smooth liquid motion
-framerate = 90
+# 60 FPS — visually identical to 90fps in terminal, saves CPU
+framerate = 60
 autosens = 1
 overshoot = 20
 sensitivity = 35
@@ -28,9 +28,13 @@ reverse = 0
 show_idle_bar_heads = 1
 
 [color]
-# Clean Soft White Bars
-gradient = 0
-foreground = '#e2e8f0'
+# Everforest gradient: green → aqua → mint → lavender
+gradient = 1
+gradient_count = 4
+gradient_color_1 = '#c5e89b'
+gradient_color_2 = '#a0dbd3'
+gradient_color_3 = '#aee8ba'
+gradient_color_4 = '#f3b9d6'
 
 [smoothing]
 # Monstercat dynamic audio smoothing
