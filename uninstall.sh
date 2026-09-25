@@ -6,7 +6,6 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-DRY_RUN=false
 AUTO_YES=false
 RESTORE_BACKUP=false
 
@@ -37,10 +36,6 @@ section() {
 }
 
 run_as_user() {
-    if "$DRY_RUN"; then
-        info "[dry-run] $*"
-        return 0
-    fi
     if [[ $(id -u) -eq 0 && "$TARGET_USER" != "root" ]]; then
         sudo -u "$TARGET_USER" -H env "HOME=$TARGET_HOME" "$@"
     else
@@ -53,6 +48,7 @@ remove_managed_file() {
     local target_file="$2"
     local label="$3"
 
+    [[ -f "$source_file" ]] || return 0
     [[ -e "$target_file" || -L "$target_file" ]] || return 0
 
     # Preserve custom symlinks
@@ -62,17 +58,12 @@ remove_managed_file() {
     fi
 
     # Check if unmodified from repo
-    if [[ -f "$source_file" ]] && ! cmp -s "$source_file" "$target_file"; then
+    if ! cmp -s "$source_file" "$target_file"; then
         warn "Preserving user-modified file: $target_file"
         return 0
     fi
 
-    if "$DRY_RUN"; then
-        info "[dry-run] Would remove: $target_file"
-        return 0
-    fi
-
-    run_as_user rm -rf -- "$target_file"
+    run_as_user rm -f -- "$target_file"
     success "Removed: $label (${target_file#"$TARGET_HOME"/})"
 }
 
@@ -92,19 +83,26 @@ restore_backup() {
     fi
 
     local backup_path="$backup_root/$latest"
+    local snapshot_root="$TARGET_HOME/.config/kitty-setup-restore-snapshots/$(date +%Y%m%d_%H%M%S_%N)"
     info "Restoring files from: $backup_path"
 
     while IFS= read -r -d '' src; do
         local rel="${src#"$backup_path"/}"
         local dst="$TARGET_HOME/$rel"
-        if "$DRY_RUN"; then
-            info "[dry-run] Restore $rel -> $dst"
-        else
-            run_as_user mkdir -p "$(dirname "$dst")"
-            run_as_user cp -a "$src" "$dst"
-            success "Restored: $rel"
+        if [[ -L "$dst" ]]; then
+            warn "Keeping existing symlink: $dst"
+            continue
         fi
+        if [[ -e "$dst" ]]; then
+            local snapshot="$snapshot_root/$rel"
+            run_as_user mkdir -p "$(dirname "$snapshot")"
+            run_as_user cp -a -- "$dst" "$snapshot"
+        fi
+        run_as_user mkdir -p "$(dirname "$dst")"
+        run_as_user cp -a -- "$src" "$dst"
+        success "Restored: $rel"
     done < <(find "$backup_path" -type f -print0)
+    info "Files replaced during restore were saved to $snapshot_root."
 }
 
 usage() {
@@ -115,7 +113,6 @@ ${c_bold}Usage:${c_reset} ./uninstall.sh [options]
 
 ${c_bold}Options:${c_reset}
   -y, --yes           Auto-confirm uninstall without prompting
-  --dry-run           Simulate actions without deleting files
   --restore-latest    Restore configurations from the newest backup archive
   -h, --help          Show this help message
 EOF
@@ -125,7 +122,6 @@ EOF
 for arg in "$@"; do
     case "$arg" in
         -y|--yes) AUTO_YES=true ;;
-        --dry-run) DRY_RUN=true ;;
         --restore-latest) RESTORE_BACKUP=true ;;
         -h|--help) usage; exit 0 ;;
         *) fail "Unknown option: $arg"; usage; exit 2 ;;
@@ -144,7 +140,8 @@ main() {
         exit 0
     fi
 
-    if ! "$AUTO_YES" && ! "$DRY_RUN" && [[ -t 0 ]]; then
+    if ! "$AUTO_YES"; then
+        [[ -t 0 ]] || { fail "Uninstall needs confirmation. Run it in a terminal or pass --yes."; }
         printf "\n"
         read -r -p "$(printf "${c_yellow}Remove setup configuration files? [y/N]: ${c_reset}")" confirm
         if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
@@ -184,7 +181,6 @@ main() {
 
     # Fastfetch & Yazi
     remove_managed_file "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc" "Fastfetch config"
-    remove_managed_file "$SCRIPT_DIR/fastfetch/fastfetch-random.sh" "$TARGET_HOME/.config/fastfetch/fastfetch-random.sh" "Fastfetch random script"
     remove_managed_file "$SCRIPT_DIR/yazi/yazi.toml" "$TARGET_HOME/.config/yazi/yazi.toml" "Yazi config"
 
     if [[ -d "$SCRIPT_DIR/fastfetch/arts" ]]; then
