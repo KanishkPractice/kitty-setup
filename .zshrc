@@ -166,8 +166,14 @@ if command -v zoxide >/dev/null 2>&1; then
 fi
 
 # ── 7. AUTOSUGGESTIONS & SYNTAX HIGHLIGHTING ─────────────────
-[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
-    source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+for _p in ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh \
+          /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh; do
+    if [ -f "$_p" ]; then
+        source "$_p"
+        break
+    fi
+done
+unset _p
 # High visibility suggestion preview (Crisp Nordic slate)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9ca3af,italic"
 
@@ -190,18 +196,37 @@ ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b48ead,bold'     # Aurora Purple for ke
 
 # Extra completions for common tools (docker, cargo, nix, etc.)
 [ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)
+[ -d /usr/share/zsh/site-functions ] && fpath=(/usr/share/zsh/site-functions $fpath)
 
 # Remind you when an alias exists for a command you just typed
-[ -f ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh ] && \
-    source ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh
+for _p in ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh \
+          /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh; do
+    if [ -f "$_p" ]; then
+        source "$_p"
+        break
+    fi
+done
+unset _p
 
 # Syntax highlighting (MUST be sourced last among plugins)
-[ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
-    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+for _p in ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+          /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
+    if [ -f "$_p" ]; then
+        source "$_p"
+        break
+    fi
+done
+unset _p
 
 # History substring search (source AFTER syntax highlighting)
-[ -f ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh ] && \
-    source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+for _p in ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh \
+          /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh; do
+    if [ -f "$_p" ]; then
+        source "$_p"
+        break
+    fi
+done
+unset _p
 if type history-substring-search-up &>/dev/null; then
     bindkey '^[[A' history-substring-search-up
     bindkey '^[[B' history-substring-search-down
@@ -263,10 +288,10 @@ alias cheatsheet='scmd'
 alias fastfetch='command fastfetch'
 alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
 alias matrix-red='matrix-red'
-alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo dnf install cmatrix"'
-alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Run: cargo install pipes-rs or install pipes.sh")'
-alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: sudo dnf install cbonsai"'
-alias aquarium='command -v asciiquarium >/dev/null 2>&1 && asciiquarium || echo "Install asciiquarium with: sudo dnf install asciiquarium"'
+alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo pacman -S cmatrix"'
+alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Run: yay -S pipes-rs or install pipes.sh")'
+alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: yay -S cbonsai"'
+alias aquarium='command -v asciiquarium >/dev/null 2>&1 && asciiquarium || echo "Install asciiquarium with: sudo pacman -S asciiquarium"'
 
 # Kitty terminal features (image protocol, SSH, themes, diff, unicode)
 if [[ "$TERM" == "xterm-kitty" || -n "$KITTY_PID" ]]; then
@@ -348,7 +373,7 @@ search-cmds() {
 
             # Search & Discovery category
             printf "%-12s | %-16s | %s\n" "Search" "rg <query>" "ripgrep — Ultra-fast regex search across files"
-            printf "%-12s | %-16s | %s\n" "Search" "fd <name>" "fd-find — Fast, case-insensitive file/folder finder"
+            printf "%-12s | %-16s | %s\n" "Search" "fd <name>" "fd — Fast, case-insensitive file/folder finder"
             printf "%-12s | %-16s | %s\n" "Search" "fzf" "fzf — Fuzzy finder (Ctrl+T for files, Ctrl+R for history)"
             printf "%-12s | %-16s | %s\n" "Search" "tldr <cmd>" "tealdeer — Practical command cheat sheet with examples"
             printf "%-12s | %-16s | %s\n" "Search" "apropos <word>" "Search manual page descriptions for keywords"
@@ -374,7 +399,7 @@ search-cmds() {
             printf "%-12s | %-16s | %s\n" "System" "scs <svc>" "systemctl status — Check service status"
             printf "%-12s | %-16s | %s\n" "System" "scu <svc>" "systemctl --user — Manage user-level services"
             printf "%-12s | %-16s | %s\n" "System" "jc" "journalctl -xe — View system logs with explanations"
-            printf "%-12s | %-16s | %s\n" "System" "install-tools" "install-tools — Audit and install modern CLI suite via DNF"
+            printf "%-12s | %-16s | %s\n" "System" "install-tools" "install-tools — Audit and install modern CLI suite via pacman"
 
             # Kitty shortcuts
             printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+Enter" "Kitty: Split window horizontally"
@@ -433,7 +458,7 @@ install-tools() {
         ["eza"]="eza (Modern ls with icons)"
         ["bat"]="bat (Cat with syntax highlighting)"
         ["rg"]="ripgrep (Ultra-fast code search)"
-        ["fd"]="fd-find (Fast user-friendly find)"
+        ["fd"]="fd (Fast user-friendly find)"
         ["fzf"]="fzf (Fuzzy finder)"
         ["zoxide"]="zoxide (Smart cd jump directory)"
         ["btop"]="btop (System resource monitor)"
@@ -444,6 +469,11 @@ install-tools() {
         ["fontconfig"]="fontconfig (Font management)"
         ["git"]="git (Version control)"
         ["curl"]="curl (HTTP transfer tool)"
+        ["cava"]="cava (Audio visualizer)"
+        ["fastfetch"]="fastfetch (System information)"
+        ["tmux"]="tmux (Terminal multiplexer)"
+        ["lazygit"]="lazygit (Git TUI)"
+        ["yazi"]="yazi (Terminal file manager)"
     )
 
     echo -e "\033[1;36m━━ Modern CLI Tools Status ━━\033[0m"
@@ -462,17 +492,17 @@ install-tools() {
         printf " \033[32m✓\033[0m %-10s : %s\n" "starship" "Starship prompt"
     else
         printf " \033[31m✗\033[0m %-10s : %s \033[33m(missing)\033[0m\n" "starship" "Starship prompt"
+        missing+=("starship")
     fi
 
     echo ""
     if ((${#missing[@]} == 0)); then
         echo -e "\033[1;32mAll cutting-edge tools are installed and ready!\033[0m"
     else
-        echo -e "\033[1;33mTo install all missing tools on Fedora, run:\033[0m"
-        echo -e "  \033[1msudo dnf install -y kitty neovim zsh fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai\033[0m"
-        if ! command -v starship >/dev/null 2>&1; then
-            echo -e "  \033[1mcurl -sS https://starship.rs/install.sh | sh\033[0m"
-        fi
+        echo -e "\033[1;33mTo install missing tools on Arch Linux, run:\033[0m"
+        echo -e "  \033[1msudo pacman -S --needed kitty neovim zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix cava fastfetch tmux lazygit yazi starship wl-clipboard\033[0m"
+        echo -e "\033[1;33mFor AUR packages (cbonsai, tty-clock):\033[0m"
+        echo -e "  \033[1myay -S --needed cbonsai tty-clock\033[0m"
     fi
 }
 alias check-tools='install-tools'

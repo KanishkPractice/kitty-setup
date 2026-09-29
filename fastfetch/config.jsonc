@@ -1,86 +1,126 @@
-// Catppuccin Mocha themed Fastfetch - Rounded border style
+// Everforest-charcoal themed Fastfetch
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "source": "fedora_small",
+    "source": "arch",
     "type": "builtin",
+    "color": {
+      "1": "38;2;197;232;155",
+      "2": "38;2;160;219;211"
+    },
     "padding": {
-      "top": 2,
+      "top": 1,
       "left": 1,
       "right": 2
     }
   },
   "display": {
-    "separator": " ",
+    "separator": "  ",
     "color": {
-      "keys": "38;2;147;153;178",
-    },
+      "keys": "38;2;120;144;156"
+    }
   },
   "modules": [
     {
-      "key": "╭─────────────╮",
-      "type": "custom",
+      "key": "╭───────────────╮",
+      "type": "custom"
     },
     {
-      "key": "│ {#38;2;243;139;168}  user     {#keys} │",
+      "key": "│ {#38;2;197;232;155}  host     {#keys}   │",
+      "type": "host",
+      "format": "{name} {version}"
+    },
+    {
+      "key": "│ {#38;2;160;219;211}  user     {#keys}   │",
       "type": "title",
-      "format": "{user-name}",
+      "format": "{user-name}@{host-name}"
     },
     {
-      "key": "│ {#38;2;137;180;250}  uptime   {#keys} │",
-      "type": "uptime",
+      "key": "│ {#38;2;250;226;160}  uptime   {#keys}   │",
+      "type": "uptime"
     },
     {
-      "key": "│ {#38;2;249;226;175}  display  {#keys} │",
-      "type": "display",
-      "compactType": "original",
+      "key": "├───────────────┤",
+      "type": "custom"
     },
     {
-      "key": "│ {#38;2;166;227;161}  distro   {#keys} │",
-      "type": "os",
+      "key": "│ {#38;2;174;232;186}  distro   {#keys}   │",
+      "type": "os"
     },
     {
-      "key": "│ {#38;2;245;194;231}  kernel   {#keys} │",
-      "type": "kernel",
+      "key": "│ {#38;2;243;185;214}  kernel   {#keys}   │",
+      "type": "kernel"
     },
     {
-      "key": "│ {#38;2;203;166;247}  DE       {#keys} │",
-      "type": "de",
+      "key": "│ {#38;2;160;219;211}  DE       {#keys}   │",
+      "type": "de"
     },
     {
-      "key": "│ {#38;2;243;139;168}  term     {#keys} │",
-      "type": "terminal",
+      "key": "│ {#38;2;197;232;155}  WM       {#keys}   │",
+      "type": "wm"
     },
     {
-      "key": "│ {#38;2;249;226;175}  apps     {#keys} │",
-      "type": "packages",
+      "key": "│ {#38;2;250;226;160}  shell    {#keys}   │",
+      "type": "shell"
     },
     {
-      "key": "│ {#38;2;137;180;250}  disk     {#keys} │",
+      "key": "│ {#38;2;255;155;160}  term     {#keys}   │",
+      "type": "terminal"
+    },
+    {
+      "key": "├───────────────┤",
+      "type": "custom"
+    },
+    {
+      "key": "│ {#38;2;160;219;211}  cpu      {#keys}   │",
+      "type": "cpu",
+      "format": "{name}"
+    },
+    {
+      "key": "│ {#38;2;174;232;186}  gpu      {#keys}   │",
+      "type": "gpu",
+      "format": "{name}",
+      "detectionMethod": "pci"
+    },
+    {
+      "key": "│ {#38;2;243;185;214} 󰍛 memory   {#keys}  │",
+      "type": "memory"
+    },
+    {
+      "key": "│ {#38;2;250;226;160} 󰋊 disk     {#keys}  │",
       "type": "disk",
-      "folders": "/",
+      "folders": "/"
     },
     {
-      "key": "│ {#38;2;166;227;161}  memory   {#keys} │",
-      "type": "memory",
+      "key": "│ {#38;2;160;180;184}  display  {#keys}   │",
+      "type": "display",
+      "compactType": "original"
     },
     {
-      "key": "│ {#38;2;148;226;213}  OS Age   {#keys} │",
+      "key": "├───────────────┤",
+      "type": "custom"
+    },
+    {
+      "key": "│ {#38;2;197;232;155} 󰏗 apps     {#keys}  │",
+      "type": "packages"
+    },
+    {
+      "key": "│ {#38;2;148;226;213}  OS age   {#keys}   │",
       "type": "command",
-      "text": "birth=$(stat -c %W /); now=$(date +%s); echo $(( (now - birth) / 86400 )) days",
+      "text": "birth=$(stat -c %W /); now=$(date +%s); echo $(( (now - birth) / 86400 )) days"
     },
     {
-      "key": "├─────────────┤",
-      "type": "custom",
+      "key": "├───────────────┤",
+      "type": "custom"
     },
     {
-      "key": "│ {#38;2;88;91;112}◀  colors  {#keys} │",
+      "key": "│ {#38;2;120;144;156}   colors  {#keys}   │",
       "type": "colors",
-      "symbol": "circle",
+      "symbol": "circle"
     },
     {
-      "key": "╰─────────────╯",
-      "type": "custom",
-    },
-  ],
+      "key": "╰───────────────╯",
+      "type": "custom"
+    }
+  ]
 }

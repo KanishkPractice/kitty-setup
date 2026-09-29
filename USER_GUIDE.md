@@ -4,7 +4,7 @@ Install the complete setup by running `./install.sh` from this directory. It det
 
 ## Kitty
 
-The terminal background is solid `#181818`; the font is Fantasque Sans Mono Nerd Font Mono at 14.5 pt.
+The terminal background has a 0.85 opacity with blur; font is Fantasque Sans Mono Nerd Font Mono at 16.5 pt. Adjust opacity on the fly using `Ctrl+Shift+A` then `M` (increase), `L` (decrease), `D` (default), or `1` (solid).
 
 | Shortcut | Action |
 | --- | --- |

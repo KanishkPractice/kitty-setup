@@ -1,6 +1,6 @@
 # Kitty setup
 
-A terminal setup with Kitty, Zsh, Starship, Neovim, and useful command-line tools for Arch Linux and Fedora. Kitty uses a solid `#181818` background and the bundled Fantasque Nerd Font.
+A terminal setup with Kitty, Zsh, Starship, Neovim, and useful command-line tools for Arch Linux and Fedora. Kitty uses a translucent background with blur, the Arch Linux prompt character, and the bundled Fantasque Nerd Font.
 
 ## Install
 

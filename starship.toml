@@ -49,8 +49,8 @@ style = "bold #ff9ba0"
 
 # ── Prompt Character ─────────────────────────────────────────
 [character]
-success_symbol = "[❯](bold #c5e89b) "
-error_symbol   = "[❯](bold #ff9ba0) "
+success_symbol = "[󰣇 ](bold #1793d1) "
+error_symbol   = "[󰣇 ](bold #ff9ba0) "
 vimcmd_symbol  = "[❮](bold #a0dbd3) "
 
 [line_break]
