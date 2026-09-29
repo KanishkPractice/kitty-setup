@@ -35,7 +35,7 @@ as_root() {
     elif command -v sudo >/dev/null 2>&1; then
         sudo "$@"
     else
-        fail "Install sudo or run this script as root to install Fedora packages."
+        fail "Install sudo or run this script as root to install packages."
     fi
 }
 
@@ -63,23 +63,58 @@ deploy() {
     as_user install -m "$mode" -- "$src" "$dst"
 }
 
-[[ $# -eq 0 ]] || fail "This installer has no options. Run it as ./install.sh."
-command -v dnf >/dev/null 2>&1 || fail "This setup installer currently supports Fedora and other DNF based systems."
+# ── Detect distribution ──────────────────────────────────────────────────────
+DISTRO=""
+if command -v pacman >/dev/null 2>&1; then
+    DISTRO="arch"
+elif command -v dnf >/dev/null 2>&1; then
+    DISTRO="fedora"
+else
+    fail "Unsupported system. This installer supports Arch (pacman) and Fedora (dnf)."
+fi
 
-printf '\nKitty and CLI setup for %s\n\n' "$TARGET_USER"
+printf '\nKitty and CLI setup for %s (%s)\n\n' "$TARGET_USER" "$DISTRO"
 as_user mkdir -p "$USER_BIN"
 export PATH="$USER_BIN:$PATH"
 
-info "Installing packages"
-packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai neovim gcc make tar unzip cava fastfetch tmux)
-as_root dnf install -y "${packages[@]}"
+info "Installing packages via ${DISTRO} package manager"
+if [[ "$DISTRO" == "arch" ]]; then
+    packages=(kitty zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix neovim gcc make tar unzip cava fastfetch tmux lazygit yazi starship)
+    missing_packages=()
+    for pkg in "${packages[@]}"; do
+        if ! pacman -Q "$pkg" >/dev/null 2>&1; then
+            missing_packages+=("$pkg")
+        fi
+    done
 
-# These optional tools are provided by Fedora COPR repositories.
-if ! command -v lazygit >/dev/null 2>&1; then
-    as_root dnf copr enable -y dejan/lazygit >/dev/null 2>&1 && as_root dnf install -y lazygit || warn "Could not install optional lazygit."
-fi
-if ! command -v yazi >/dev/null 2>&1; then
-    as_root dnf copr enable -y atim/yazi >/dev/null 2>&1 && as_root dnf install -y yazi || warn "Could not install optional yazi."
+    if [[ ${#missing_packages[@]} -gt 0 ]]; then
+        info "Installing missing packages: ${missing_packages[*]}"
+        as_root pacman -S --needed --noconfirm "${missing_packages[@]}"
+    else
+        success "All required packages are already installed."
+    fi
+
+    # cbonsai is only available in the AUR
+    if ! command -v cbonsai >/dev/null 2>&1; then
+        if command -v yay >/dev/null 2>&1; then
+            as_user yay -S --needed --noconfirm cbonsai || warn "Could not install optional cbonsai from AUR."
+        elif command -v paru >/dev/null 2>&1; then
+            as_user paru -S --needed --noconfirm cbonsai || warn "Could not install optional cbonsai from AUR."
+        else
+            warn "cbonsai is AUR-only. Install an AUR helper (yay/paru) or build it manually."
+        fi
+    fi
+elif [[ "$DISTRO" == "fedora" ]]; then
+    packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai neovim gcc make tar unzip cava fastfetch tmux)
+    as_root dnf install -y "${packages[@]}"
+
+    # These optional tools are provided by Fedora COPR repositories.
+    if ! command -v lazygit >/dev/null 2>&1; then
+        as_root dnf copr enable -y dejan/lazygit >/dev/null 2>&1 && as_root dnf install -y lazygit || warn "Could not install optional lazygit."
+    fi
+    if ! command -v yazi >/dev/null 2>&1; then
+        as_root dnf copr enable -y atim/yazi >/dev/null 2>&1 && as_root dnf install -y yazi || warn "Could not install optional yazi."
+    fi
 fi
 
 if ! command -v starship >/dev/null 2>&1 && [[ ! -x "$USER_BIN/starship" ]]; then

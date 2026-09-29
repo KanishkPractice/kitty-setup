@@ -1,6 +1,6 @@
 # Quick reference
 
-Install the complete Fedora setup by running `./install.sh` from this directory. It installs the packages, fonts, shell plugins, and configuration files, then makes Zsh the login shell. Existing files replaced by the installer are backed up in `~/.config/kitty-setup-backups/`.
+Install the complete setup by running `./install.sh` from this directory. It detects Arch Linux or Fedora, installs packages, fonts, shell plugins, and configuration files, then makes Zsh the login shell. Existing files replaced by the installer are backed up in `~/.config/kitty-setup-backups/`.
 
 ## Kitty
 

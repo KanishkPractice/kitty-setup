@@ -1,6 +1,6 @@
 # Kitty setup
 
-A Fedora terminal setup with Kitty, Zsh, Starship, Neovim, and useful command-line tools. Kitty uses a solid `#181818` background and the bundled Fantasque Nerd Font.
+A terminal setup with Kitty, Zsh, Starship, Neovim, and useful command-line tools for Arch Linux and Fedora. Kitty uses a solid `#181818` background and the bundled Fantasque Nerd Font.
 
 ## Install
 
@@ -10,7 +10,7 @@ From this directory, run:
 ./install.sh
 ```
 
-The installer uses Fedora's DNF package manager and sudo, downloads Starship and Zsh plugins, installs the bundled font, deploys the configurations, and sets Zsh as the login shell. It backs up any existing files it replaces under `~/.config/kitty-setup-backups/`. Internet access is needed for packages and downloads.
+The installer auto-detects your distribution (Arch Linux via `pacman` or Fedora via `dnf`) and uses sudo for package management, installs Zsh plugins and Starship, deploys the bundled font, copies the configurations, and sets Zsh as the login shell. It backs up any existing files it replaces under `~/.config/kitty-setup-backups/`. Internet access is needed for packages and downloads.
 
 The installer intentionally has no modes or flags: it applies the complete setup in one run. Do not run it with `sudo`; it requests sudo only for package installation and uses your account for configuration files.
 
