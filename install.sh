@@ -79,7 +79,7 @@ export PATH="$USER_BIN:$PATH"
 
 info "Installing packages via ${DISTRO} package manager"
 if [[ "$DISTRO" == "arch" ]]; then
-    packages=(kitty zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix neovim gcc make tar unzip cava fastfetch tmux lazygit yazi starship)
+    packages=(kitty zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix neovim gcc make tar unzip fastfetch tmux lazygit starship)
     missing_packages=()
     for pkg in "${packages[@]}"; do
         if ! pacman -Q "$pkg" >/dev/null 2>&1; then
@@ -105,15 +105,12 @@ if [[ "$DISTRO" == "arch" ]]; then
         fi
     fi
 elif [[ "$DISTRO" == "fedora" ]]; then
-    packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai neovim gcc make tar unzip cava fastfetch tmux)
+    packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai neovim gcc make tar unzip fastfetch tmux)
     as_root dnf install -y "${packages[@]}"
 
     # These optional tools are provided by Fedora COPR repositories.
     if ! command -v lazygit >/dev/null 2>&1; then
         as_root dnf copr enable -y dejan/lazygit >/dev/null 2>&1 && as_root dnf install -y lazygit || warn "Could not install optional lazygit."
-    fi
-    if ! command -v yazi >/dev/null 2>&1; then
-        as_root dnf copr enable -y atim/yazi >/dev/null 2>&1 && as_root dnf install -y yazi || warn "Could not install optional yazi."
     fi
 fi
 
@@ -153,13 +150,6 @@ info "Installing Kitty, shell, and application configs"
 for file in "$SCRIPT_DIR"/kitty/*.conf; do
     deploy "$file" "$TARGET_HOME/.config/kitty/$(basename "$file")"
 done
-for dir in textures sessions; do
-    if [[ -d "$SCRIPT_DIR/kitty/$dir" ]]; then
-        while IFS= read -r -d '' file; do
-            deploy "$file" "$TARGET_HOME/.config/kitty/$dir/${file##*/}"
-        done < <(find "$SCRIPT_DIR/kitty/$dir" -type f -print0)
-    fi
-done
 
 for file in "$SCRIPT_DIR"/bin/*; do
     [[ -f "$file" ]] && deploy "$file" "$USER_BIN/${file##*/}" 0755
@@ -167,15 +157,13 @@ done
 
 deploy "$SCRIPT_DIR/starship.toml" "$TARGET_HOME/.config/starship.toml"
 deploy "$SCRIPT_DIR/terminal.conf" "$TARGET_HOME/.config/environment.d/terminal.conf"
-deploy "$SCRIPT_DIR/cava/config" "$TARGET_HOME/.config/cava/config"
 deploy "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc"
 deploy "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc"
 deploy "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile"
 deploy "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf"
 deploy "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc"
-deploy "$SCRIPT_DIR/yazi/yazi.toml" "$TARGET_HOME/.config/yazi/yazi.toml"
 
-for dir in cava/shaders fastfetch/arts; do
+for dir in fastfetch/arts; do
     if [[ -d "$SCRIPT_DIR/$dir" ]]; then
         while IFS= read -r -d '' file; do
             deploy "$file" "$TARGET_HOME/.config/$dir/${file##*/}"

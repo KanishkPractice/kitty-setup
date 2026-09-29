@@ -22,14 +22,7 @@ The terminal background has a 0.85 opacity with blur; font is Fantasque Sans Mon
 | `Ctrl+Shift+Alt+G` | Show last command output in a pager |
 | `Ctrl+Shift+U` | Pick a URL from terminal output |
 | `Ctrl+Shift+E` | Pick a path and open it in Neovim |
-| `Ctrl+Shift+Alt+E/R/D` | Open the dev/rice/dashboard session |
-
-## Commands
-
-- `rice` opens the Cava and system monitor session.
-- `dev` opens the Neovim and Git session.
-- `scmd` searches the command guide; `cool` opens the visual tools menu.
-- `y` opens Yazi and changes to the selected directory when it exits.
+| `Ctrl+Shift+A > M/L` | Increase / decrease background opacity |
 
 ## Backups
 

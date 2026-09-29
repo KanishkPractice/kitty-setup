@@ -18,7 +18,7 @@ The installer intentionally has no modes or flags: it applies the complete setup
 
 `Ctrl+Shift+Enter` creates a horizontal split; `Ctrl+Shift+-` creates a vertical split. Use `Ctrl+Shift+H/J/K/L` to move between panes, `Ctrl+Shift+T` for a tab, `Alt+1..9` to switch tabs, and `Ctrl+Shift+F5` to reload Kitty's config.
 
-The `rice` and `dev` commands launch the bundled Kitty sessions. `scmd` opens the command guide, and `cool` opens the visual tools menu.
+Use `Ctrl+Shift+A` followed by `M` or `L` to adjust background opacity on the fly.
 
 ## Restore or remove
 

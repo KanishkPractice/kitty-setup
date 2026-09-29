@@ -145,27 +145,7 @@ if command -v nvim >/dev/null 2>&1; then
     export VISUAL='nvim'
 fi
 
-# Yazi (terminal file manager) with dynamic directory switching on exit
-function yy() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-}
-alias y='yy'
-
-# Animation & fun screensavers / aesthetic tools
-alias scmd='scmd'
-alias cheatsheet='scmd'
 alias fastfetch='command fastfetch'
-alias rice='kitty --session ~/.config/kitty/sessions/rice.session &>/dev/null &'
-alias matrix-red='matrix-red'
-alias matrix='command -v cmatrix >/dev/null 2>&1 && cmatrix || echo "Install cmatrix with: sudo pacman -S cmatrix"'
-alias pipes='command -v pipes-rs >/dev/null 2>&1 && pipes-rs || (command -v pipes.sh >/dev/null 2>&1 && pipes.sh || echo "Run: yay -S pipes-rs or install pipes.sh")'
-alias bonsai='command -v cbonsai >/dev/null 2>&1 && cbonsai -l || echo "Install cbonsai with: yay -S cbonsai"'
-alias aquarium='command -v asciiquarium >/dev/null 2>&1 && asciiquarium || echo "Install asciiquarium with: sudo pacman -S asciiquarium"'
 
 # Kitty terminal features (image protocol, SSH, sessions)
 if [[ "$TERM" == "xterm-kitty" || -n "$KITTY_PID" ]]; then
@@ -328,11 +308,9 @@ install-tools() {
         ["fontconfig"]="fontconfig (Font management)"
         ["git"]="git (Version control)"
         ["curl"]="curl (HTTP transfer tool)"
-        ["cava"]="cava (Audio visualizer)"
         ["fastfetch"]="fastfetch (System information)"
         ["tmux"]="tmux (Terminal multiplexer)"
         ["lazygit"]="lazygit (Git TUI)"
-        ["yazi"]="yazi (Terminal file manager)"
     )
 
     echo -e "\033[1;36m━━ Modern CLI Tools Status ━━\033[0m"
@@ -358,7 +336,7 @@ install-tools() {
         echo -e "\033[1;32mAll cutting-edge tools are installed and ready!\033[0m"
     else
         echo -e "\033[1;33mTo install missing tools on Arch Linux, run:\033[0m"
-        echo -e "  \033[1msudo pacman -S --needed kitty neovim zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix cava fastfetch tmux lazygit yazi starship wl-clipboard\033[0m"
+        echo -e "  \033[1msudo pacman -S --needed kitty neovim zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix fastfetch tmux lazygit starship wl-clipboard\033[0m"
         echo -e "\033[1;33mFor AUR packages (cbonsai, tty-clock):\033[0m"
         echo -e "  \033[1myay -S --needed cbonsai tty-clock\033[0m"
     fi

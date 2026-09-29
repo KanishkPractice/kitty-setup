@@ -158,30 +158,16 @@ main() {
     remove_managed_file "$SCRIPT_DIR/kitty/open-actions.conf" "$TARGET_HOME/.config/kitty/open-actions.conf" "Kitty open-actions"
     remove_managed_file "$SCRIPT_DIR/kitty/theme.conf" "$TARGET_HOME/.config/kitty/theme.conf" "Kitty theme"
 
-    if [[ -d "$SCRIPT_DIR/kitty/textures" ]]; then
-        for tex in "$SCRIPT_DIR/kitty/textures"/*; do
-            [[ -f "$tex" ]] && remove_managed_file "$tex" "$TARGET_HOME/.config/kitty/textures/$(basename "$tex")" "Kitty texture"
-        done
-    fi
-
-    if [[ -d "$SCRIPT_DIR/kitty/sessions" ]]; then
-        for sess in "$SCRIPT_DIR/kitty/sessions"/*; do
-            [[ -f "$sess" ]] && remove_managed_file "$sess" "$TARGET_HOME/.config/kitty/sessions/$(basename "$sess")" "Kitty session"
-        done
-    fi
-
     # Shell, prompts & environment
     remove_managed_file "$SCRIPT_DIR/starship.toml" "$TARGET_HOME/.config/starship.toml" "Starship prompt"
     remove_managed_file "$SCRIPT_DIR/terminal.conf" "$TARGET_HOME/.config/environment.d/terminal.conf" "Terminal env"
-    remove_managed_file "$SCRIPT_DIR/cava/config" "$TARGET_HOME/.config/cava/config" "Cava config"
     remove_managed_file "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc" "Zsh rc"
     remove_managed_file "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc" "Bash rc"
     remove_managed_file "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile" "Bash profile"
     remove_managed_file "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf" "Tmux config"
 
-    # Fastfetch & Yazi
+    # Fastfetch
     remove_managed_file "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc" "Fastfetch config"
-    remove_managed_file "$SCRIPT_DIR/yazi/yazi.toml" "$TARGET_HOME/.config/yazi/yazi.toml" "Yazi config"
 
     if [[ -d "$SCRIPT_DIR/fastfetch/arts" ]]; then
         for art in "$SCRIPT_DIR/fastfetch/arts"/*; do
