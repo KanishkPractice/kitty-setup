@@ -154,11 +154,15 @@ if command -v fzf >/dev/null 2>&1; then
 fi
 
 export FZF_DEFAULT_OPTS="\
-  --height 45% --layout=reverse --border=rounded \
-  --color=fg:#d8dee9,bg:#2e3440,hl:#88c0d0 \
-  --color=fg+:#eceff4,bg+:#434c5e,hl+:#ebcb8b \
-  --color=info:#ebcb8b,prompt:#88c0d0,pointer:#ebcb8b \
-  --color=marker:#a3be8c,spinner:#b48ead,header:#4c566a,border:#88c0d0"
+  --height 50% --layout=reverse --border=rounded \
+  --margin=1,4% --padding=1,2 \
+  --prompt='   ' --pointer='󰅂 ' --marker='󰄲 ' \
+  --color=fg:#ede1c7,bg:#181818,hl:#fae2a0 \
+  --color=fg+:#ffffff,bg+:#282e33,hl+:#c5e89b \
+  --color=info:#a0dbd3,prompt:#c5e89b,pointer:#c5e89b \
+  --color=marker:#c5e89b,spinner:#f3b9d6,header:#78909c,border:#5c6970"
+export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :300 {} 2>/dev/null || eza --tree --level=2 --icons {}'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --icons {}'"
 
 # zoxide initialization
 if command -v zoxide >/dev/null 2>&1; then
@@ -203,6 +207,20 @@ for _p in ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh \
           /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh; do
     if [ -f "$_p" ]; then
         source "$_p"
+        break
+    fi
+done
+unset _p
+
+# fzf-tab (Floating interactive tab-completion popups with previews)
+for _p in ~/.zsh/fzf-tab/fzf-tab.plugin.zsh \
+          /usr/share/zsh/plugins/fzf-tab/fzf-tab.plugin.zsh; do
+    if [ -f "$_p" ]; then
+        source "$_p"
+        zstyle ':completion:*:git-checkout:*' sort false
+        zstyle ':completion:*:descriptions' format '[%d]'
+        zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons --color=always $realpath 2>/dev/null'
+        zstyle ':fzf-tab:*' switch-group '<' '>'
         break
     fi
 done
@@ -281,6 +299,7 @@ if [[ "$TERM" == "xterm-kitty" || -n "$KITTY_PID" ]]; then
     alias kssh='kitten ssh'
     alias kdiff='kitten diff'
     alias ktheme='kitten themes'
+    alias themes='kitten themes'
     alias kunicode='kitten unicode_input'
     alias kshow='kitten show_key'
     alias dev='kitty --session ~/.config/kitty/sessions/dev.session &>/dev/null &'
@@ -379,7 +398,7 @@ search-cmds() {
             printf "%-12s | %-16s | %s\n" "System" "scs <svc>" "systemctl status — Check service status"
             printf "%-12s | %-16s | %s\n" "System" "scu <svc>" "systemctl --user — Manage user-level services"
             printf "%-12s | %-16s | %s\n" "System" "jc" "journalctl -xe — View system logs with explanations"
-            printf "%-12s | %-16s | %s\n" "System" "install-tools" "install-tools — Audit and install modern CLI suite via pacman"
+            printf "%-12s | %-16s | %s\n" "System" "install-tools" "install-tools — Audit and install modern CLI suite (pacman/dnf)"
 
             # Kitty shortcuts
             printf "%-12s | %-16s | %s\n" "Kitty UI" "Ctrl+Shift+Enter" "Kitty: Split window horizontally"
@@ -446,7 +465,7 @@ install-tools() {
         ["delta"]="git-delta (Syntax highlighted git diff)"
         ["cmatrix"]="cmatrix (Matrix falling code animation)"
         ["cbonsai"]="cbonsai (Animated bonsai growth)"
-        ["fontconfig"]="fontconfig (Font management)"
+        ["fc-cache"]="fontconfig (Font management)"
         ["git"]="git (Version control)"
         ["curl"]="curl (HTTP transfer tool)"
         ["fastfetch"]="fastfetch (System information)"
@@ -476,11 +495,135 @@ install-tools() {
     echo ""
     if ((${#missing[@]} == 0)); then
         echo -e "\033[1;32mAll cutting-edge tools are installed and ready!\033[0m"
+        return 0
+    fi
+
+    # Detect package manager (pacman or dnf)
+    local pm=""
+    if command -v pacman >/dev/null 2>&1 && command -v dnf >/dev/null 2>&1; then
+        local os_id=""
+        [[ -f /etc/os-release ]] && os_id="$(. /etc/os-release 2>/dev/null && echo "${ID_LIKE:-$ID}")"
+        if [[ "$os_id" =~ (arch|manjaro|endeavouros) ]]; then
+            pm="pacman"
+        elif [[ "$os_id" =~ (fedora|rhel|centos) ]]; then
+            pm="dnf"
+        else
+            echo -e "\033[1;33mBoth pacman and dnf are available.\033[0m"
+            printf "Select package manager (1: pacman, 2: dnf) [1]: "
+            read -r pm_choice
+            [[ "$pm_choice" == "2" || "$pm_choice" =~ ^[Dd]nf ]] && pm="dnf" || pm="pacman"
+        fi
+    elif command -v pacman >/dev/null 2>&1; then
+        pm="pacman"
+    elif command -v dnf >/dev/null 2>&1; then
+        pm="dnf"
+    fi
+
+    if [[ "$pm" == "pacman" ]]; then
+        local -a pkgs_to_install=()
+        local need_aur_cbonsai=false
+        for m in "${missing[@]}"; do
+            case "$m" in
+                nvim) pkgs_to_install+=("neovim") ;;
+                rg) pkgs_to_install+=("ripgrep") ;;
+                fd) pkgs_to_install+=("fd") ;;
+                tldr) pkgs_to_install+=("tealdeer") ;;
+                delta) pkgs_to_install+=("git-delta") ;;
+                fc-cache|fontconfig) pkgs_to_install+=("fontconfig") ;;
+                cbonsai) need_aur_cbonsai=true ;;
+                starship) pkgs_to_install+=("starship") ;;
+                *) pkgs_to_install+=("$m") ;;
+            esac
+        done
+
+        echo -e "\033[1;33mDetected package manager:\033[0m pacman (Arch Linux)"
+        if ((${#pkgs_to_install[@]} > 0)); then
+            echo -e "Missing package(s): \033[1m${pkgs_to_install[*]}\033[0m"
+            printf '\033[1;33mInstall missing package(s) via sudo pacman? [y/N]: \033[0m'
+            read -r confirm
+            if [[ "$confirm" =~ ^[Yy]$ ]]; then
+                echo -e "\033[1;36mExecuting: sudo pacman -S --needed ${pkgs_to_install[*]}\033[0m"
+                sudo pacman -S --needed "${pkgs_to_install[@]}"
+            else
+                echo -e "\033[0;33mSkipped. You can manually install with:\033[0m"
+                echo -e "  sudo pacman -S --needed ${pkgs_to_install[*]}"
+            fi
+        fi
+
+        if "$need_aur_cbonsai"; then
+            echo ""
+            echo -e "\033[1;33mcbonsai is available from the AUR.\033[0m"
+            if command -v yay >/dev/null 2>&1; then
+                printf '\033[1;33mInstall cbonsai from AUR via yay? [y/N]: \033[0m'
+                read -r confirm_aur
+                if [[ "$confirm_aur" =~ ^[Yy]$ ]]; then
+                    yay -S --needed cbonsai
+                fi
+            elif command -v paru >/dev/null 2>&1; then
+                printf '\033[1;33mInstall cbonsai from AUR via paru? [y/N]: \033[0m'
+                read -r confirm_aur
+                if [[ "$confirm_aur" =~ ^[Yy]$ ]]; then
+                    paru -S --needed cbonsai
+                fi
+            else
+                echo -e "  Install an AUR helper (yay/paru) or build cbonsai manually."
+            fi
+        fi
+    elif [[ "$pm" == "dnf" ]]; then
+        local -a pkgs_to_install=()
+        local need_copr_lazygit=false
+        local need_starship_sh=false
+        for m in "${missing[@]}"; do
+            case "$m" in
+                nvim) pkgs_to_install+=("neovim") ;;
+                rg) pkgs_to_install+=("ripgrep") ;;
+                fd) pkgs_to_install+=("fd-find") ;;
+                tldr) pkgs_to_install+=("tealdeer") ;;
+                delta) pkgs_to_install+=("git-delta") ;;
+                fc-cache|fontconfig) pkgs_to_install+=("fontconfig") ;;
+                cbonsai) pkgs_to_install+=("cbonsai") ;;
+                lazygit) need_copr_lazygit=true ;;
+                starship) need_starship_sh=true ;;
+                *) pkgs_to_install+=("$m") ;;
+            esac
+        done
+
+        echo -e "\033[1;33mDetected package manager:\033[0m dnf (Fedora)"
+        if ((${#pkgs_to_install[@]} > 0)); then
+            echo -e "Missing package(s): \033[1m${pkgs_to_install[*]}\033[0m"
+            printf '\033[1;33mInstall missing package(s) via sudo dnf? [y/N]: \033[0m'
+            read -r confirm
+            if [[ "$confirm" =~ ^[Yy]$ ]]; then
+                echo -e "\033[1;36mExecuting: sudo dnf install -y ${pkgs_to_install[*]}\033[0m"
+                sudo dnf install -y "${pkgs_to_install[@]}"
+            else
+                echo -e "\033[0;33mSkipped. You can manually install with:\033[0m"
+                echo -e "  sudo dnf install -y ${pkgs_to_install[*]}"
+            fi
+        fi
+
+        if "$need_copr_lazygit"; then
+            echo ""
+            echo -e "\033[1;33mlazygit is available via Fedora COPR (dejan/lazygit).\033[0m"
+            printf '\033[1;33mEnable COPR and install lazygit? [y/N]: \033[0m'
+            read -r confirm_copr
+            if [[ "$confirm_copr" =~ ^[Yy]$ ]]; then
+                sudo dnf copr enable -y dejan/lazygit && sudo dnf install -y lazygit
+            fi
+        fi
+
+        if "$need_starship_sh"; then
+            echo ""
+            echo -e "\033[1;33mStarship prompt can be installed via its official installer.\033[0m"
+            printf '\033[1;33mInstall Starship now? [y/N]: \033[0m'
+            read -r confirm_ss
+            if [[ "$confirm_ss" =~ ^[Yy]$ ]]; then
+                curl -fsSL https://starship.rs/install.sh | sh
+            fi
+        fi
     else
-        echo -e "\033[1;33mTo install missing tools on Arch Linux, run:\033[0m"
-        echo -e "  \033[1msudo pacman -S --needed kitty neovim zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix fastfetch tmux lazygit starship wl-clipboard\033[0m"
-        echo -e "\033[1;33mFor AUR packages (cbonsai, tty-clock):\033[0m"
-        echo -e "  \033[1myay -S --needed cbonsai tty-clock\033[0m"
+        echo -e "\033[1;31mNeither pacman nor dnf was detected on this system.\033[0m"
+        echo -e "Missing tools: ${missing[*]}"
     fi
 }
 alias check-tools='install-tools'
