@@ -1,6 +1,10 @@
 # ~/.config/starship.toml
 # Clean, Simple High-Contrast Full Path Prompt
 
+# Timeout optimizations for instant prompt responsiveness
+scan_timeout = 10
+command_timeout = 500
+
 format = """$directory$git_branch$git_status$cmd_duration$status
 $character"""
 

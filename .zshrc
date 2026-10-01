@@ -59,6 +59,10 @@ export LESS_TERMCAP_ue=$'\e[0m'                         # end underline
 export LESS_TERMCAP_us=$'\e[4;38;2;163;190;140m'        # underline / flags (green)
 
 # ── 4. COMPLETION SYSTEM (FAST CACHED & CASE-INSENSITIVE) ───
+# Extra completions for common tools (docker, cargo, nix, etc.)
+[ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)
+[ -d /usr/share/zsh/site-functions ] && fpath=(/usr/share/zsh/site-functions $fpath)
+
 autoload -Uz compinit
 # Check dump file age once a day to keep shell startup fast
 if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.m+1) ]]; then
@@ -197,10 +201,6 @@ ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#81a1c1'   # Frost Blue for flags
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#81a1c1'   # Frost Blue for flags (--all)
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#bf616a,bold'     # Aurora Red for errors
 ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b48ead,bold'     # Aurora Purple for keywords
-
-# Extra completions for common tools (docker, cargo, nix, etc.)
-[ -d ~/.zsh/zsh-completions/src ] && fpath=(~/.zsh/zsh-completions/src $fpath)
-[ -d /usr/share/zsh/site-functions ] && fpath=(/usr/share/zsh/site-functions $fpath)
 
 # Remind you when an alias exists for a command you just typed
 for _p in ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh \

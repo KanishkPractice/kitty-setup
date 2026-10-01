@@ -273,14 +273,6 @@ deploy "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile"
 deploy "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf"
 deploy "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc"
 
-for dir in fastfetch/arts; do
-    if [[ -d "$SCRIPT_DIR/$dir" ]]; then
-        while IFS= read -r -d '' file; do
-            deploy "$file" "$TARGET_HOME/.config/$dir/${file##*/}"
-        done < <(find "$SCRIPT_DIR/$dir" -type f -print0)
-    fi
-done
-
 if [[ -d "$SCRIPT_DIR/nvim" ]]; then
     while IFS= read -r -d '' file; do
         rel="${file#"$SCRIPT_DIR/nvim/"}"

@@ -169,12 +169,6 @@ main() {
     # Fastfetch
     remove_managed_file "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc" "Fastfetch config"
 
-    if [[ -d "$SCRIPT_DIR/fastfetch/arts" ]]; then
-        for art in "$SCRIPT_DIR/fastfetch/arts"/*; do
-            [[ -f "$art" ]] && remove_managed_file "$art" "$TARGET_HOME/.config/fastfetch/arts/$(basename "$art")" "Fastfetch art"
-        done
-    fi
-
     # CLI Helper binaries
     if [[ -d "$SCRIPT_DIR/bin" ]]; then
         for b in "$SCRIPT_DIR/bin"/*; do
