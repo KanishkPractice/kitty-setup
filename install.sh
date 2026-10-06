@@ -193,7 +193,7 @@ if [[ "$PM" == "pacman" ]]; then
         fi
     fi
 elif [[ "$PM" == "dnf" ]]; then
-    packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix cbonsai neovim gcc make tar unzip fastfetch tmux)
+    packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix neovim gcc make tar unzip fastfetch tmux)
     missing_packages=()
     for pkg in "${packages[@]}"; do
         if ! rpm -q "$pkg" >/dev/null 2>&1; then
@@ -211,6 +211,12 @@ elif [[ "$PM" == "dnf" ]]; then
         fi
     else
         success "All required dnf packages are already installed."
+    fi
+
+    # Keep this optional tool out of the required package transaction: it may
+    # not be available in the enabled Fedora repositories.
+    if ! command -v cbonsai >/dev/null 2>&1; then
+        info "Optional cbonsai was skipped; it is not required for the setup."
     fi
 
     # These optional tools are provided by Fedora COPR repositories.
@@ -257,7 +263,8 @@ for plugin in "${plugins[@]}"; do
 done
 
 info "Installing Kitty, shell, and application configs"
-for file in "$SCRIPT_DIR"/kitty/*.conf; do
+for file in "$SCRIPT_DIR"/kitty/*.conf "$SCRIPT_DIR"/kitty/*.py; do
+    [[ -f "$file" ]] || continue
     deploy "$file" "$TARGET_HOME/.config/kitty/$(basename "$file")"
 done
 

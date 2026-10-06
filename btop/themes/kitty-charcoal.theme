@@ -1,0 +1,92 @@
+# kitty-charcoal.theme
+# Matches the Everforest-inspired charcoal kitty theme
+# Palette reference:
+#   bg        #181818   fg         #f8f4e8
+#   purple    #cba6f7   green      #c5e89b   bright-green  #d5f8ab
+#   aqua      #a0dbd3   bright-aqua #b0ebe3   mint          #aee8ba
+#   coral     #ff9ba0   gold       #fae2a0   lavender      #f3b9d6
+#   selection #47555e   dim        #2a3240
+
+# Main background — empty = use terminal bg (transparency-friendly)
+theme[main_bg]=
+
+# Main text color
+theme[main_fg]=#f8f4e8
+
+# Title color for boxes
+theme[title]=#f8f4e8
+
+# Highlight color for keyboard shortcuts  →  vivid purple
+theme[hi_fg]=#cba6f7
+
+# Background color of selected item in processes box
+theme[selected_bg]=#47555e
+
+# Foreground color of selected item in processes box
+theme[selected_fg]=#f8f4e8
+
+# Color of inactive/disabled text
+theme[inactive_fg]=#859289
+
+# Color of text on top of graphs (uptime, net scale)  →  gold
+theme[graph_text]=#fae2a0
+
+# Background color of percentage meters
+theme[meter_bg]=#2a3240
+
+# Misc colors for processes box (mini cpu graphs, detail mem graph)  →  lavender
+theme[proc_misc]=#f3b9d6
+
+# Box outline colors
+theme[cpu_box]=#cba6f7
+theme[mem_box]=#a0dbd3
+theme[net_box]=#aee8ba
+theme[proc_box]=#f3b9d6
+
+# Box divider line
+theme[div_line]=#47555e
+
+# Temperature gradient: cool → warm → hot  →  aqua → gold → coral
+theme[temp_start]=#a0dbd3
+theme[temp_mid]=#fae2a0
+theme[temp_end]=#ff9ba0
+
+# CPU graph gradient  →  purple → bright-aqua → green
+theme[cpu_start]=#cba6f7
+theme[cpu_mid]=#b0ebe3
+theme[cpu_end]=#c5e89b
+
+# Mem/Disk free meter  →  mint shades
+theme[free_start]=#aee8ba
+theme[free_mid]=#bef8ca
+theme[free_end]=#c5e89b
+
+# Mem/Disk cached meter  →  aqua shades
+theme[cached_start]=#a0dbd3
+theme[cached_mid]=#b0ebe3
+theme[cached_end]=#aee8ba
+
+# Mem/Disk available meter  →  purple → lavender
+theme[available_start]=#cba6f7
+theme[available_mid]=#f3b9d6
+theme[available_end]=#ffc9e6
+
+# Mem/Disk used meter  →  gold → coral
+theme[used_start]=#fae2a0
+theme[used_mid]=#ffb0b5
+theme[used_end]=#ff9ba0
+
+# Download graph  →  aqua → mint
+theme[download_start]=#a0dbd3
+theme[download_mid]=#aee8ba
+theme[download_end]=#bef8ca
+
+# Upload graph  →  purple → lavender
+theme[upload_start]=#cba6f7
+theme[upload_mid]=#f3b9d6
+theme[upload_end]=#ffc9e6
+
+# Process box gradient (threads/mem/cpu usage)  →  aqua → green → mint
+theme[process_start]=#a0dbd3
+theme[process_mid]=#c5e89b
+theme[process_end]=#aee8ba

@@ -4,7 +4,7 @@ Install the complete setup by running `./install.sh` from this directory. It che
 
 ## Kitty
 
-The terminal background features a borderless frosted-glass look (0.85 opacity with 32 blur), a floating rounded pill tab bar, animated cursor trails, and Fantasque Sans Mono Nerd Font Mono at 16.5 pt (with modern font alternative options commented in `kitty.conf`). Adjust opacity on the fly using `Ctrl+Shift+A` then `M` (increase), `L` (decrease), `D` (default), or `1` (solid).
+The terminal background features a borderless frosted-glass look (0.85 opacity with 32 blur), a floating rounded pill tab bar, animated cursor trails, and Fantasque Sans Mono Nerd Font Mono at 17 pt (with modern font alternatives commented in `kitty.conf`). Starship uses a right-facing arrow for both successful and failed commands. Adjust opacity on the fly using `Ctrl+Shift+A` then `M` (increase), `L` (decrease), `D` (default), or `1` (solid).
 
 | Shortcut | Action |
 | --- | --- |

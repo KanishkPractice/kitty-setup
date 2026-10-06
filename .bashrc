@@ -117,6 +117,11 @@ if command -v starship >/dev/null 2>&1; then
 fi
 
 # ── 5. ALIASES & CUTTING-EDGE CLI TOOLS ──────────────────────
+
+# Fedora packages fd-find as fdfind; provide the common fd command name.
+if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
+    alias fd='fdfind'
+fi
 # Modern file listing with eza (fallback to ls)
 if command -v eza >/dev/null 2>&1; then
     alias ls='eza --icons --group-directories-first'

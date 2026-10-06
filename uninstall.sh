@@ -157,6 +157,7 @@ main() {
     remove_managed_file "$SCRIPT_DIR/kitty/keybindings.conf" "$TARGET_HOME/.config/kitty/keybindings.conf" "Kitty keybindings"
     remove_managed_file "$SCRIPT_DIR/kitty/open-actions.conf" "$TARGET_HOME/.config/kitty/open-actions.conf" "Kitty open-actions"
     remove_managed_file "$SCRIPT_DIR/kitty/theme.conf" "$TARGET_HOME/.config/kitty/theme.conf" "Kitty theme"
+    remove_managed_file "$SCRIPT_DIR/kitty/tab_bar.py" "$TARGET_HOME/.config/kitty/tab_bar.py" "Kitty tab bar"
 
     # Shell, prompts & environment
     remove_managed_file "$SCRIPT_DIR/starship.toml" "$TARGET_HOME/.config/starship.toml" "Starship prompt"

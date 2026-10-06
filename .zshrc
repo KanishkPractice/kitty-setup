@@ -45,18 +45,17 @@ unset _ls_colors
 # Eza colors configuration (Nordic Solar)
 export EZA_COLORS="da=38;2;76;86;106:ur=38;2;191;97;106:uw=38;2;208;135;112:ux=1;38;2;163;190;140:ue=1;38;2;163;190;140:gr=38;2;180;142;173:gw=38;2;208;135;112:gx=38;2;163;190;140:tr=38;2;180;142;173:tw=38;2;208;135;112:tx=38;2;163;190;140:sn=38;2;143;188;187:sb=38;2;136;192;208:df=38;2;180;142;173:ds=1;38;2;136;192;208"
 
-# Bat (modern cat) & Pager theme
-export BAT_THEME="Nord"
+# Bat (modern cat) & Pager theme — theme set via ~/.config/bat/config
 export BAT_PAGER="less -RF"
 
-# Colored man pages via less termcap
-export LESS_TERMCAP_mb=$'\e[1;38;2;191;97;106m'        # begin blinking (red)
-export LESS_TERMCAP_md=$'\e[1;38;2;136;192;208m'        # begin bold / headings (frost cyan)
+# Colored man pages via less termcap — kitty-charcoal palette
+export LESS_TERMCAP_mb=$'\e[1;38;2;255;155;160m'        # begin blinking    → coral
+export LESS_TERMCAP_md=$'\e[1;38;2;160;219;211m'        # begin bold        → aqua
 export LESS_TERMCAP_me=$'\e[0m'                         # end mode
 export LESS_TERMCAP_se=$'\e[0m'                         # end standout-mode
-export LESS_TERMCAP_so=$'\e[38;2;0;0;0;48;2;235;203;139m' # standout (amber bar)
+export LESS_TERMCAP_so=$'\e[38;2;0;0;0;48;2;250;226;160m' # standout bar   → gold bg
 export LESS_TERMCAP_ue=$'\e[0m'                         # end underline
-export LESS_TERMCAP_us=$'\e[4;38;2;163;190;140m'        # underline / flags (green)
+export LESS_TERMCAP_us=$'\e[4;38;2;203;166;247m'        # underline         → purple
 
 # ── 4. COMPLETION SYSTEM (FAST CACHED & CASE-INSENSITIVE) ───
 # Extra completions for common tools (docker, cargo, nix, etc.)
@@ -257,6 +256,11 @@ fi
 
 # ── 9. ALIASES & CUTTING-EDGE CLI TOOLS ──────────────────────
 
+# Fedora packages fd-find as fdfind; provide the common fd command name.
+if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
+    alias fd='fdfind'
+fi
+
 # Modern file listing with eza (fallback to ls)
 if command -v eza >/dev/null 2>&1; then
     alias ls='eza --icons --group-directories-first'
@@ -308,7 +312,10 @@ fi
 # Fastfetch
 alias ff='command fastfetch'
 
-# Git with delta pager integration
+# cmatrix — force green color to match kitty palette
+alias cmatrix='cmatrix -C green'
+
+
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit'
@@ -638,4 +645,3 @@ export PATH="$HOME/.local/bin:$PATH"
 if [[ -o interactive ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
     command fastfetch
 fi
-
