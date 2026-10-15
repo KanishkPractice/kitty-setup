@@ -1,6 +1,9 @@
 # ~/.zshrc
 # Zsh Configuration — Catppuccin Mocha Theme & Modern CLI Integration
 
+# Force terminal colors even when the desktop session exports NO_COLOR=1.
+unset NO_COLOR
+
 # ── 1. HISTORY SETTINGS ──────────────────────────────────────
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
@@ -12,22 +15,22 @@ setopt AUTO_CD              # Type directory name to cd into it
 setopt INTERACTIVE_COMMENTS # Allow inline #comments in shell
 unsetopt BEEP
 
-# ── 3. COLORS & EXPORTS (Nordic Solar Palette) ───────────────
+# ── 3. COLORS & EXPORTS (Catppuccin Mocha) ───────────────
 autoload -U colors && colors
 
-# LS_COLORS categorized styling (Nordic Precision)
-c_dir="1;38;2;136;192;208"      # bold frost cyan — directories (#88c0d0)
-c_exec="1;38;2;163;190;140"     # bold aurora green— executables (#a3be8c)
-c_link="1;38;2;143;188;187"     # bold frost teal  — symlinks (#8fbcbb)
-c_image="38;2;235;203;139"      # solar amber      — images (#ebcb8b)
-c_video="38;2;208;135;112"      # aurora orange    — video (#d08770)
-c_audio="38;2;235;203;139"      # solar amber      — audio (#ebcb8b)
-c_doc="38;2;191;97;106"         # aurora red       — documents (#bf616a)
-c_archive="1;38;2;180;142;173"  # aurora purple    — archives / zips (#b48ead)
-c_code="38;2;129;161;193"       # frost blue       — source code (#81a1c1)
-c_config="38;2;235;203;139"     # solar amber      — config/data (#ebcb8b)
-c_lock="38;2;76;86;106"         # polar night dim  — lockfiles (#4c566a)
-c_build="38;2;180;142;173"      # aurora purple    — build artifacts (#b48ead)
+# LS_COLORS categorized styling (Catppuccin Mocha)
+c_dir="1;38;2;137;180;250"      # bold blue — directories
+c_exec="1;38;2;166;227;161"     # bold green — executables
+c_link="1;38;2;148;226;213"       # bold teal — symlinks
+c_image="38;2;245;194;231"      # pink — images
+c_video="38;2;250;179;135"      # peach — video
+c_audio="38;2;249;226;175"      # yellow — audio
+c_doc="38;2;243;139;168"        # red — documents
+c_archive="1;38;2;203;166;247"  # bold mauve — archives
+c_code="38;2;137;180;250"       # blue — source code
+c_config="38;2;148;226;213"     # teal — config/data
+c_lock="38;2;108;112;134"       # muted gray — lockfiles
+c_build="38;2;203;166;247"      # mauve — build artifacts
 
 _ls_colors="di=${c_dir}:ex=${c_exec}:ln=${c_link}"
 _ls_colors+=":*.jpg=${c_image}:*.jpeg=${c_image}:*.png=${c_image}:*.gif=${c_image}:*.bmp=${c_image}:*.svg=${c_image}:*.webp=${c_image}:*.ico=${c_image}:*.tiff=${c_image}"
@@ -42,18 +45,18 @@ _ls_colors+=":*.o=${c_build}:*.so=${c_build}:*.dylib=${c_build}:*.dll=${c_build}
 export LS_COLORS="$_ls_colors"
 unset _ls_colors
 
-# Eza colors configuration (Nordic Solar)
-export EZA_COLORS="da=38;2;76;86;106:ur=38;2;191;97;106:uw=38;2;208;135;112:ux=1;38;2;163;190;140:ue=1;38;2;163;190;140:gr=38;2;180;142;173:gw=38;2;208;135;112:gx=38;2;163;190;140:tr=38;2;180;142;173:tw=38;2;208;135;112:tx=38;2;163;190;140:sn=38;2;143;188;187:sb=38;2;136;192;208:df=38;2;180;142;173:ds=1;38;2;136;192;208"
+# Eza colors configuration (Catppuccin Mocha)
+export EZA_COLORS="da=38;2;108;112;134:ur=38;2;243;139;168:uw=38;2;250;179;135:ux=1;38;2;166;227;161:ue=1;38;2;166;227;161:gr=38;2;203;166;247:gw=38;2;250;179;135:gx=38;2;166;227;161:tr=38;2;203;166;247:tw=38;2;250;179;135:tx=38;2;166;227;161:sn=38;2;148;226;213:sb=38;2;137;180;250:df=38;2;203;166;247:ds=1;38;2;137;180;250"
 
 # Bat (modern cat) & Pager theme — theme set via ~/.config/bat/config
 export BAT_PAGER="less -RF"
 
-# Colored man pages via less termcap — kitty-charcoal palette
-export LESS_TERMCAP_mb=$'\e[1;38;2;255;155;160m'        # begin blinking    → coral
-export LESS_TERMCAP_md=$'\e[1;38;2;160;219;211m'        # begin bold        → aqua
+# Colored man pages via less termcap — Catppuccin Mocha palette
+export LESS_TERMCAP_mb=$'\e[1;38;2;243;139;168m'        # begin blinking    → coral
+export LESS_TERMCAP_md=$'\e[1;38;2;148;226;213m'        # begin bold        → aqua
 export LESS_TERMCAP_me=$'\e[0m'                         # end mode
 export LESS_TERMCAP_se=$'\e[0m'                         # end standout-mode
-export LESS_TERMCAP_so=$'\e[38;2;0;0;0;48;2;250;226;160m' # standout bar   → gold bg
+export LESS_TERMCAP_so=$'\e[38;2;17;17;27;48;2;203;166;247m' # standout bar   → gold bg
 export LESS_TERMCAP_ue=$'\e[0m'                         # end underline
 export LESS_TERMCAP_us=$'\e[4;38;2;203;166;247m'        # underline         → purple
 
@@ -160,10 +163,11 @@ export FZF_DEFAULT_OPTS="\
   --height 50% --layout=reverse --border=rounded \
   --margin=1,4% --padding=1,2 \
   --prompt='   ' --pointer='󰅂 ' --marker='󰄲 ' \
-  --color=fg:#ede1c7,bg:#181818,hl:#fae2a0 \
-  --color=fg+:#ffffff,bg+:#282e33,hl+:#c5e89b \
-  --color=info:#a0dbd3,prompt:#c5e89b,pointer:#c5e89b \
-  --color=marker:#c5e89b,spinner:#f3b9d6,header:#78909c,border:#5c6970"
+  --color=fg:#cdd6f4,bg:#1e1e2e,hl:#f9e2af \
+  --color=fg+:#ffffff,bg+:#313244,hl+:#a6e3a1 \
+  --color=info:#94e2d5,prompt:#a6e3a1,pointer:#cba6f7 \
+  --color=marker:#a6e3a1,spinner:#f5c2e7,header:#89b4fa,border:#585b70 \
+  --color=query:#ffffff"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :300 {} 2>/dev/null || eza --tree --level=2 --icons {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --icons {}'"
 
@@ -181,27 +185,16 @@ for _p in ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh \
     fi
 done
 unset _p
-# High visibility suggestion preview (Crisp Nordic slate)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9ca3af,italic"
+# High visibility suggestion preview (Catppuccin Mocha overlay)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086,italic"
 
-# Syntax highlighting custom styling & activation (MUST be sourced last)
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[command]='fg=#88c0d0,bold'          # Frost Cyan for commands
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#81a1c1,bold'          # Frost Blue for builtins
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#a3be8c,bold'            # Aurora Green for aliases
-ZSH_HIGHLIGHT_STYLES[function]='fg=#8fbcbb,bold'         # Frost Teal for functions
-ZSH_HIGHLIGHT_STYLES[path]='fg=#ebcb8b,underline'        # Solar Amber underline for valid paths
-ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#d08770'           # Aurora Orange for partial paths
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#ebcb8b' # Amber for strings
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#ebcb8b' # Amber for strings
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#ebcb8b' # Amber for vars
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#b48ead'   # Aurora Purple for substitutions
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#81a1c1'   # Frost Blue for flags (-a)
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#81a1c1'   # Frost Blue for flags (--all)
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#bf616a,bold'     # Aurora Red for errors
-ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#b48ead,bold'     # Aurora Purple for keywords
+
 
 # Remind you when an alias exists for a command you just typed
+# `source` is a shell builtin commonly used with a config path, so don't
+# suggest replacing it with an alias (for example, `source ~/.zshrc`).
+typeset -ga YSU_IGNORED_ALIASES
+YSU_IGNORED_ALIASES+=(source)
 for _p in ~/.zsh/zsh-you-should-use/you-should-use.plugin.zsh \
           /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh; do
     if [ -f "$_p" ]; then
@@ -234,6 +227,34 @@ for _p in ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
     fi
 done
 unset _p
+
+# ── Syntax highlight styles (MUST be set AFTER plugin is sourced) ────
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[default]='fg=#cdd6f4'                        # Text — base color for all unclassified text
+ZSH_HIGHLIGHT_STYLES[command]='fg=#89b4fa,bold'                   # Blue — commands
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#89b4fa,bold'                   # Blue — builtins
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6e3a1,bold'                     # Green — aliases
+ZSH_HIGHLIGHT_STYLES[function]='fg=#89dceb,bold'                  # Sky — functions
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#94e2d5,bold'                # Teal — sudo, env, etc.
+ZSH_HIGHLIGHT_STYLES[path]='fg=#f9e2af,underline'                 # Yellow — valid paths
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#fab387'                    # Peach — partial paths
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#a6e3a1'         # Green — strings
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#a6e3a1'         # Green — strings
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#f9e2af'         # Yellow — $'...' vars
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#f5c2e7'  # Pink — $var inside "strings"
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#cba6f7'           # Lavender — `substitutions`
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#74c7ec'           # Sapphire — flags (-a)
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#74c7ec'           # Sapphire — flags (--all)
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8'                  # Red — unrecognized ($var, typos)
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#cba6f7,bold'             # Lavender — keywords (if/for/while)
+ZSH_HIGHLIGHT_STYLES[assign]='fg=#94e2d5'                         # Teal — VAR=value assignments
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#f5c2e7,bold'          # Pink — ; | && ||
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#f5c2e7'                    # Pink — > >> < |
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#f5c2e7'                       # Pink — * ? globs
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#6c7086,italic'                 # Overlay0 — # comments
+ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#94e2d5'                       # Teal — named file descriptors
+ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#94e2d5'                     # Teal — numeric fds
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=#cdd6f4'                           # Text — command arguments
 
 # History substring search (source AFTER syntax highlighting)
 for _p in ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh \

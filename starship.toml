@@ -1,30 +1,45 @@
 # ~/.config/starship.toml
-# Clean, Simple High-Contrast Full Path Prompt
+# Catppuccin Mocha Aesthetic High-Contrast Prompt with Nerd Icons
 
-# Timeout optimizations for instant prompt responsiveness
 scan_timeout = 10
 command_timeout = 500
 
-format = """$directory$git_branch$git_status$cmd_duration$status
+format = """$os$directory$git_branch$git_status$status
 $character"""
+
+right_format = """$python$nodejs$cmd_duration$time"""
+
+# ── OS Icon ───────────────────────────────────────────────────
+[os]
+disabled = false
+format = "[$symbol ]($style)"
+style = "bold #cba6f7"
+
+[os.symbols]
+Arch = "󰣇"
+Ubuntu = "󰕈"
+Debian = "󰣚"
+Fedora = "󰣛"
+NixOS = "󱄅"
+Macos = "󰀵"
+Windows = "󰍲"
+Linux = "󰌽"
 
 # ── Full Path Directory ──────────────────────────────────────
 [directory]
-style = "bold #a0dbd3"
-format = "[$path]($style)[$read_only]($read_only_style) "
+style = "bold #89b4fa"
+format = "[󰉋 $path]($style) "
 truncation_length = 0
 truncate_to_repo = false
-read_only = " [RO]"
-read_only_style = "bold #ff9ba0"
 
 # ── Git Integration ──────────────────────────────────────────
 [git_branch]
-style = "bold #f3b9d6"
+style = "bold #f5c2e7"
 format = "[$symbol$branch]($style) "
-symbol = " "
+symbol = "󰘬 "
 
 [git_status]
-style = "bold #fae2a0"
+style = "bold #f9e2af"
 format = '([\[$all_status$ahead_behind\]]($style) )'
 conflicted = "~"
 ahead = "⇡${count}"
@@ -38,24 +53,43 @@ staged = "+"
 renamed = "»"
 deleted = "✘"
 
-# ── Metrics & Timing ─────────────────────────────────────────
+# ── Language Versions (shown only in project dirs) ────────────
+[python]
+symbol = "󰌠 "
+format = "[${symbol}${version}]($style) "
+style = "bold #f9e2af"
+detect_files = ["requirements.txt", "pyproject.toml", ".python-version", "setup.py"]
+
+[nodejs]
+symbol = "󰎙 "
+format = "[${symbol}${version}]($style) "
+style = "bold #a6e3a1"
+detect_files = ["package.json", ".nvmrc", ".node-version"]
+
+# ── Right Side: Duration & Time ───────────────────────────────
 [cmd_duration]
 min_time = 1000
 show_milliseconds = false
-style = "bold #fae2a0"
-format = "[took $duration]($style) "
+style = "bold #f9e2af"
+format = "[󱎫 $duration]($style) "
+
+[time]
+disabled = false
+format = "[󱑒 $time]($style)"
+style = "bold #a6adc8"
+time_format = "%H:%M"
 
 [status]
 disabled = false
 format = "[$symbol$status]($style) "
 symbol = "✘ "
-style = "bold #ff9ba0"
+style = "bold #f38ba8"
 
 # ── Prompt Character ─────────────────────────────────────────
 [character]
-success_symbol = "[➜ ](bold #1793d1) "
-error_symbol   = "[➜ ](bold #ff9ba0) "
-vimcmd_symbol  = "[❮](bold #a0dbd3) "
+success_symbol = "[➜ ](bold #89b4fa)"
+error_symbol   = "[➜ ](bold #f38ba8)"
+vimcmd_symbol  = "[❮](bold #94e2d5) "
 
 [line_break]
 disabled = false
