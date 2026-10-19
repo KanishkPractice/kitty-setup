@@ -332,6 +332,7 @@ fi
 
 # Fastfetch
 alias ff='command fastfetch'
+alias ffw='command fastfetch --watch 1'
 
 # cmatrix — force green color to match kitty palette
 alias cmatrix='cmatrix -C green'
@@ -662,7 +663,18 @@ export PATH="$HOME/.local/bin:$PATH"
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
-# ── Auto-run Fastfetch on Shell Launch ──
+# ── Smart Auto-run Fastfetch on Shell Launch ──
 if [[ -o interactive ]] && [[ -t 1 ]] && command -v fastfetch >/dev/null 2>&1; then
-    command fastfetch
+    # Skip running inside tmux sessions to avoid cluttering split panes
+    if [[ -z "$TMUX" ]]; then
+        # Adaptive layout: use compact logo or hide logo on narrow split terminals
+        local _cols=$(tput cols 2>/dev/null || echo 100)
+        if (( _cols < 70 )); then
+            command fastfetch --logo none
+        elif (( _cols < 100 )); then
+            command fastfetch --logo arch_small
+        else
+            command fastfetch
+        fi
+    fi
 fi

@@ -1,0 +1,22 @@
+inherits = "catppuccin_mocha"
+
+# Seamless transparent UI — removes all opaque blocks and stripes
+"ui.background" = {}
+"ui.cursorline.primary" = {}
+"ui.cursorline.secondary" = {}
+"ui.bufferline.background" = {}
+"ui.bufferline" = { fg = "subtext0" }
+"ui.bufferline.active" = { fg = "mauve", modifiers = ["bold"] }
+"ui.statusline" = { fg = "subtext1" }
+"ui.statusline.inactive" = { fg = "surface2" }
+"ui.gutter" = {}
+
+# High-contrast line numbers for crystal-clear readability
+"ui.linenr" = { fg = "subtext0" }
+"ui.linenr.selected" = { fg = "mauve", modifiers = ["bold"] }
+
+# Floating menus & command completion (removes flat opaque grey slab)
+"ui.menu" = { fg = "text" }
+"ui.menu.selected" = { fg = "base", bg = "mauve", modifiers = ["bold"] }
+"ui.popup" = { fg = "text" }
+"ui.help" = { fg = "subtext0" }

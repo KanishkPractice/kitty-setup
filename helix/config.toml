@@ -1,0 +1,174 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Helix Modern Aesthetic Configuration
+# Seamlessly styled for Kitty transparency & clean readability
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── 1. THEME ────────────────────────────────────────────────────────────────
+# Uses custom transparent catppuccin_mocha (overridden in ~/.config/helix/themes/)
+theme = "catppuccin_mocha"
+
+# ── 2. GENERAL EDITOR SETTINGS ──────────────────────────────────────────────
+[editor]
+line-number = "relative"        # Relative in Normal mode, absolute in Insert mode
+scrolloff = 8                   # Keep 8 lines of context above/below cursor
+mouse = true                    # Enable mouse click, scroll, and drag
+cursorline = false              # Disable full-width horizontal stripe across transparent window
+bufferline = "multiple"         # Only show buffer tabs when 2+ files are open (no clutter on startup)
+auto-save = true                # Auto-save buffer on window blur / buffer switch
+auto-pairs = true               # Auto-close brackets, quotes, etc.
+color-modes = true              # Color-code status bar mode
+true-color = true               # Full 24-bit RGB true color rendering
+scroll-lines = 3                # Smooth scroll step (3 lines per tick)
+middle-click-paste = true       # Linux middle-click clipboard paste
+idle-timeout = 150              # Snappy 150ms timeout for instant diagnostics & which-key guides
+completion-trigger-len = 1      # Start code completion after typing 1 character
+completion-replace = true       # Cleanly replace partial words when accepting completion
+
+# ── 3. CURSOR SHAPES ────────────────────────────────────────────────────────
+[editor.cursor-shape]
+normal = "block"                # Solid block in Normal mode
+insert = "bar"                  # Thin vertical line in Insert mode
+select = "underline"            # Underline cursor in Selection mode
+
+# ── 4. FILE PICKER & SEARCH ─────────────────────────────────────────────────
+[editor.file-picker]
+hidden = false                  # Include dotfiles (.gitignore, .zshrc, etc.)
+git-ignore = true               # Filter out ignored dirs (node_modules, build/)
+deduplicate-links = true
+
+[editor.search]
+smart-case = true               # Case-insensitive if lowercase, case-sensitive if capitalized
+wrap-around = true              # Wrap around buffer when reaching the end of search
+
+# ── 5. STATUSLINE ───────────────────────────────────────────────────────────
+[editor.statusline]
+left = [
+  "mode",
+  "spinner",
+  "file-name",
+  "read-only-indicator",
+  "file-modification-indicator",
+  "version-control"
+]
+center = []
+right = [
+  "diagnostics",
+  "selections",
+  "position",
+  "file-type"
+]
+separator = " "
+mode.normal = " NORMAL "
+mode.insert = " INSERT "
+mode.select = " SELECT "
+
+# ── 6. GUTTERS & HIGH-VISIBILITY LINE NUMBERS ──────────────────────────────
+[editor.gutters]
+layout = ["diff", "diagnostics", "line-numbers", "spacer"]
+
+[editor.gutters.line-numbers]
+min-width = 3
+
+# ── 7. INLINE DIAGNOSTICS (Instant Error Previews) ─────────────────────────
+[editor.inline-diagnostics]
+cursor-line = "hint"            # Show error/warning directly next to cursor line in dim italics
+other-lines = "error"           # Show errors on other lines to catch fatal syntax breaks
+
+# ── 8. INDENT GUIDES & SOFT WRAP ───────────────────────────────────────────
+[editor.indent-guides]
+render = true                   # Render vertical indentation lines
+character = "│"
+skip-levels = 1
+
+[editor.soft-wrap]
+enable = true                   # Wrap long lines visually without altering buffer text
+max-wrap = 25
+wrap-indicator = ""
+
+# ── 9. WHITESPACE RENDERING ────────────────────────────────────────────────
+[editor.whitespace.render]
+space = "none"
+tab = "none"
+newline = "none"
+
+# ── 10. LSP & CODE INTELLIGENCE ────────────────────────────────────────────
+[editor.lsp]
+display-messages = true         # Show language server notifications
+display-inlay-hints = true      # Inline parameter names and type hints
+display-signature-help-docs = true
+auto-signature-help = true      # Show function parameter signatures automatically
+snippets = true                 # Enable snippet completions
+goto-reference-include-declaration = false
+
+# ══════════════════════════════════════════════════════════════════════════════
+# KEYBINDINGS & WORKFLOW SHORTCUTS
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── Normal Mode ─────────────────────────────────────────────────────────────
+[keys.normal]
+# Natural movement on soft-wrapped lines
+j = "move_visual_line_down"
+k = "move_visual_line_up"
+
+# Auto-center screen on search results
+n = ["search_next", "align_view_center"]
+N = ["search_prev", "align_view_center"]
+
+# Quick buffer tab switching
+tab = "goto_next_buffer"
+"S-tab" = "goto_previous_buffer"
+
+# Fast save and quit
+"C-s" = ":w"
+"C-q" = ":q"
+
+# Clear multi-cursor selections back to single cursor
+esc = ["collapse_selection", "keep_primary_selection"]
+
+# Split window navigation
+"C-h" = "jump_view_left"
+"C-j" = "jump_view_down"
+"C-k" = "jump_view_up"
+"C-l" = "jump_view_right"
+
+# Move current line / selection up and down (Alt+j / Alt+k)
+"A-j" = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+"A-k" = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+
+# Quick comment toggle
+"C-/" = "toggle_comments"
+
+# ── Space Leader Shortcuts (<space> + key) ──────────────────────────────────
+[keys.normal.space]
+w = ":w"                        # <space>w -> Save file
+q = ":q"                        # <space>q -> Quit
+x = ":buffer-close"             # <space>x -> Close active buffer tab
+b = "buffer_picker"             # <space>b -> Interactive buffer list
+f = "file_picker"               # <space>f -> Find files in project
+F = "file_picker_in_current_directory"
+"/" = "global_search"           # <space>/ -> Global grep regex search across workspace
+r = ":reload"                   # <space>r -> Reload file from disk
+
+# System Clipboard integration (<space> + y / p)
+y = ":clipboard-yank"           # <space>y -> Copy to Wayland/system clipboard
+p = ":clipboard-paste-after"    # <space>p -> Paste from system clipboard
+P = ":clipboard-paste-before"   # <space>P -> Paste before from system clipboard
+
+# Kitty Terminal Integration
+g = ":sh kitty @ launch --type=overlay lazygit" # <space>g -> Open Lazygit overlay
+
+# ── Insert Mode ─────────────────────────────────────────────────────────────
+[keys.insert]
+"C-s" = ":w"                    # Save directly from insert mode
+"C-h" = "delete_char_backward"
+"C-d" = "delete_char_forward"
+
+# ── Select Mode ─────────────────────────────────────────────────────────────
+[keys.select]
+j = "move_visual_line_down"
+k = "move_visual_line_up"
+"A-j" = ["delete_selection", "paste_after"]
+"A-k" = ["delete_selection", "move_line_up", "paste_before"]
+"C-s" = ":w"
+y = ":clipboard-yank"           # Copy selected text straight to system clipboard
+esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]

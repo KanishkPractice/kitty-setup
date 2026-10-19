@@ -35,6 +35,36 @@ The terminal background features transparent rendering (0.80 opacity with 0 blur
 * **Seamless Remote SSH (`kssh`)**: Use `kssh user@host` (or `kitten ssh`) to automatically sync Kitty terminfo and enable clipboard forwarding on remote machines.
 * **Inline Image & Media Rendering**: Use `icat <image>` or `img <image>` to render high-res images directly in the terminal, or click any image link to preview in an overlay.
 
+## Helix Editor (`hx`)
+
+Helix is pre-configured with native **transparent background rendering** matching Kitty's 0.80 opacity, relative line numbers, git gutter diffs, and enhanced ergonomics:
+
+| Shortcut | Action |
+| --- | --- |
+| `Tab` / `Shift+Tab` | Next / previous buffer tab |
+| `Ctrl+S` | Quick save (Normal, Insert, Select modes) |
+| `Ctrl+Q` | Quick quit (`:q`) |
+| `Esc` | Clear multiple cursors & collapse selection |
+| `Space + w` | Save current file |
+| `Space + q` | Quit |
+| `Space + x` | Close current buffer tab (`:buffer-close`) |
+| `Space + f` | Fuzzy file search across project |
+| `Space + /` | Global regex search across all files |
+| `Space + b` | Interactive open buffer picker |
+| `Space + y` / `Space + p` | Copy to / paste from system clipboard |
+| `Space + g` | Launch floating **Lazygit** inside Kitty |
+| `Space + r` | Reload current buffer from disk |
+| `Ctrl+H/J/K/L` | Jump directly between split windows |
+| `Alt+J` / `Alt+K` | Move line or selected block down / up |
+| `j` / `k` | Move by visual line (smooth on wrapped text) |
+| `n` / `N` | Next / previous search match (auto-centered) |
+| `Ctrl+/` | Toggle line comment |
+
+* **Inline Diagnostics**: Warnings and errors appear in dim italics directly next to your cursor line.
+* **Instant System Clipboard**: `<space>y` copies selection to Wayland clipboard; `<space>p` pastes.
+* **Auto-centered Search**: Searching automatically aligns matches in the vertical center of your screen.
+* **Smart Tab Bar**: Buffer tabs appear cleanly when 2+ files are open.
+
 ## Backups
 
 Restore the latest install backup with `./uninstall.sh --restore-latest`. Any existing files replaced during restore are saved under `~/.config/kitty-setup-restore-snapshots/`. To remove setup files that still match the repository, run `./uninstall.sh` in a terminal and confirm.

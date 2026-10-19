@@ -26,18 +26,14 @@
       "type": "custom"
     },
     {
-      "key": "│ {#38;2;203;166;247} 󰌢 host     {#keys}  │",
-      "type": "host",
-      "format": "{name} {version}"
-    },
-    {
       "key": "│ {#38;2;137;180;250}  user     {#keys}  │",
       "type": "title",
       "format": "{user-name}@{host-name}"
     },
     {
-      "key": "│ {#38;2;249;226;175} 󰔚 uptime   {#keys}  │",
-      "type": "uptime"
+      "key": "│ {#38;2;250;179;135} 󰥔 time     {#keys}  │",
+      "type": "datetime",
+      "format": "{weekday}, {month-name} {day-pretty} · {hour-12-pretty}:{minute-pretty} {am-pm}"
     },
     {
       "key": "├───────────────┤",
@@ -50,22 +46,6 @@
     {
       "key": "│ {#38;2;245;194;231} 󰌽 kernel   {#keys}  │",
       "type": "kernel"
-    },
-    {
-      "key": "│ {#38;2;148;226;213} 󰧨 DE       {#keys}  │",
-      "type": "de"
-    },
-    {
-      "key": "│ {#38;2;203;166;247} 󱂬 WM       {#keys}  │",
-      "type": "wm"
-    },
-    {
-      "key": "│ {#38;2;249;226;175} 󰞷 shell    {#keys}  │",
-      "type": "shell"
-    },
-    {
-      "key": "│ {#38;2;243;139;168} 󰆍 term     {#keys}  │",
-      "type": "terminal"
     },
     {
       "key": "├───────────────┤",
@@ -84,12 +64,18 @@
     },
     {
       "key": "│ {#38;2;245;194;231} 󰍛 memory   {#keys}  │",
-      "type": "memory"
+      "type": "memory",
+      "percent": {
+        "type": 3
+      }
     },
     {
       "key": "│ {#38;2;249;226;175} 󰋊 disk     {#keys}  │",
       "type": "disk",
-      "folders": "/"
+      "folders": "/",
+      "percent": {
+        "type": 3
+      }
     },
     {
       "key": "│ {#38;2;148;226;213} 󰍹 display  {#keys}  │",

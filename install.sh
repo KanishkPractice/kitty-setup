@@ -158,7 +158,7 @@ export PATH="$USER_BIN:$PATH"
 
 info "Checking packages via $PM package manager"
 if [[ "$PM" == "pacman" ]]; then
-    packages=(kitty zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix neovim gcc make tar unzip fastfetch tmux lazygit starship)
+    packages=(kitty zsh fzf zoxide fontconfig curl git bat eza ripgrep fd btop tealdeer git-delta cmatrix neovim helix gcc make tar unzip fastfetch tmux lazygit starship)
     missing_packages=()
     for pkg in "${packages[@]}"; do
         if ! pacman -Q "$pkg" >/dev/null 2>&1; then
@@ -193,7 +193,7 @@ if [[ "$PM" == "pacman" ]]; then
         fi
     fi
 elif [[ "$PM" == "dnf" ]]; then
-    packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix neovim gcc make tar unzip fastfetch tmux)
+    packages=(kitty zsh util-linux-user fzf zoxide fontconfig curl git bat eza ripgrep fd-find btop tealdeer git-delta cmatrix neovim helix gcc make tar unzip fastfetch tmux)
     missing_packages=()
     for pkg in "${packages[@]}"; do
         if ! rpm -q "$pkg" >/dev/null 2>&1; then
@@ -285,6 +285,13 @@ if [[ -d "$SCRIPT_DIR/nvim" ]]; then
         rel="${file#"$SCRIPT_DIR/nvim/"}"
         deploy "$file" "$TARGET_HOME/.config/nvim/$rel"
     done < <(find "$SCRIPT_DIR/nvim" -type f -print0)
+fi
+
+if [[ -d "$SCRIPT_DIR/helix" ]]; then
+    while IFS= read -r -d '' file; do
+        rel="${file#"$SCRIPT_DIR/helix/"}"
+        deploy "$file" "$TARGET_HOME/.config/helix/$rel"
+    done < <(find "$SCRIPT_DIR/helix" -type f -print0)
 fi
 
 zsh_path="$(command -v zsh || true)"

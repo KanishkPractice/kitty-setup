@@ -156,8 +156,11 @@ if command -v nvim >/dev/null 2>&1; then
     export EDITOR='nvim'
     export VISUAL='nvim'
 fi
+command -v helix >/dev/null 2>&1 && alias hx='helix'
 
 alias fastfetch='command fastfetch'
+alias ff='command fastfetch'
+alias ffw='command fastfetch --watch 1'
 
 # Kitty terminal features (image protocol, SSH, sessions)
 if [[ "$TERM" == "xterm-kitty" || -n "$KITTY_PID" ]]; then
