@@ -102,10 +102,10 @@ export FZF_DEFAULT_OPTS="\
   --height 50% --layout=reverse --border=rounded \
   --margin=1,4% --padding=1,2 \
   --prompt='   ' --pointer='󰅂 ' --marker='󰄲 ' \
-  --color=fg:#cdd6f4,bg:#1e1e2e,hl:#f9e2af \
+  --color=fg:#ffffff,bg:-1,hl:#f9e2af \
   --color=fg+:#ffffff,bg+:#313244,hl+:#a6e3a1 \
   --color=info:#94e2d5,prompt:#a6e3a1,pointer:#cba6f7 \
-  --color=marker:#a6e3a1,spinner:#f5c2e7,header:#89b4fa,border:#585b70"
+  --color=marker:#a6e3a1,spinner:#f5c2e7,header:#89b4fa,border:#89b4fa"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :300 {} 2>/dev/null || eza --tree --level=2 --icons {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --icons {}'"
 
@@ -144,9 +144,11 @@ alias reload='source ~/.bashrc'
 alias cls='clear'
 alias path='echo $PATH | tr ":" "\n"'
 
-# bat (Modern cat replacement)
+# bat (Modern cat replacement & syntax-highlighted man pager)
 if command -v bat >/dev/null 2>&1; then
     alias catp='bat'
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT="-c"
 fi
 
 # Editor

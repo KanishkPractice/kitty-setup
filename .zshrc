@@ -163,10 +163,10 @@ export FZF_DEFAULT_OPTS="\
   --height 50% --layout=reverse --border=rounded \
   --margin=1,4% --padding=1,2 \
   --prompt='   ' --pointer='󰅂 ' --marker='󰄲 ' \
-  --color=fg:#cdd6f4,bg:#1e1e2e,hl:#f9e2af \
+  --color=fg:#ffffff,bg:-1,hl:#f9e2af \
   --color=fg+:#ffffff,bg+:#313244,hl+:#a6e3a1 \
   --color=info:#94e2d5,prompt:#a6e3a1,pointer:#cba6f7 \
-  --color=marker:#a6e3a1,spinner:#f5c2e7,header:#89b4fa,border:#585b70 \
+  --color=marker:#a6e3a1,spinner:#f5c2e7,header:#89b4fa,border:#89b4fa \
   --color=query:#ffffff"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :300 {} 2>/dev/null || eza --tree --level=2 --icons {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --icons {}'"
@@ -185,8 +185,8 @@ for _p in ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh \
     fi
 done
 unset _p
-# High visibility suggestion preview (Catppuccin Mocha overlay)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086,italic"
+# High visibility suggestion preview (Subtext contrast on pitch-black)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#7f849c,italic"
 
 
 
@@ -210,9 +210,12 @@ for _p in ~/.zsh/fzf-tab/fzf-tab.plugin.zsh \
     if [ -f "$_p" ]; then
         source "$_p"
         zstyle ':completion:*:git-checkout:*' sort false
-        zstyle ':completion:*:descriptions' format '[%d]'
+        zstyle ':completion:*:descriptions' format '%F{#89b4fa}[%d]%f'
+        zstyle ':completion:*:messages' format '%F{#f5c2e7}%d%f'
+        zstyle ':completion:*:warnings' format '%F{#f38ba8}No matches for: %d%f'
         zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons --color=always $realpath 2>/dev/null'
         zstyle ':fzf-tab:*' switch-group '<' '>'
+        zstyle ':fzf-tab:*' fzf-flags --color=fg:#ffffff,bg:-1,hl:#f9e2af,fg+:#ffffff,bg+:#313244,hl+:#a6e3a1,pointer:#cba6f7,prompt:#a6e3a1,border:#89b4fa
         break
     fi
 done
@@ -228,33 +231,35 @@ for _p in ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
 done
 unset _p
 
-# ── Syntax highlight styles (MUST be set AFTER plugin is sourced) ────
+# ── High-Contrast Syntax Highlight Styles (Ultra-Visible on Black) ──
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[default]='fg=#cdd6f4'                        # Text — base color for all unclassified text
-ZSH_HIGHLIGHT_STYLES[command]='fg=#89b4fa,bold'                   # Blue — commands
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#89b4fa,bold'                   # Blue — builtins
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#a6e3a1,bold'                     # Green — aliases
-ZSH_HIGHLIGHT_STYLES[function]='fg=#89dceb,bold'                  # Sky — functions
-ZSH_HIGHLIGHT_STYLES[precommand]='fg=#94e2d5,bold'                # Teal — sudo, env, etc.
-ZSH_HIGHLIGHT_STYLES[path]='fg=#f9e2af,underline'                 # Yellow — valid paths
-ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#fab387'                    # Peach — partial paths
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#a6e3a1'         # Green — strings
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#a6e3a1'         # Green — strings
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#f9e2af'         # Yellow — $'...' vars
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#f5c2e7'  # Pink — $var inside "strings"
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#cba6f7'           # Lavender — `substitutions`
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#74c7ec'           # Sapphire — flags (-a)
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#74c7ec'           # Sapphire — flags (--all)
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8'                  # Red — unrecognized ($var, typos)
-ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#cba6f7,bold'             # Lavender — keywords (if/for/while)
-ZSH_HIGHLIGHT_STYLES[assign]='fg=#94e2d5'                         # Teal — VAR=value assignments
-ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#f5c2e7,bold'          # Pink — ; | && ||
-ZSH_HIGHLIGHT_STYLES[redirection]='fg=#f5c2e7'                    # Pink — > >> < |
-ZSH_HIGHLIGHT_STYLES[globbing]='fg=#f5c2e7'                       # Pink — * ? globs
-ZSH_HIGHLIGHT_STYLES[comment]='fg=#6c7086,italic'                 # Overlay0 — # comments
-ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#94e2d5'                       # Teal — named file descriptors
-ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#94e2d5'                     # Teal — numeric fds
-ZSH_HIGHLIGHT_STYLES[arg0]='fg=#cdd6f4'                           # Text — command arguments
+ZSH_HIGHLIGHT_STYLES[default]='fg=#ffffff'                         # Crisp White — base text
+ZSH_HIGHLIGHT_STYLES[command]='fg=#a6e3a1,bold'                    # Vivid Green — valid commands
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#a6e3a1,bold'                    # Vivid Green — builtins (cd, echo)
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#94e2d5,bold'                      # Vivid Teal — aliases
+ZSH_HIGHLIGHT_STYLES[function]='fg=#89dceb,bold'                   # Vivid Sky — functions
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#cba6f7,bold'                 # Mauve — sudo, env, exec
+ZSH_HIGHLIGHT_STYLES[path]='fg=#89b4fa,bold,underline'             # Vivid Blue underline — valid paths
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#fab387'                     # Peach — partial paths
+ZSH_HIGHLIGHT_STYLES[path_approx]='fg=#fab387,italic'              # Peach italic — approximate paths
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#f9e2af'          # Radiant Gold — strings
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#f9e2af'          # Radiant Gold — strings
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#f9e2af,bold'     # Radiant Gold — $'...' vars
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#f5c2e7'   # Pink — $var inside "strings"
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#cba6f7'            # Lavender — `substitutions`
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#fab387,bold'       # Peach — flags (-la, -v)
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#fab387,bold'       # Peach — flags (--help, --all)
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f38ba8,bold'              # Vivid Red — unrecognized / typos
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#cba6f7,bold'              # Lavender — if/for/while
+ZSH_HIGHLIGHT_STYLES[assign]='fg=#94e2d5'                          # Teal — VAR=val
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#f5c2e7,bold'           # Pink — ; | && ||
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#f5c2e7,bold'                # Pink — > >> < |
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#f5c2e7,bold'                   # Pink — * ? globs
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#7f849c,italic'                  # Subtext — # comments
+ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#94e2d5'                        # Teal — file descriptors
+ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#94e2d5'                      # Teal — numeric fds
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=#ffffff'                            # Pure White — command arguments
 
 # History substring search (source AFTER syntax highlighting)
 for _p in ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh \
@@ -301,9 +306,11 @@ alias reload='source ~/.zshrc'
 alias cls='clear'
 alias path='echo $PATH | tr ":" "\n"'
 
-# bat (Modern cat replacement)
+# bat (Modern cat replacement & syntax-highlighted man pager)
 if command -v bat >/dev/null 2>&1; then
     alias catp='bat'
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT="-c"
 fi
 
 # Editor

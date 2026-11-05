@@ -9,13 +9,22 @@
 
 [delta]
     navigate = true
-    side-by-side = true
+    dark = true
     line-numbers = true
+    side-by-side = false
     syntax-theme = Catppuccin Mocha
+    file-style = "bold #cba6f7"
+    file-decoration-style = "bold #89b4fa ul"
+    hunk-header-style = file line-number syntax
+    hunk-header-decoration-style = "#89b4fa box"
     minus-style = "syntax #3b1d22"
     plus-style = "syntax #1d321e"
     minus-emph-style = "syntax #5b2d32"
     plus-emph-style = "syntax #2d5b2e"
+    line-numbers-left-format = "{nm:>4}⋮ "
+    line-numbers-right-format = "{np:>4}│ "
+    line-numbers-left-style = "#6c7086"
+    line-numbers-right-style = "#6c7086"
 
 [merge]
     conflictstyle = diff3

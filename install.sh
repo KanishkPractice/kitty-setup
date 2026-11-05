@@ -277,8 +277,16 @@ deploy "$SCRIPT_DIR/terminal.conf" "$TARGET_HOME/.config/environment.d/terminal.
 deploy "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc"
 deploy "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc"
 deploy "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile"
+deploy "$SCRIPT_DIR/.gitconfig" "$TARGET_HOME/.gitconfig"
 deploy "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf"
 deploy "$SCRIPT_DIR/fastfetch/config.jsonc" "$TARGET_HOME/.config/fastfetch/config.jsonc"
+
+if [[ -d "$SCRIPT_DIR/btop" ]]; then
+    while IFS= read -r -d '' file; do
+        rel="${file#"$SCRIPT_DIR/btop/"}"
+        deploy "$file" "$TARGET_HOME/.config/btop/$rel"
+    done < <(find "$SCRIPT_DIR/btop" -type f -print0)
+fi
 
 if [[ -d "$SCRIPT_DIR/nvim" ]]; then
     while IFS= read -r -d '' file; do

@@ -165,6 +165,7 @@ main() {
     remove_managed_file "$SCRIPT_DIR/.zshrc" "$TARGET_HOME/.zshrc" "Zsh rc"
     remove_managed_file "$SCRIPT_DIR/.bashrc" "$TARGET_HOME/.bashrc" "Bash rc"
     remove_managed_file "$SCRIPT_DIR/.bash_profile" "$TARGET_HOME/.bash_profile" "Bash profile"
+    remove_managed_file "$SCRIPT_DIR/.gitconfig" "$TARGET_HOME/.gitconfig" "Git config"
     remove_managed_file "$SCRIPT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf" "Tmux config"
 
     # Fastfetch
@@ -183,6 +184,22 @@ main() {
             local rel="${file#"$SCRIPT_DIR/nvim/"}"
             remove_managed_file "$file" "$TARGET_HOME/.config/nvim/$rel" "Neovim file $rel"
         done < <(find "$SCRIPT_DIR/nvim" -type f -print0)
+    fi
+
+    # Helix configurations
+    if [[ -d "$SCRIPT_DIR/helix" ]]; then
+        while IFS= read -r -d '' file; do
+            local rel="${file#"$SCRIPT_DIR/helix/"}"
+            remove_managed_file "$file" "$TARGET_HOME/.config/helix/$rel" "Helix file $rel"
+        done < <(find "$SCRIPT_DIR/helix" -type f -print0)
+    fi
+
+    # Btop configurations
+    if [[ -d "$SCRIPT_DIR/btop" ]]; then
+        while IFS= read -r -d '' file; do
+            local rel="${file#"$SCRIPT_DIR/btop/"}"
+            remove_managed_file "$file" "$TARGET_HOME/.config/btop/$rel" "Btop file $rel"
+        done < <(find "$SCRIPT_DIR/btop" -type f -print0)
     fi
 
     printf "\n${c_bold}${c_green}✨ Uninstallation complete. User-created files were kept untouched.${c_reset}\n\n"
